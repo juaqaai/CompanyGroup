@@ -1,0 +1,9 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Settings.MenuWidgetPartTypePartSettings
+    <fieldset>
+    <div>
+        @Html.LabelFor(m => m.MenuName, @T("Default menu name"))
+        @Html.EditorFor(m => m.MenuName)
+        @Html.ValidationMessageFor(m => m.MenuName, "*")
+    </div>
+    </fieldset>
+

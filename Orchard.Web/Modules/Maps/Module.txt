@@ -1,0 +1,11 @@
+Name: Maps
+AntiForgery: enabled
+Author: Attila Juhász
+Website: http://www.hrp.hu
+Version: 1.0
+OrchardVersion: 1.0
+Description: Adds a map image to content items, based on longitude and latitude.
+Features:
+    Maps:
+        Description: Adds a map image to content items, based on longitude and latitude.
+		Category: Geolocation

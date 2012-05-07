@@ -1,0 +1,45 @@
+﻿<style type="text/css">
+        @if (!string.IsNullOrWhiteSpace(Model.ContentPart.BackColor)){
+        <text>#menu-@(Model.MenuId).sf-menu li { 
+            background:     @(Model.ContentPart.BackColor); 
+        }</text>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ContentPart.ForeColor)){
+        <text>
+        #menu-@(Model.MenuId).sf-menu a, 
+        #menu-@(Model.MenuId).sf-menu a:visited {
+            color:          @(Model.ContentPart.ForeColor) !important;
+        }</text>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ContentPart.HoverBackColor) || !string.IsNullOrWhiteSpace(Model.ContentPart.HoverForeColor)){
+        <text>
+        #menu-@(Model.MenuId).sf-menu li:hover, #menu-@(Model.MenuId).sf-menu li.sfHover,
+        #menu-@(Model.MenuId).sf-menu a:focus, #menu-@(Model.MenuId).sf-menu a:hover, #menu-@(Model.MenuId).sf-menu a:active {
+        </text>
+            if (!string.IsNullOrWhiteSpace(Model.ContentPart.HoverBackColor)){
+            <text>background:     @(Model.ContentPart.HoverBackColor) !important;</text>
+            }
+            if (!string.IsNullOrWhiteSpace(Model.ContentPart.HoverForeColor)){
+            <text>color:          @(Model.ContentPart.HoverForeColor) !important;</text>
+            }
+        <text>}</text>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ContentPart.SelectedBackColor))
+        {
+        <text>
+        #menu-@(Model.MenuId).sf-menu li.selected,
+        #menu-@(Model.MenuId).sf-menu li.current { 
+            background:     @(Model.ContentPart.SelectedBackColor) !important;
+        }
+        </text>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ContentPart.SelectedForeColor))
+        {
+        <text>
+        #menu-@(Model.MenuId).sf-menu li.selected a, #menu-@(Model.MenuId).sf-menu li.selected a:visited,
+        #menu-@(Model.MenuId).sf-menu li.current a, #menu-@(Model.MenuId).sf-menu li.current a:visited { 
+            color:          @(Model.ContentPart.SelectedForeColor) !important; 
+        }
+        </text>
+        }
+</style>

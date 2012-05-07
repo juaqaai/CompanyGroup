@@ -1,0 +1,26 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Models.BreadcrumbsPart
+<fieldset>
+    <legend>@T("Breadcrumbs settings")</legend>
+    <div>
+        @Html.LabelFor(m => m.Separator, @T("Separator string"))
+        @Html.EditorFor(m => m.Separator)
+        @Html.ValidationMessageFor(m => m.Separator, "*")
+    </div>
+    <div>
+        @Html.LabelFor(m => m.LeadingText, @T("Leading text"))
+        @Html.EditorFor(m => m.LeadingText)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.MenuName, @T("Menu to use"))
+        @Html.DropDownListFor(m => m.MenuName,
+        new SelectList(Model.AvailableMenus, "Value", "Text", Model.MenuName))
+        @Html.ValidationMessageFor(m => m.MenuName, "*")
+        <span class="hint">
+            @T("The menu on which the breadcrumbs path will be based on.")
+        </span>
+    </div>
+    <div>
+        @Html.EditorFor(m => m.LastAsLink)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.LastAsLink)">@T("Display last breadcrumb as link?")</label>
+    </div>
+</fieldset>

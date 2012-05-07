@@ -1,0 +1,39 @@
+﻿@using System.Linq
+@{
+    // Breadcrumbs display shape
+
+    IEnumerable<dynamic> items = Enumerable.Cast<dynamic>(Model.Path);
+    var lastAsLink = Model.LastAsLink ?? false;
+    var count = items.Count();
+    var i = 0;
+    var tag = Tag(Model, "div");
+}
+@tag.StartElement
+@if (HasText(Model.LeadingText))
+{ 
+    <span class="leading">@T(Model.LeadingText)</span>
+}
+@foreach (var item in items)
+{
+    var text = item.Text;
+    i++;
+    if (i == count)
+    {
+    <span class="breadcrumb last">
+        @if (lastAsLink)
+        {
+            <a href="@item.Href">@text</a>
+        }
+        else
+        {
+            <text>@text</text>
+        }
+    </span>
+    }
+    else
+    {
+    <span class="breadcrumb @((i == 1) ? "first" : "")"><a href="@item.Href">@text</a>
+    </span>@Model.Separator
+    }
+}
+@tag.EndElement

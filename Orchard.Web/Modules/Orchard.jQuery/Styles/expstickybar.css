@@ -1,0 +1,16 @@
+.expstickybar{
+position:fixed;
+color: white;
+padding: 5px;
+right:0; /*horizontally center bar in window*/
+left:0; /*horizontally center bar in window*/
+visibility:hidden;
+background: #e43a3d;
+z-index: 10000;
+width:auto; /*set width of bar to width of entire window*/
+font-weight:bold;
+}
+
+.expstickybar a{
+color: white;
+}

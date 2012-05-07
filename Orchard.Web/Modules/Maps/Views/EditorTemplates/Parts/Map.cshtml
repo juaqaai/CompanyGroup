@@ -1,0 +1,22 @@
+﻿@model Maps.Models.MapPart
+
+<fieldset>
+  <legend>Map Fields</legend>
+            
+  <div class="editor-label">
+    @Html.LabelFor(model => model.Latitude)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.Latitude)
+    @Html.ValidationMessageFor(model => model.Latitude)
+  </div>
+
+  <div class="editor-label">
+    @Html.LabelFor(model => model.Longitude)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.Longitude)
+    @Html.ValidationMessageFor(model => model.Longitude)
+  </div>
+            
+</fieldset>

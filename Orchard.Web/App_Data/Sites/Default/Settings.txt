@@ -1,0 +1,11 @@
+Name: Default
+DataProvider: SqlServer
+DataConnectionString: Data Source=1Juhasza;Initial Catalog=CmsDb;Persist Security Info=True;User ID=CmsUser;Password=CmsUser2004
+DataPrefix: null
+RequestUrlHost: null
+RequestUrlPrefix: null
+State: Running
+EncryptionAlgorithm: AES
+EncryptionKey: 76F4318F445C8C02C0473DD51ED909E2797B3B208A2F6B0E33A955CAEF1C1214
+HashAlgorithm: HMACSHA256
+HashKey: A6CD0B414F39B43809DDD4ABCA07C1208247B223AE6E45FD6E105AAE91A9FA2B099FDA2045B86A4EBFB3B43CFAE6D7ABD96F3B70D2497CF997EC201AE22BF45D

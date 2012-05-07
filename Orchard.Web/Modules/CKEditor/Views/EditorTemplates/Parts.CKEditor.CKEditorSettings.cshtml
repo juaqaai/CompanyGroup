@@ -1,0 +1,26 @@
+@model CKEditor.Models.CKEditorSettingsPartRecord
+@using Orchard.ContentManagement;
+
+@{ Layout.Title = T("CKEditor Settings").ToString(); }
+
+<fieldset>
+    <legend>@T("CKEditor")</legend>
+    <div>
+        @Html.LabelFor(m => m.ContentsCss, @T("CSS stylesheet(s) for contents"))
+        @Html.EditorFor(m => m.ContentsCss)
+        @Html.ValidationMessageFor(m => m.ContentsCss, "*")
+        <span class="hint">@T("Enter a space-separated list of stylesheet file names to use inside the CKEditor window (e.g. Site.css)")</span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.ExtraPlugins, @T("Extra plugins to load"))
+        @Html.EditorFor(m => m.ExtraPlugins)
+        @Html.ValidationMessageFor(m => m.ExtraPlugins, "*")
+        <span class="hint">@T("Enter a <strong>comma-separated</strong> list of plugin names to be enabled (e.g. 'stylesheetparser,devtools')")</span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.ClearDefaultStyleSets, @T("Clear default styles"))
+        @Html.EditorFor(m => m.ClearDefaultStyleSets)
+        @Html.ValidationMessageFor(m => m.ClearDefaultStyleSets, "*")
+        <span class="hint">@T("If you enable the 'stylesheetparser' plugin, you might want to use this to clear the default styles from the menu")</span>
+    </div>
+</fieldset>

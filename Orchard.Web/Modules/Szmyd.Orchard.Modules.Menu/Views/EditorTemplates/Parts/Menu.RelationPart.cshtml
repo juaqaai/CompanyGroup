@@ -1,0 +1,27 @@
+@using Szmyd.Orchard.Modules.Menu.ViewModels
+@model Szmyd.Orchard.Modules.Menu.Models.Menus.MenuRelationPart
+@{
+    Script.Require("ShapesBase");
+}
+<fieldset>
+<legend>@T("Show this item on menu(s)")</legend>
+@if (Model.Menus.Count() > 0) {
+        foreach (var entry in Model.Menus) {
+            <fieldset>
+                <input type="checkbox" name="SelectedMenus.Index" id="OnMenu-@entry.MenuName" @(entry.Selected ? "checked" : "") value="@entry.MenuName" />
+                <input type="hidden" name="SelectedMenus[@entry.MenuName].MenuName" id="" value="@entry.MenuName" />
+                <label class="forcheckbox" for="SelectedMenus[@entry.MenuName]">@T("Show on '<i>{0}</i>' menu", entry.MenuName)</label>
+                <div data-controllerid="OnMenu-@entry.MenuName" class="">
+                    <label for="SelectedMenus[@entry.MenuName].MenuText">@T("Menu text")</label>
+                    @Html.TextBox("SelectedMenus[" + entry.MenuName + "].MenuText", entry.MenuText, new { @class = "text-box single-line" })
+                    <label for="SelectedMenus[@entry.MenuName].Position">@T("Location")</label>
+                    @Html.TextBox("SelectedMenus[" + entry.MenuName + "].Position", entry.Position, new { @class = "text-box single-line" })
+                </div>
+            </fieldset>
+        }
+    }
+    else {
+    <p>@T("There are no menus to choose from.")</p>
+    }
+</fieldset>
+

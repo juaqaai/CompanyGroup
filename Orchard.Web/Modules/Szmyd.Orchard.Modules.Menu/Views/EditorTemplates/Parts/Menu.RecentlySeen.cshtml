@@ -1,0 +1,44 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Models.RecentlySeenPart
+@using System.Linq
+<fieldset>
+    <legend>@T("Recently seen settings")</legend>
+    <div>
+        @Html.LabelFor(m => m.PositiveFilterRegex, @T("Positive filtering regular expression"))
+        @Html.EditorFor(m => m.PositiveFilterRegex)
+        @Html.ValidationMessageFor(m => m.PositiveFilterRegex, "*")
+        <div>
+        <span class="hint">
+            @T("You can specify here the regular expression for an URL white-list. <b>Only matching URLs will be displayed.</b>")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.NegativeFilterRegex, @T("Negative filtering regular expression"))
+        @Html.EditorFor(m => m.NegativeFilterRegex)
+        @Html.ValidationMessageFor(m => m.NegativeFilterRegex, "*")
+        <div>
+        <span class="hint">
+            @T("You can specify here the regular expression for an URL black-list. <b>Matching URLs won't be displayed.</b>.")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.ItemCount, T("Items displayed"))
+        @Html.EditorFor(m => m.ItemCount)
+        @Html.ValidationMessageFor(m => m.ItemCount, "*")
+        <span class="hint">
+            @T("Specify how many items will be displayed.")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.VisitCounter, T("Visit counter"))
+        @Html.DropDownListFor(m => m.VisitCounter,
+                 new System.Web.Mvc.SelectList(Enum.GetNames(typeof(Szmyd.Orchard.Modules.Menu.Enums.VisitCounterType)).Select(s => new { Name = s }), "Name", "Name", Model.VisitCounter))
+        <span class="hint">
+            @T("Select the counter which you'd like to display items for.")
+        </span>
+    </div>
+    <div>
+        @Html.EditorFor(m => m.ShowCounts)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.ShowCounts)">@T("Should display visit counts?")</label>
+        </div>
+    </div>
+</fieldset>

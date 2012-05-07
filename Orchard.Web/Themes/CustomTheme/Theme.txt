@@ -1,0 +1,7 @@
+Name: CustomTheme
+Author: HRP Hungary Kft.
+Website: http://www.hrp.hu
+Description: Custom theme
+Version: 1.0
+# todo: provide tags
+# Tags: Classic, Serif

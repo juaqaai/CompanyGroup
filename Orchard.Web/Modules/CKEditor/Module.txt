@@ -1,0 +1,17 @@
+Name: CKEditor
+AntiForgery: enabled
+Author: usagi
+Website: http://orchardckeditor.codeplex.com
+License: http://orchardckeditor.codeplex.com/license
+Version: 1.0.9.2
+OrchardVersion: 1.0.20
+Summary: CKEditor HTML WYSIWYG editor
+Description: Provides CKEditor 3.6 for HTML editing. Important upgrade note: this will overwrite ckeditor.js and config.js - so if you've made any changes there, you'll have to make them again upgrading. We introduced a new configuration mechanic in 1.0.3 - please see our Project Site on Codeplex for instructions; and in 1.0.7 we have introduced a CKEditor settings page in Dashboard. 1.0.9 adds an extensible configuration system with ICKEditorConfigProvider.
+Tags: body content html wysiwyg ckeditor editor
+Category: Publishing
+Dependencies: Orchard.Themes
+Features:
+    CKEditor:
+		Description: CKEditor 3.6 HTML WYSIWYG editor
+		Dependencies: Orchard.Themes
+		Category: Input Editor

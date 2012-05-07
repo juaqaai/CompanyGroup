@@ -1,0 +1,7 @@
+﻿@model dynamic
+@{ 
+    var tag = Tag(Model, "span");
+}
+@tag.StartElement
+    @T("{0} views", Model.Count)
+@tag.EndElement

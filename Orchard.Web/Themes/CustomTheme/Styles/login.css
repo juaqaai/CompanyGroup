@@ -1,0 +1,13 @@
+﻿
+#div_login {
+	background-color: #CCC;
+	background-image: url('../../../Media/images/loginpanelbg.jpg');
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+#loginform table {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 11px;
+	color: #333;
+	background-repeat: no-repeat;
+}

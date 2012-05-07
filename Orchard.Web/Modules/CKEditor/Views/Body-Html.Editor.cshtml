@@ -1,0 +1,16 @@
+﻿@{
+	Script.Require("CKEditor");
+    // From Orchard.Mvc.Html.HtmlHelperExtensions
+    var id = Html.ViewData.TemplateInfo.GetFullHtmlFieldId("Text");
+    // because "[" and "]" aren't replaced with "_" in GetFullHtmlFieldId
+    id = id.Replace('[', '_').Replace(']', '_');
+}
+
+@using(Script.Foot()) {
+<script type="text/javascript">
+//<![CDATA[
+	CKEDITOR.replace("@id",@Display.CKEditor_Config());
+//]]>
+</script>
+}
+@Html.TextArea("Text", (string)Model.Text, 50, 80, new { @class = "html" })

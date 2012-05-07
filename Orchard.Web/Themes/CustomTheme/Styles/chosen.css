@@ -1,0 +1,240 @@
+select.chzn-select {
+    visibility: hidden;
+    height: 20px !important;
+    min-height: 20px !important;
+}
+.chzn-container {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+	font-weight:normal;
+    position: relative;
+    display: inline-block;
+    zoom: 1;
+    *
+    display: inline;
+    -moz-border-radius: 6px 6px 0px 0px;
+    -webkit-border-radius: 6px 6px 0px 0px;
+    border-radius: 6px 6px 0px 0px;
+}
+.chzn-container .chzn-drop {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: 0;
+    position: absolute;
+    margin-top:1px;
+    top: 29px;
+    left: 0;
+    -webkit-box-shadow: 0 4px 5px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 4px 5px rgba(0,0,0,.15);
+    -o-box-shadow: 0 4px 5px rgba(0,0,0,.15);
+    box-shadow: 0 4px 5px rgba(0,0,0,.15);
+    z-index: 999;
+}
+/* @end */
+
+/* @group Multi Chosen */
+.chzn-container-multi .chzn-choices {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+    margin-top: 5px;
+    margin-bottom:0px;
+    margin-left:0px;
+    margin-right:0px;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    height: auto !important;
+    height: 1%;
+    position: relative;
+}
+.chzn-container-multi .chzn-choices li {
+    float: left;
+    list-style: none;
+}
+.chzn-container-multi .chzn-choices .search-field {
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+}
+.chzn-container-multi .chzn-choices .search-field input {
+    color: #666;
+    /*background: transparent !important;*/
+    border: 0 !important;
+    padding: 5px;
+    margin: 1px 0;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+	/*width:320px;
+	background:#09F;*/
+}
+.chzn-container-multi .chzn-choices .search-field .default {
+    color: #999;
+}
+.chzn-container-multi .chzn-choices .search-choice {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    background-color: #e4e4e4;
+    color: #333;
+    border: 1px solid #b4b4b4;
+    line-height: 11px;
+    padding: 3px 19px 3px 6px;
+    margin: 4px 0 2px 4px;
+    position: relative;
+}
+.chzn-container-multi .chzn-choices .search-choice span {
+    cursor: default;
+}
+.chzn-container-multi .chzn-choices .search-choice-focus {
+    background: #d4d4d4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.chzn-container-multi .chzn-choices .search-choice .search-choice-close {
+    display: block;
+    position: absolute;
+    right: 2px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    font-size: 1px;
+    background: url('../../../Media/images/chosen-sprite.png') right top no-repeat;
+}
+.chzn-container-multi .chzn-choices .search-choice .search-choice-close:hover {
+    background-position: right -11px;
+}
+.chzn-container-multi .chzn-choices .search-choice-focus .search-choice-close {
+    background-position: right -11px;
+}
+/* @end */
+
+/* @group Results */
+.chzn-container .chzn-results {
+    margin: 0 4px 4px 0;
+    /*max-height: 190px;*/
+    padding: 0 0 0 4px;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background:#DDDDDD;
+}
+.chzn-container-multi .chzn-results {
+    margin: -1px 0 0;
+    padding: 0;
+}
+.chzn-container .chzn-results li {
+    line-height: 80%;
+    padding: 7px 7px 8px;
+    margin: 0;
+    list-style: none;
+}
+.chzn-container .chzn-results .active-result {
+    cursor: pointer;
+}
+.chzn-container .chzn-results .highlighted {
+    background: #3875d7;
+    color: #fff;
+}
+.chzn-container .chzn-results li em {
+    background: #feffde;
+    font-style: normal;
+}
+.chzn-container .chzn-results .highlighted em {
+    background: transparent;
+}
+.chzn-container .chzn-results .no-results {
+    background: #f4f4f4;
+}
+.chzn-container .chzn-results .group-result {
+    cursor: default;
+    color: #999;
+    font-weight: bold;
+}
+.chzn-container .chzn-results .group-option {
+    padding-left: 20px;
+}
+.chzn-container-multi .chzn-drop .result-selected {
+    display: none;
+}
+/* @end */
+
+/* @group Active  */
+.chzn-container-active .chzn-single {
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -o-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    box-shadow: 0 0 5px rgba(0,0,0,.3);
+    border: 0px solid #666;
+}
+.chzn-container-active .chzn-single-with-drop {
+    border: 1px solid #aaa;
+    -webkit-box-shadow: 0 1px 0 #fff inset;
+    -moz-box-shadow: 0 1px 0 #fff inset;
+    -o-box-shadow: 0 1px 0 #fff inset;
+    box-shadow: 0 1px 0 #fff inset;
+    background-color: #eee;
+    -webkit-border-radius: 3;
+    -moz-border-radius: 3;
+    border-radius: 3;
+}
+.chzn-container-active .chzn-single-with-drop div {
+    background: transparent;
+    border-left: none;
+}
+.chzn-container-active .chzn-single-with-drop div b {
+    background-position: -18px 1px;
+}
+.chzn-container-active .chzn-choices {
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -o-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    box-shadow: 0 0 5px rgba(0,0,0,.3);
+    border: 1px solid #CCC;
+    /*background:#222222;*/
+}
+.chzn-container-active .chzn-choices .search-field input {
+    color: #111 !important;
+}
+/* @end */
+
+/* ár szerinti kisebb, nagyobb, egyenlő szűrő */
+
+#cus_filter_price {z-index: 3400; margin-left:0px; background:#DEDEDE; padding:5px; border-bottom:0px solid #ccc; margin-bottom:5px;}
+
+#cus_refresh_icon {
+   width: auto;
+   height:18px;
+   padding-left:28px;
+   padding-top:7px;
+   display:block;
+   background: #900;
+   margin-left:145px;
+   margin-top:-27px;
+   border-radius: 2px;
+   background: url('../../../Media/images/refresh.png') left 5px no-repeat;
+   cursor:pointer;
+}
+
+/* a négy szűrő egyedi z-indexre emelése */
+
+#cus_filter_1 {z-index: 3400; margin-left:0px; background:#DEDEDE; padding:5px; border-bottom:0px solid #ccc; margin-bottom:5px;}
+#cus_filter_1 .chzn-results {background: #F9F9F9; height:600px; resize: vertical;}
+
+#cus_filter_2 {z-index: 3300; margin-left:0px; background:#DEDEDE; padding:5px; border-bottom:0px solid #ccc; margin-bottom:5px;}
+#cus_filter_2 .chzn-results {background: #F9F9F9; height:600px;}
+
+#cus_filter_3 {z-index: 3200; margin-left:0px; background:#DEDEDE; padding:5px; border-bottom:0px solid #ccc; margin-bottom:5px;}
+#cus_filter_3 .chzn-results {background: #F9F9F9; height:600px;}
+
+#cus_filter_4 {z-index: 3100; margin-left:0px; background:#DEDEDE; padding:5px; border-bottom:0px solid #ccc; margin-bottom:5px;}
+#cus_filter_4 .chzn-results {background: #F9F9F9; height:600px;}
