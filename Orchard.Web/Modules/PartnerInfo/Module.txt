@@ -1,0 +1,10 @@
+Name: PartnerInfo
+AntiForgery: enabled
+Author: Attila Juhász
+Website: http://www.hrp.hu
+Version: 1.3.0
+OrchardVersion: 1.3.0
+Description: The module contains thiese following parts: order list, invoice list, registered customer data
+FeatureDescription: The module contains thiese following parts: order list, invoice list, registered customer data.
+Category: Commerce
+

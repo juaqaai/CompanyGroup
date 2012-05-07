@@ -1,0 +1,58 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Models.MenuStylingPart
+@using Szmyd.Orchard.Modules.Menu.Enums
+<fieldset>
+    <legend>@T("Simple menu styling settings")</legend>
+    <div>
+        @Html.LabelFor(m => m.Style, T("Choose menu style:"))
+        @Html.DropDownListFor(m => m.Style,
+        new System.Web.Mvc.SelectList(Enum.GetNames(typeof(MenuStyles)).Select(s => new { Name = s }), "Name", "Name", Model.Style))
+    </div>
+    <div>
+        @Html.LabelFor(m => m.BackColor, @T("Item background color"))
+        @Html.EditorFor(m => m.BackColor)
+        @Html.ValidationMessageFor(m => m.BackColor, "*")
+        <span class="hint">
+            @T("Background color in hex format, eg. #FFFFFF (white), #000000 (black)")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.ForeColor, @T("Item foreground (text) color"))
+        @Html.EditorFor(m => m.ForeColor)
+        @Html.ValidationMessageFor(m => m.ForeColor, "*")
+        <span class="hint">
+            @T("Foreground color in hex format, eg. #FFFFFF (white), #000000 (black)")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.SelectedBackColor, @T("Selected item's background color"))
+        @Html.EditorFor(m => m.SelectedBackColor)
+        @Html.ValidationMessageFor(m => m.SelectedBackColor, "*")
+        <span class="hint">
+            @T("Background color in hex format, eg. #FFFFFF (white), #000000 (black)")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.SelectedForeColor, @T("Selected item's foreground (text) color"))
+        @Html.EditorFor(m => m.SelectedForeColor)
+        @Html.ValidationMessageFor(m => m.SelectedForeColor, "*")
+        <span class="hint">
+            @T("Foreground color in hex format, eg. #FFFFFF (white), #000000 (black)")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.HoverBackColor, @T("Hovered item's background color"))
+        @Html.EditorFor(m => m.HoverBackColor)
+        @Html.ValidationMessageFor(m => m.HoverBackColor, "*")
+        <span class="hint">
+            @T("Background color in hex format, eg. #FFFFFF (white), #000000 (black)")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.HoverForeColor, @T("Hovered item's foreground (text) color"))
+        @Html.EditorFor(m => m.HoverForeColor)
+        @Html.ValidationMessageFor(m => m.HoverForeColor, "*")
+        <span class="hint">
+            @T("Foreground color in hex format, eg. #FFFFFF (white), #000000 (black)")
+        </span>
+    </div>
+</fieldset>

@@ -1,0 +1,9 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Settings.ItemCounterPartTypePartSettings
+    <fieldset>
+    <div>
+        @Html.LabelFor(m => m.Type, T("Default counter displayed"))
+        @Html.DropDownListFor(m => m.Type,
+                 new System.Web.Mvc.SelectList(Enum.GetNames(typeof(Szmyd.Orchard.Modules.Menu.Enums.VisitCounterType)).Select(s => new { Name = s }), "Name", "Name", Model.Type))
+</div>
+    </fieldset>
+

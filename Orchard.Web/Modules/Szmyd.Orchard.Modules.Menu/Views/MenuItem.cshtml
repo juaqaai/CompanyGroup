@@ -1,0 +1,64 @@
+﻿@{
+    // odd formatting in this file is to cause more attractive results in the output.
+    var items = (IEnumerable<dynamic>)Enumerable.Cast<dynamic>(Model);
+}
+@{
+    if (!HasText(Model.Text)){
+        @DisplayChildren(Model)
+    }
+    else
+    {
+        if (Model.Selected)
+        {
+            Model.Classes.Add("selected");
+        }
+
+        if (Model.Current)
+        {
+            Model.Classes.Add("current");
+        }
+        
+        var tag = Tag(Model, "li");
+        
+        @tag.StartElement
+        if (Model.DisplayText == null || (Model.DisplayText != null && Model.DisplayText))
+        {
+            if (Model.DisplayHref == null || (Model.DisplayHref != null && Model.DisplayHref))
+            {
+                <a href="@Model.Href" class="title">@Model.Text</a>
+            }
+            else
+            { 
+                <div class="title">@Model.Text</div>
+            }
+            if (Model.SubTitle != null)
+            { 
+                <div class="subtitle">@Model.SubTitle</div>
+            }
+        }
+        if (Model.HtmlTemplate != null)
+        {
+                    <div>
+                        @Html.Raw(Model.HtmlTemplate)
+                    </div>
+        }
+        if (items.Any())
+        {
+            if (Model.WrapChildrenInDiv != null && (bool)Model.WrapChildrenInDiv)
+            {
+                    <div>
+                        <ul>
+                            @DisplayChildren(Model)
+                        </ul>
+                    </div>
+            }
+            else
+            {
+                    <ul>
+                        @DisplayChildren(Model)
+                    </ul>
+            }
+        }
+        @tag.EndElement
+    }
+}

@@ -1,0 +1,11 @@
+Name: CatalogueFilter
+AntiForgery: enabled
+Author: Attila Juhasz
+Website: http://www.hrp.hu
+Version: 1.0
+OrchardVersion: 1.0
+Description:  Webshop catalogue filter widget.
+Features:
+    CatalogueFilter:
+        Description: Webshop catalogue filter widget.
+        Category: Commerce

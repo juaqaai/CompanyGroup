@@ -1,0 +1,11 @@
+﻿@using Orchard.ContentManagement;
+@using Szmyd.Orchard.Modules.Menu.Models;
+@{
+    var item = Model.ContentItem as IContent;
+    var count = (item != null && item.Is<ItemCounterPart>()) ? item.As<ItemCounterPart>().Count : Model.Count;
+}
+
+@Display(New.Counter()
+    .Count(count)
+    .Type(Model.Type)
+    .ContentItem(Model.ContentItem))

@@ -1,0 +1,42 @@
+﻿@using Szmyd.Orchard.Modules.Menu.Enums
+@{
+    var id = ((Orchard.ContentManagement.IContent)Model.ContentPart.ContentItem).Id;
+    string cssClass = "";
+    Style.Require("Superfish").AtHead();
+
+    /* Styles for Superfish menu */
+    if (Model.ContentPart.Style == MenuStyles.SuperfishVertical)
+    {
+        Style.Require("SuperfishVertical").AtHead();
+        cssClass = "sf-vertical";
+    }
+    else if (Model.ContentPart.Style == MenuStyles.SuperfishNavbar)
+    {
+        Style.Require("SuperfishNavbar").AtHead();
+        cssClass = "sf-navbar";
+    }
+    WorkContext.Layout.Head.Add(New.MenuStyle(MenuId: id, ContentPart: Model.ContentPart));
+    /* Scripts for Superfish menu */
+    Script.Require("Superfish").AtHead();
+    Script.Require("Supersubs").AtHead();
+    
+    
+}
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#menu-@(id)").addClass('sf-menu');
+            @if(!string.IsNullOrWhiteSpace(cssClass))
+            {
+            <text>$("#menu-@(id)").addClass("@cssClass");</text>
+            }
+            $("#menu-@(id)").superfish({
+                delay: 200,
+                speed: 'fast',
+                autoArrows: 1,
+                dropShadows: 1
+            });
+        });
+    </script>
+}

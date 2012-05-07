@@ -1,0 +1,10 @@
+Name: CommonCore
+AntiForgery: enabled
+Author: Attila Juhasz
+Website: http://orchardproject.net
+Version: 1.0
+OrchardVersion: 1.0
+Description: Common core module for the cms modules
+Features:
+    CommonCore:
+        Description: CommonCore is a very simple module.

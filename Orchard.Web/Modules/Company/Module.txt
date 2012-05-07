@@ -1,0 +1,10 @@
+Name: Company
+AntiForgery: enabled
+Author: Attila Juhász
+Website: http://www.hrp.hu
+Version: 1.0
+OrchardVersion: 1.0
+Description: The company module contains thiese following parts: carreer, brands list, newsletter datasheet 
+FeatureDescription: The company module contains thiese following parts: carreer, brands list, newsletter datasheet.
+Category: Commerce
+        

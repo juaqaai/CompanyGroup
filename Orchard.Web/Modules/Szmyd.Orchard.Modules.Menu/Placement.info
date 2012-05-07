@@ -1,0 +1,11 @@
+<Placement>
+    <Place Parts_Menu_Settings="Content:10"/>
+    <Place Parts_Menu_Breadcrumbs="Content:0"/>
+    <Place Parts_Menu_RecentlySeen="Content:0"/>
+    <Place Parts_Menu_Widget="Content:0"/>
+    <Place Parts_Menu_Styling="Content:before"/>
+    <Place Parts_Menu_AdvancedItem="Content:before"/>
+    <Place Parts_Menu_AdvancedMenu="Content:before"/>
+    <Place Parts_Counters_ItemCounter="Content:before"/>
+    <Place Parts_Menu_RelationPart="Content:9"/>
+</Placement>

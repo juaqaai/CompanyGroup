@@ -1,0 +1,9 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Models.AdvancedMenuPart
+<fieldset>
+    <legend>@T("Menu settings")</legend>
+    <div>
+        @Html.LabelFor(m => m.Name, @T("Menu name"))
+        @Html.EditorFor(m => m.Name)
+        @Html.ValidationMessageFor(m => m.Name, "*")
+    </div>
+</fieldset>

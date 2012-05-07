@@ -1,0 +1,78 @@
+@model MenuItemsViewModel
+@using Orchard.ContentManagement;
+@using Orchard.Core.Common.Models
+@using Orchard.Core.Navigation.Models;
+@using Orchard.Mvc.Html
+@using Szmyd.Orchard.Modules.Menu.ViewModels;
+@using Szmyd.Orchard.Modules.Menu.Enums;
+
+@{ Layout.Title = T("Manage {0} menu", Model.MenuName).ToString(); }
+
+<div class="manage">
+    <a href="@Html.AntiForgeryTokenGetUrl(Url.Action("Delete", new { menuName = Model.MenuName }))" class="button primaryAction">@T("Delete menu") </a>
+    @Html.ActionLink(T("Create new menu").Text, "Create", "MenuAdmin", new { Area = "Szmyd.Orchard.Modules.Menu" }, new { @class = "button primaryAction" })
+</div>
+<div class="manage">
+    @Html.ActionLink(T("+ Add item").Text, "CreateItem", "MenuAdmin", new { type = MenuItemType.Simple, menuName = Model.MenuName, Area = "Szmyd.Orchard.Modules.Menu" }, new { @class = "button primaryAction" })
+    @Html.ActionLink(T("+ Add item /w custom Html").Text, "CreateItem", "MenuAdmin", new { type = MenuItemType.Templated, menuName = Model.MenuName, Area = "Szmyd.Orchard.Modules.Menu" }, new { @class = "button primaryAction" })
+</div>
+<br />
+<div style="width:100%;text-align:right;clear:both;">
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Fill", "MenuAdmin", new { menuName = Model.MenuName, Area = "Szmyd.Orchard.Modules.Menu" }), FormMethod.Post))
+{
+    @Html.CheckBox("containable", false)
+    <label class="forcheckbox" for="containable">@T("Include contained items?")</label>
+    <button class="primaryAction" type="submit">@T("+ Fill menu with existing items")</button>
+}
+</div>
+<table class="items">
+    <colgroup>
+        <col id="Item" />
+        <col id="Position" />
+        <col id="Url" />
+        <col id="Actions" />
+    </colgroup>
+    <thead>
+        <tr>
+            <td scope="col">@T("Item")</td>
+            <td scope="col">@T("Position")</td>
+            <td scope="col">@T("Url")</td>
+            <td scope="col"></td>
+        </tr>
+    </thead>
+    <tbody>@{ 
+        var itemIndex = 0;
+        foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                <div><h3>@Html.ItemAdminLink(item.Text, item)</h3>
+                @if(!string.IsNullOrWhiteSpace(item.SubTitle))
+                {
+                    <h6><i>@item.SubTitle</i></h6>
+                }
+                </div>
+                <div>@T("Type: <strong>{0}</strong>", item.Is<BodyPart>() ? "Custom Html" : "Simple")</div>
+                
+                </td>
+
+                <td>@item.Position</td>
+                <td>@if (item.RelatedItem != null) 
+                     {
+                        @Html.ItemAdminLink(item.RelatedItem)
+                     }
+                     else
+                     {
+                        @T(item.Url)
+                     }
+                </td>
+                <td>
+                @Html.ItemAdminLink(T("Edit").Text, item)&nbsp;|&nbsp;
+                <a href="@Html.AntiForgeryTokenGetUrl(Url.Action("DeleteItem", new { menuName = Model.MenuName, itemId = item.Id }))" class="remove">@T("Delete")</a>
+                </td>
+            </tr>
+            ++itemIndex;
+        }
+    }
+    </tbody>
+</table>

@@ -1,0 +1,9 @@
+Name: Webshop
+AntiForgery: enabled
+Author: Attila Juhász
+Website: http://www.hrp.hu
+Version: 1.0
+OrchardVersion: 1.0
+Description: The module contains thiese following parts: catalogue list, catalogue item, checkout, pricelist, order confirmation
+FeatureDescription: The module contains thiese following parts: catalogue list, catalogue item, checkout, pricelist, order confirmation.
+Category: Commerce

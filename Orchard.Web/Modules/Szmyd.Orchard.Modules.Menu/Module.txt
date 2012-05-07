@@ -1,0 +1,21 @@
+Name: Advanced menu
+AntiForgery: enabled
+Author: Piotr Szmyd
+Website: http://www.szmyd.com.pl
+Version: 1.3.0
+OrchardVersion: 1.1.30
+Description: Allows creation of custom, hierarchical menus. Adds also the BreadcrumbsWidget, RecentlySeenWidget and a MenuWidget/StyledMenuWidget to display independent menus on your pages.
+FeatureDescription: Allows creation of custom, hierarchical menus. Adds a MenuWidget/StyledMenuWidget to display independent menus on your pages.
+Category: Navigation
+Dependencies: Orchard.jQuery, Orchard.Widgets, Navigation, Settings
+Features:
+    Szmyd.Menu.Counters:
+        Name: Advanced menu - Visit counters
+        Description: Enables counting content item visits/displays. Adds Recently Seen Widget that displays recently visited items.
+        Category: Navigation
+        Dependencies: Szmyd.Orchard.Modules.Menu
+    Szmyd.Menu.Breadcrumbs:
+        Name: Advanced Menu - Breadcrumbs
+        Description: Enables breadcrumbs. Adds Breadcrumbs Widget that displays breadcrumbs path based on a given menu.
+        Category: Navigation
+        Dependencies: Szmyd.Orchard.Modules.Menu

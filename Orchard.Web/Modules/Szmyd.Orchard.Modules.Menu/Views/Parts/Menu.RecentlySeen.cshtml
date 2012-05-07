@@ -1,0 +1,17 @@
+﻿@{
+    var i = 0;
+}
+<div class="recently-seen">
+<ul>
+@foreach (var item in Model.RecentItems)
+{
+    i++;
+     <li class="item item-@i"><a href="@item.Url">@item.Text</a>&nbsp;
+     @if ((bool)Model.ShowCounts)
+     { 
+         <span class="visit-counter">(@item.Visits)</span>
+     }
+     </li>
+}
+</ul>
+</div>

@@ -1,0 +1,35 @@
+﻿@using Orchard.ContentManagement;
+@using Orchard.Widgets.Models;
+@using Szmyd.Orchard.Modules.Menu.Models;
+@{
+    var widget = ((IContent) Model.ContentItem).As<WidgetPart>();
+    var title = widget.Title;
+    var tag = Tag(Model, "article");
+}
+@* Strip wrapper for menu widget when displayed in Navigation zone and for Breadcrumbs part. *@
+@if ((widget.Is<MenuWidgetPart>() && widget.Zone == "Navigation") || widget.Is<BreadcrumbsPart>())
+{
+    @Display(Model.Child)
+}
+else
+{
+    @tag.StartElement
+    if (HasText(title) || Model.Header != null)
+    {
+        <header>
+            @if (HasText(title))
+            {
+                <h1>@title</h1>
+            }
+            @Display(Model.Header)
+        </header>
+    }
+    @Display(Model.Child)
+    if (Model.Footer != null)
+    {
+        <footer>
+            @Display(Model.Footer)
+        </footer>
+    }
+    @tag.EndElement
+}

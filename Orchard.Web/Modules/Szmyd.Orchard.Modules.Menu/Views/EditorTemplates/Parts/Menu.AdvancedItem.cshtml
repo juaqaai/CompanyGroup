@@ -1,0 +1,56 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Models.AdvancedMenuItemPart
+@using Orchard.ContentManagement;
+@{ Layout.Title = T("Menu Item for '{0}'", Model.MenuName).ToString(); }
+<fieldset>
+    <legend>@T("Menu item settings")</legend>
+    <div>
+        @Html.LabelFor(m => m.Text, @T("Displayed text"))
+        @Html.EditorFor(m => m.Text)
+        @Html.ValidationMessageFor(m => m.Text, "*")
+    </div>
+    <div>
+        @Html.LabelFor(m => m.SubTitle, @T("Subtitle"))
+        @Html.EditorFor(m => m.SubTitle)
+        @Html.ValidationMessageFor(m => m.SubTitle, "*")
+        <span class="hint">
+            @T("Optional subtitle to display.")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Position, @T("Position"))
+        @Html.EditorFor(m => m.Position)
+        @Html.ValidationMessageFor(m => m.Position, "*")
+        <span class="hint">
+            @T("Menu item position in menu, using dot-notation (eg. 1, 1.1, 1.1.2 etc.)")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Url, @T("Url"))
+        @Html.EditorFor(m => m.Url)
+        @Html.ValidationMessageFor(m => m.Url, "*")
+        <span class="hint">
+            @T("Url to the desired page")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Classes, @T("Additional CSS classes"))
+        @Html.EditorFor(m => m.Classes)
+        @Html.ValidationMessageFor(m => m.Classes, "*")
+        <span class="hint">
+            @T("Optional additional CSS classes to apply to this item.")
+        </span>
+    </div>
+    <div>
+        @Html.EditorFor(m => m.DisplayText)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.DisplayText)">@T("Should display item text?")</label>
+    </div>
+    <div>
+        @Html.EditorFor(m => m.DisplayHref)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.DisplayHref)">@T("Should display item as link?")</label>
+    </div>
+    @Html.HiddenFor(m => m.MenuName)
+    @if (Model.Id != default(int))
+    {
+        <input type="hidden" name="type" value="@(Model.Is<Orchard.Core.Common.Models.BodyPart>() ? "Templated" : "Simple")" />
+    }
+</fieldset>

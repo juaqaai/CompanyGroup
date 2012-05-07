@@ -1,0 +1,837 @@
+﻿@functions {
+    // To support the layout classifaction below. Implementing as a razor function because we can, could otherwise be a Func<string[], string, string> in the code block following.
+    string CalcuClassify(string[] zoneNames, string classNamePrefix)
+    {
+        var zoneCounter = 0;
+        var zoneNumsFilled = string.Join("", zoneNames.Select(zoneName => { ++zoneCounter; return Model[zoneName] != null ? zoneCounter.ToString() : ""; }).ToArray());
+        return HasText(zoneNumsFilled) ? classNamePrefix + zoneNumsFilled : "";
+    }
+}
+@{
+    /* Global includes for the theme
+    ***************************************************************/
+    Style.Include("http://fonts.googleapis.com/css?family=Lobster&subset=latin");
+    Style.Include("site.css");
+    Style.Include("hrp_bsc_html_css.css");
+    Style.Include("login.css");
+
+    Script.Require(Url.Content("jQuery")).AtHead();
+    Script.Require(Url.Content("Chosen")).AtHead();
+    Script.Require(Url.Content("JTemplate")).AtHead();
+    Script.Require(Url.Content("JSon")).AtHead();
+    Script.Require(Url.Content("JQuery_EasyPaginate")).AtHead();
+    //Script.Require(Url.Content("JQuery_StickyBar")).AtHead();
+    Script.Require(Url.Content("JQuery_FlexCroll")).AtHead();
+    Script.Require(Url.Content("JQuery_HoverIntent")).AtHead();
+    Script.Require(Url.Content("JQuery_AsmSelect")).AtHead();
+    Script.Require(Url.Content("JQuery_Easing")).AtHead();
+    Script.Require(Url.Content("JQuery_FancyBox")).AtHead();
+    Script.Require(Url.Content("JQuery_FloatingMessage")).AtHead();
+    Script.Require(Url.Content("JQuery_JqEasyPanel")).AtHead();
+    Script.Require(Url.Content("JQuery_MouseWheel")).AtHead();
+    Script.Require(Url.Content("JQuery_MultiSelect")).AtHead();
+    Script.Require(Url.Content("JQuery_Tabify")).AtHead();
+    Script.Require(Url.Content("JQuery_Uniform")).AtHead();
+    Script.Require(Url.Content("JQuery_Vegas")).AtHead();
+    Script.Require(Url.Content("JQuery_Prettify")).AtHead();
+    Script.Require(Url.Content("JQuery_Flash")).AtHead();
+    Script.Require(Url.Content("JQuery_MaskedInput")).AtHead();
+    Script.Require(Url.Content("JQuery_PrintElement")).AtHead();
+    Script.Require(Url.Content("jQuery_Validate")).AtHead();
+    
+    Script.Require(Url.Content("CatalogueFilter")).AtHead();
+    Script.Require(Url.Content("CatalogueService")).AtHead();
+    Script.Require(Url.Content("CustomerService")).AtHead();    
+
+    /* Some useful shortcuts or settings
+    ***************************************************************/
+
+    Func<dynamic, dynamic> Zone = x => Display(x); // Zone as an alias for Display to help make it obvious when we're displaying zones
+
+    /* Layout classification based on filled zones
+    ***************************************************************/
+
+    //Add classes to the wrapper div to toggle aside widget zones on and off
+    var asideClass = CalcuClassify(new[] { "AsideFirst", "AsideSecond" }, "aside-"); // for aside-1, aside-2 or aside-12 if any of the aside zones are filled
+    if (HasText(asideClass))
+    {
+        Model.Classes.Add(asideClass);
+    }
+
+    //Add classes to the wrapper div to toggle tripel widget zones on and off
+    var tripelClass = CalcuClassify(new[] { "TripelFirst", "TripelSecond", "TripelThird" }, "tripel-"); // for tripel-1, triple-2, etc. if any of the tripel zones are filled
+    if (HasText(tripelClass))
+    {
+        Model.Classes.Add(tripelClass);
+    }
+
+    //Add classes to the wrapper div to toggle quad widget zones on and off
+    var footerQuadClass = CalcuClassify(new[] { "FooterQuadFirst", "FooterQuadSecond", "FooterQuadThird", "FooterQuadFourth" }, "split-"); // for quad-1, quad-2, etc. if any of the quad zones are filled
+    if (HasText(footerQuadClass))
+    {
+        Model.Classes.Add(footerQuadClass);
+    }
+
+    /* Inserting some ad hoc shapes
+    ***************************************************************/
+
+    WorkContext.Layout.Header.Add(New.Branding(), "5"); // Site name and link to the home page
+    WorkContext.Layout.Footer.Add(New.BadgeOfHonor(), "5"); // Powered by Orchard
+    WorkContext.Layout.Footer.Add(New.User(), "10"); // Login and dashboard links
+
+    /* Last bit of code to prep the layout wrapper
+    ***************************************************************/
+
+    Model.Id = "layout-wrapper";
+    var tag = Tag(Model, "div"); // using Tag so the layout div gets the classes, id and other attributes added to the Model
+}
+@tag.StartElement
+
+    @using (Script.Head())
+    {
+        <script type="text/javascript" language="javascript">
+
+            var catalogueFilter = new CatalogueFilter();
+            var catalogueService = new CatalogueService();
+
+            $(document).ready(function () {
+
+                var customerService = new CustomerService();
+                customerService.visitorInfo('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
+                
+
+                jQuery('.chosen').chosen();
+
+                jQuery('.chosen').unbind('change').bind('change', function () {
+                    //var selected = $(this).find('option').eq(this.selectedIndex);
+                    //alert($(this).attr('id')) + ' index: ' + this.selectedIndex + ' val: ' + $(selected).val());
+
+                    if ($(this).attr('id') == 'manufacturerList') {
+                        catalogueFilter.setManufacturerIdList($('#manufacturerList').val());    //$(selected).val()
+                        catalogueService.loadStructure(false, true, true, true, '@Url.Content("~/Webshop/Catalogue/GetStructure")');
+                        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                    }
+                    else if ($(this).attr('id') == 'category1List') {
+                        //alert($('#category1List').val());
+                        catalogueFilter.setCategory1IdList($('#category1List').val());   //$(selected).val()
+                        catalogueService.loadStructure(true, false, true, true, '@Url.Content("~/Webshop/Catalogue/GetStructure")');
+                        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                    }
+                    else if ($(this).attr('id') == 'category2List') {
+                        catalogueFilter.setCategory2IdList($('#category2List').val());
+                        catalogueService.loadStructure(true, true, false, true, '@Url.Content("~/Webshop/Catalogue/GetStructure")');
+                        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                    }
+                });
+
+                //cus teljes háttérkép eleje
+                $.vegas({
+                    src: '@Url.Content("~/Media/images/background6.jpg")'
+                });
+
+                //cus alsó (ajánlott) termék lapozó eleje
+                $('#cus_recommended_prod_content').easyPaginate({
+                    step: 4,
+                    delay: 300,
+                    numeric: true,
+                    nextprev: false,
+                    auto: false,
+                    pause: 5000,
+                    clickstop: true,
+                    controls: 'pagination',
+                    current: 'current'
+                });
+
+                //cus kosárba kerülő termék (jobb felső) értesítő ablak eleje
+                $('#basketicon').click(function () {
+                    $.floatingMessage('<span style="font-family: verdana; font-size: 13px;"> A kiválasztott termék:<br /><strong>Toshiba C660 notebook</strong><br />bekerült a kosárba.</span>', {
+                        time: 4000,
+                        align: 'right',
+                        verticalAlign: 'top',
+                        show: 'blind',
+                        hide: 'drop',
+                        stuffEaseTime: 100,
+                        stuffEasing: 'easeInExpo',
+                        moveEaseTime: 200,
+                        moveEasing: 'easeOutBounce'
+                    })
+                });
+
+                //FanyBox felbukkanó ablakok eleje
+                $('#loginwin').fancybox({
+                    autoDimensions: true,
+                    /*width: '40%',
+                    height: '60%',*/
+                    autoScale: false,
+                    transitionIn: 'fade',
+                    transitionOut: 'fade'
+                    //type : 'iframe'
+                });
+
+                $('a[rel=cus_prodpics]').fancybox({
+                    transitionIn: 'elastic',
+                    transitionOut: 'elastic',
+                    titlePosition: 'over',
+                    titleFormat: function (title, currentArray, currentIndex, currentOpts) {
+                        return '<span id="fancybox-title-over">' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? '<br>' + title : '') + '</span>';
+                    }
+                });
+
+                //fenti, lenyíló kosár panel eleje
+                $(".btn_basket_slide").click(function () {
+                    $("#basket_panel").slideToggle("fast");
+                    $(this).toggleClass("active");
+                    return false;
+                });
+
+                //mindent lenyit/becsuk lista elemek eleje
+                $(".toggle_container").show();
+                $("span.expand_heading").toggle(function () {
+                    $(this).addClass("active");
+                }, function () {
+                    $(this).removeClass("active");
+                });
+                $("span.expand_heading").click(function () {
+                    $(this).next(".toggle_container").slideToggle("slow");
+                });
+                $(".expand_all").toggle(function () {
+                    $(this).addClass("expanded");
+                }, function () {
+                    $(this).removeClass("expanded");
+                });
+                $(".expand_all").click(function () {
+                    $(".toggle_container").slideToggle("slow");
+                });
+
+                //alsó kinyíló panel eleje
+                var slide = false;
+                var height = $('#cus_bottom_panel_on').height();
+                $('#bottom_button_open').click(function () {
+                    var docHeight = $(document).height();
+                    var windowHeight = $(window).height();
+                    var scrollPos = '';
+                    $('#cus_bottom_panel_on').animate({
+                        height: "toggle"
+                    }, 600);
+                    if (slide == false) {
+                        if ($.browser.opera) {//Fix opera double scroll bug by targeting only HTML.
+                            $('html').animate({
+                                scrollTop: scrollPos + 'px'
+                            }, 600);
+                        } else {
+                            $('html, body').animate({
+                                scrollTop: scrollPos + 'px'
+                            }, 600);
+                        }
+                        slide = true;
+                    } else {
+                        slide = false;
+                    }
+                });
+
+                $("#anchSequenceIdUp").click(function () {
+                    catalogueFilter.setSequence(2);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceIdDown").click(function () {
+                    catalogueFilter.setSequence(3);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceNameUp").click(function () {
+                    catalogueFilter.setSequence(4);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceNameDown").click(function () {
+                    catalogueFilter.setSequence(5);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequencePriceUp").click(function () {
+                    catalogueFilter.setSequence(6);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequencePriceDown").click(function () {
+                    catalogueFilter.setSequence(7);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceStockUp").click(function () {
+                    catalogueFilter.setSequence(8);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceStockDown").click(function () {
+                    catalogueFilter.setSequence(9);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceGarantyUp").click(function () {
+                    catalogueFilter.setSequence(10);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+                $("#anchSequenceGarantyDown").click(function () {
+                    catalogueFilter.setSequence(11);
+                    catalogueFilter.setCurrentPageIndex(0);
+                    catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                });
+
+                $('#preloader').ajaxStart(function () {
+                    $('#preloader').show();
+                }).ajaxStop(function () {
+                    $('#preloader').hide();
+                });
+
+                $("#anchor_signout").click(function () {
+                    var customerService = new CustomerService();
+                    customerService.signOut('@Url.Content("~/PartnerInfo/Home/SignOut")');
+                });
+
+                //__RequestVerificationToken: $('input[name=__RequestVerificationToken]').val() 
+                $("#form_login").validate({
+                    submitHandler: function () {
+                        var signInRequest = new SignInRequest($('#txt_username').val(), $('#txt_password').val(), '@Url.Content("~/PartnerInfo/Home/SignIn")', $('input[name=__RequestVerificationToken]').val());
+                        var customerService = new CustomerService();
+                        customerService.signIn(signInRequest);
+                        return false;
+                    },
+                    invalidHandler: function (e, validator) {
+                        var errors = validator.numberOfInvalids();
+                        if (errors) {
+                            var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                            $("#login_errors").html(message);
+                            $("#login_errors").show();
+                        }
+                        else {
+                            $("#login_errors").hide();
+                        }
+                    },
+                    //errorLabelContainer: $("#login_errors"),
+                    rules: {
+                        txt_username: { required: true },
+                        txt_password: { required: true }
+                    },
+                    messages: {
+                        txt_username: "A bejelentkezési név kitöltése kötelező!",
+                        txt_password: "A jelszó kitöltése kötelező!"
+                    }
+                });
+
+            });
+
+            function pager_click(index){
+		        var currentPageIndex = catalogueFilter.getCurrentPageIndex();
+                var lastPageIndex = $("#spanTopLastPageIndex").text();
+                if (index === 1) { 
+		            if (currentPageIndex != 0) {
+		                catalogueFilter.setCurrentPageIndex(0);
+		                catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+		            }                    
+                }
+                else if(index === 2) {
+		            if (currentPageIndex > 0) {
+		                currentPageIndex = currentPageIndex - 1;
+		                catalogueFilter.setCurrentPageIndex(currentPageIndex);
+		                catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                    }
+                }
+                else if (index === 3) {
+		            if (currentPageIndex < (lastPageIndex - 1)) {
+		                currentPageIndex = currentPageIndex + 1;
+		                catalogueFilter.setCurrentPageIndex(currentPageIndex);
+		                catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                    }
+                }
+                else if (index === 4) {
+                    if (currentPageIndex < (lastPageIndex - 1)) {
+                        catalogueFilter.setCurrentPageIndex(lastPageIndex - 1);
+                        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                    }
+                }
+            }
+
+            function refreshContent(value) {
+                catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                if (value) {
+                    $('#span_visitorinfo_inner').show();
+                    $('#span_visitorinfo_outer').hide();
+                    $('#loginwin').hide();
+                    $('#anchor_signout').show();
+                }
+                else {
+                    $('#span_visitorinfo_inner').hide();
+                    $('#span_visitorinfo_outer').show();
+                    $('#loginwin').show();
+                    $('#anchor_signout').hide();                
+                }
+            }
+
+            function initContent(visitor) {
+                if (visitor.IsValidLogin) {
+                    $('#span_visitorinfo_inner').show();
+                    $('#span_visitorinfo_outer').hide();
+                    $('#loginwin').hide();
+                    $('#anchor_signout').show();
+                    $('#span_visitor_name').html(visitor.CompanyName + ' ' + visitor.PersonName);
+                }
+                else {
+                    $('#span_visitorinfo_inner').hide();
+                    $('#span_visitorinfo_outer').show();
+                    $('#loginwin').show();
+                    $('#anchor_signout').hide();
+                    $('#span_visitor_name').html('');               
+                }            
+            }
+
+
+        </script>
+    }
+
+@if (Model.Header != null)
+{
+<header id="layout-header" class="group">
+    	ide kerül a fejléc
+    <div id="header">
+        @Zone(Model.Header)
+    </div>
+</header>
+}
+<!-- *** alsó felnyíló panel div *** -->
+<div id="bottom_button_open">
+	<div id="cus_bottom_content_on">
+		<div id="openclose_button"><img src="@Url.Content("~/Media/images/openclose.png")" alt=""/>
+		</div>
+		<table align="center" width="970" border="0" cellspacing="1" cellpadding="2">
+			<tr>
+				<td width="290" nowrap="nowrap" ><strong>###<span style="color:#900;">###</span></strong></td>
+				<td width="290" nowrap="nowrap" ><strong>###</strong></td>
+				<td width="290" nowrap="nowrap" ><strong>###</strong></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div id="cus_bottom_panel_on">
+	<div id="cus_bottom_content_on">
+		<table align="center" width="970" border="0" cellspacing="1" cellpadding="2">
+			<tr>
+				<td nowrap="nowrap"><strong>###<span style="color:#900;">###</span></strong></td>
+				<td nowrap="nowrap"><strong>###</strong></td>
+				<td nowrap="nowrap"><strong>###</strong></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+				<hr style="color:#ccc; background:#ccc; height:1px; border:0;" />
+				</td>
+			</tr>
+			<tr>
+				<td valign="top">
+					<!-- kosár lista táblázat -->
+				<div id="cus_bottom_list_table">
+					<table width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">###</td>
+							<td nowrap="nowrap">###</td>
+							<td align="right" nowrap="nowrap">###</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">###</td>
+							<td nowrap="nowrap">###</td>
+							<td align="right" nowrap="nowrap">###</td>
+						</tr>
+					</table>
+					<table width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">
+							<hr style="color:#ccc; background:#ccc; height:1px; border:0;" />
+							</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">
+							### | ###
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- kosár lista táblázat vége -->
+				</td>
+				<td valign="top">
+					<!-- összehasonlító lista táblázat -->
+				<div id="cus_bottom_list_table">
+					<table width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">###</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">###</td>
+						</tr>
+					</table>
+				</div>
+				<!-- összehasonlító lista táblázat vége -->
+				</td>
+				<td valign="top">
+					<!-- előzmények lista táblázat -->
+				<div id="cus_bottom_list_table">
+					<table align="left" width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">###</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">###</td>
+						</tr>
+					</table>
+				</div>
+				<!-- előzmények lista táblázat vége -->
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!-- *** alsó felnyíló panel div vége *** -->
+<div id="cus_header1">
+	<table id="cus_header1_table" width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+		<tr>
+			<td width="100%">
+                <span id="span_visitorinfo_inner">Bejelentkezve: <strong><span id="span_visitor_name">Teszt Aladár</span></strong> | Az Ön képviselője: TeleSales +36 (1) 452-4666 info@hrp.hu</span> 
+                <span id="span_visitorinfo_outer">Kapcsolat: TeleSales +36 (1) 452-4666 info@hrp.hu</span> 
+            </td>
+			<td nowrap="nowrap">&nbsp;</td>
+			<td nowrap="nowrap">
+            <strong><a id="anchor_signout" href="javascript:void(0)">Kijelentkezés</a></strong>
+            <strong><a id="loginwin" href="#div_login">Bejelentkezés</a></strong>
+            </td>
+			<td nowrap="nowrap">&nbsp;|&nbsp;</td>
+			<td nowrap="nowrap"><strong><a href="#"><span style="background: #900; padding: 2px;">EN</span></a></strong></td>
+		</tr>
+	</table>
+</div>
+<!-- </div>  --><div id="cus_header2"></div>
+<div id="cus_content_container">
+	<div id="cus_header_navigation_b">
+		<table width="100%" border="0" cellspacing="1" cellpadding="5">
+			<tr id="cus_header_navigation_b_table">
+				<td nowrap="nowrap">
+				<ul id="navmenu">
+					<li>
+						<div id="cus_speedmenu_text">
+							Gyorsmenü
+						</div>
+						<ul>
+							<li>
+								<a href=""><strong>AKCIÓS TERMÉKEK</strong></a>
+								<!--<ul>
+								<li><a href="">Asztali gépek</a></li>
+								<li><a href="">Notebookok</a></li>
+								<li><a href="">Monitorok</a></li>
+								<li><a href="">Nyomtatók</a></li>
+								<li><a href="">Kiegészítők</a></li>
+								</ul>-->
+							</li>
+							<li>
+								<a href="">HRP termékek +</a>
+								<ul>
+									<li>
+										<a href="">Asztali gépek</a>
+									</li>
+									<li>
+										<a href="">Notebookok</a>
+									</li>
+									<li>
+										<a href="">Monitorok</a>
+									</li>
+									<li>
+										<a href="">Nyomtatók</a>
+									</li>
+									<li>
+										<a href="">Kiegészítők</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="">BSC termékek +</a>
+								<ul>
+									<li>
+										<a href="">Szoftverek</a>
+									</li>
+									<li>
+										<a href="">Játékvezérlők</a>
+									</li>
+									<li>
+										<a href="">Kiegészítők</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul></td>
+				<td nowrap="nowrap">
+				<ul id="usermenu">
+					<li>
+						<div id="cus_usermenu_text">
+							Adatkezelő
+						</div>
+						<ul>
+							<li>
+								<a href="">Adatlap / módosítás</a>
+							</li>
+							<li>
+								<a href="">Számlák</a>
+							</li>
+							<li>
+								<a href="">Megrendelések</a>
+							</li>
+							<li>
+								<a href="">Hírlevelek</a>
+							</li>
+						</ul>
+					</li>
+				</ul></td>
+				<td width="100%" nowrap="nowrap">&nbsp;</td>
+				<td align="right" nowrap="nowrap"><a name="top"></a><a href="#top" class="btn_basket_slide"><span style="color: #900">Az Ön kosara: 129 000 Ft </span></a></td>
+				<td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basket.png")" width="16" height="20" alt="" /></td>
+				<td width="50%" align="right" nowrap="nowrap"><!-- *** gyorskereső ajánlóval *** -->
+				<input name="searchfield" type="text" value="Keresett kifejezés" class="ui-autocomplete-input" id="srchfield" size="19" onfocus="if(this.value=='Keresett kifejezés')this.value=''" onblur="if(this.value=='')this.value='Keresett kifejezés'"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="cus_logo_and_pages_menu"><img src="@Url.Content("~/Media/images/hrp_bsc_logo.png")" alt=""/>
+	@if (Model.Navigation != null)
+ {
+            @Zone(Model.Navigation)
+ }
+	</div>
+	<!-- *** felső kosár panel div *** -->
+	<div id="basket_panel">
+		<table align="center" width="970" border="0" cellspacing="1" cellpadding="2">
+			<tr>
+				<td nowrap="nowrap" ><strong>Kosár HRP: <span style="color:#900;">79 000 Ft</span></strong></td>
+				<td nowrap="nowrap" ><strong>Kosár BSC: <span style="color:#900;">90 000 Ft</span></strong></td>
+				<td nowrap="nowrap" ></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+				<hr style="color:#ccc; background:ccc; height:1px; border:0;" />
+				</td>
+			</tr>
+			<tr>
+				<td valign="top"><!-- kosár lista táblázat -->
+				<div id="cus_bottom_list_table">
+					<table width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">Kyocera 5030 nyomtató</td>
+							<td nowrap="nowrap">1db</td>
+							<td align="right" nowrap="nowrap">130 000 Ft</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">LG monitor</td>
+							<td nowrap="nowrap">1db</td>
+							<td align="right" nowrap="nowrap">39 000 Ft</td>
+						</tr>
+					</table>
+					<table width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">
+							<hr style="color:#ccc; background:#ccc; height:1px; border:0;" />
+							</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap"> ide jön a send gomb </td>
+						</tr>
+					</table>
+				</div><!-- kosár lista táblázat vége --></td>
+				<td valign="top"><!-- összehasonlító lista táblázat -->
+				<div id="cus_bottom_list_table">
+					<table width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">Kyocera 5030 nyomtató</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap"> 1030 nyomtató</td>
+						</tr>
+					</table>
+				</div><!-- összehasonlító lista táblázat vége --></td>
+				<td valign="top"><!-- előzmények lista táblázat -->
+				<div id="cus_bottom_list_table">
+					<table align="left" width="290" border="0" cellspacing="1" cellpadding="2">
+						<tr>
+							<td nowrap="nowrap">Kyocera 5030 nyomtató</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">blaaaa 1030 nyomtató</td>
+						</tr>
+					</table>
+				</div><!-- előzmények lista táblázat vége --></td>
+			</tr>
+			<tr>
+				<td valign="top">&nbsp;</td>
+				<td valign="top">
+				<table align="center">
+					<tr>
+						<td><a href="#" class="btn_basket_slide">Bezárás</a></td>
+					</tr>
+				</table></td>
+				<td valign="top">&nbsp;</td>
+			</tr>
+		</table>
+		<!-- *** felső kosár panel div vége *** -->
+	</div>
+	<!-- ez a div kezdő tag a shop mudul eleje. a catalogue/index.cshtml fájlban van a záró tag -->
+	<div id="cus_catalogue_container">
+    @if (Model.Featured != null)
+    {
+    <div id="layout-featured" class="group">
+        @Zone(Model.Featured)
+    </div>
+    }
+    @if (Model.BeforeMain != null)
+    {
+    <div id="layout-before-main" class="group">
+        @Zone(Model.BeforeMain)
+    </div>
+    }
+    <div id="layout-main-container">
+        <div id="layout-main" class="group">
+            @if (Model.AsideFirst != null)
+            {
+            <aside id="aside-first" class="aside-first group">
+                @Zone(Model.AsideFirst)
+            </aside>
+            }
+            <div id="layout-content" class="group">
+                @if (Model.Messages != null)
+                {
+                <div id="messages">
+                    @Zone(Model.Messages)
+                </div>
+                }
+                @if (Model.BeforeContent != null)
+                {
+                <div id="before-content">
+                    @Zone(Model.BeforeContent)
+                </div>
+                }
+                <div id="preloader">loadnig...</div>
+                @* the model content for the page is in the Content zone @ the default position (nothing, zero, zilch) *@
+                @if (Model.Content != null)
+                {
+                <div id="content" class="group">
+     
+                    @Zone(Model.Content)
+                </div>
+                }
+                @if (Model.AfterContent != null)
+                {
+                <div id="after-content">
+                    @Zone(Model.AfterContent)
+                </div>
+                }
+            </div>
+            @if (Model.AsideSecond != null)
+            {
+            <aside id="aside-second" class="aside-second">
+                @Zone(Model.AsideSecond)
+            </aside>
+            }
+        </div>
+    </div>
+    @if (Model.AfterMain != null)
+    {
+    <div id="layout-after-main" class="group">
+        @Zone(Model.AfterMain)
+    </div>
+    }
+    @if (Model.TripelFirst != null || Model.TripelSecond != null || Model.TripelThird != null)
+    {
+    <div id="layout-tripel-container">
+        <div id="layout-tripel" class="group">@* as in beer *@
+            @if (Model.TripelFirst != null)
+            {
+            <div id="tripel-first">
+                @Zone(Model.TripelFirst)
+            </div>
+            }
+            @if (Model.TripelSecond != null)
+            {
+            <div id="tripel-second">
+                @Zone(Model.TripelSecond)
+            </div>
+            }
+            @if (Model.TripelThird != null)
+            {
+            <div id="tripel-third">
+                @Zone(Model.TripelThird)
+            </div>
+            }
+        </div>
+    </div>
+    }
+    <div id="layout-footer" class="group">
+        <footer id="footer">
+            <div id="footer-quad" class="group">
+                @if (Model.FooterQuadFirst != null)
+                {
+                <div id="footer-quad-first">
+                    @Zone(Model.FooterQuadFirst)
+                </div>
+                }
+                @if (Model.FooterQuadSecond != null)
+                {
+                <div id="footer-quad-second">
+                    @Zone(Model.FooterQuadSecond)
+                </div>
+                }
+                @if (Model.FooterQuadThird != null)
+                {
+                <div id="footer-quad-third">
+                    @Zone(Model.FooterQuadThird)
+                </div>
+                }
+                @if (Model.FooterQuadFourth != null)
+                {
+                <div id="footer-quad-fourth">
+                    @Zone(Model.FooterQuadFourth)
+                </div>
+                }
+            </div>
+            @if (Model.Footer != null)
+            {
+            <div id="footer-sig" class="group">
+                @Zone(Model.Footer)
+            </div>
+            }
+        </footer>
+    </div>
+</div>
+<div style="display: none;">
+    <div id="div_login">
+    @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id="form_login"}))
+    {
+            <table border="0" align="center" cellpadding="3" cellspacing="1" >
+                <tr>
+                  <td colspan="2" nowrap="nowrap"><h3>Bejelentkezés regisztrált partnereink részére</h3></td>
+                </tr>
+                <tr>
+                  <td>Felhasználónév</td>
+                  <td>@Html.TextBox("txt_username", "", new { style = "padding-bottom:5px; padding-top:5px;" })
+                  <label class="error" for="txt_username" generated="true" style="display:none; color:Red;">A név kitöltése kötelező</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jelszó</td>
+                  <td>@Html.Password("txt_password", "", new { style = "padding-bottom:5px; padding-top:5px;" })
+                  <label class="error" for="txt_password" generated="true" style="display:none; color:Red;">A jelszó kitöltése kötelező</label>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td><input type="submit" name="button" id="button" value="Belépés" /></td>
+                </tr>
+              </table>
+              <div id="login_errors"></div>
+    }
+    </div>
+</div>
+@tag.EndElement

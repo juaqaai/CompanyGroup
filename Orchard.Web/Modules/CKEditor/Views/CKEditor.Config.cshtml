@@ -1,0 +1,32 @@
+﻿@using System.Text;
+@using CKEditor;
+@using CKEditor.Services;
+@{
+    IEnumerable<ICKEditorConfigPair> config = null;
+    if (Model.ConfigPairs != null) { config = Model.ConfigPairs; }
+}
+{
+	@*enterMode : CKEDITOR.ENTER_BR,*@
+	toolbar :
+	[
+    ['Source','-'/*,'Save','NewPage','Preview','-'*/,'Templates'],
+    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
+    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
+    '/',
+    ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
+    ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+    ['BidiLtr', 'BidiRtl' ],
+    ['Link','Unlink','Anchor'],
+    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe'],
+    '/',
+    ['Styles','Format','Font','FontSize'],
+    ['TextColor','BGColor'],
+    ['Maximize', 'ShowBlocks','-','About']
+	]@* Render any other configuration values *@
+    @if (config!=null) {
+        @config.Loop(@<text>,
+            @item.Key : @item.Value</text>)
+    }
+}

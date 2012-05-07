@@ -1,0 +1,56 @@
+﻿@using Szmyd.Orchard.Modules.Menu.Enums
+@model Szmyd.Orchard.Modules.Menu.Models.MenuWidgetPart
+@{
+    Script.Require("ShapesBase");
+}
+<fieldset>
+    <legend>@T("Menu settings")</legend>
+    <div>
+        @Html.LabelFor(m => m.Mode, T("Menu display mode"))
+        @Html.DropDownListFor(m => m.Mode,
+                 new SelectList(Model.AvailableModes, "Text", "Text", Enum.GetName(typeof(MenuWidgetMode), Model.Mode)))
+        <span class="hint">
+            @T("Choose display mode")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.MenuName, @T("Menu to display"))
+        @Html.DropDownListFor(m => m.MenuName,
+        new SelectList(Model.AvailableMenus, "Value", "Text", Model.MenuName))
+        @Html.ValidationMessageFor(m => m.MenuName, "*")
+        <span class="hint">
+            @T("The menu from which the items will be displayed.")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.RootNode, @T("The root node to display children for"))
+        @Html.EditorFor(m => m.RootNode)
+        @Html.ValidationMessageFor(m => m.RootNode, "*")
+        <span class="hint">
+            @T("The dot-notated position of desired menu item. Leave empty for whole menu.")
+        </span>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Levels, @T("Limit levels"))
+        @Html.EditorFor(m => m.Levels)
+        @Html.ValidationMessageFor(m => m.Levels, "*")
+        <span class="hint">
+            @T("Limit the number of levels displayed. 0 = unlimited.")
+        </span>
+    </div>
+    <div>
+        @Html.EditorFor(m => m.CutOrFlattenLower)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.CutOrFlattenLower)">@T("Cut lower levels?")</label>
+        <span class="hint">
+            @T("Check if you want to cut down items below limit.")
+            @T("Leave unchecked if you want to flatten lower levels to single list.")
+        </span>
+    </div>
+    <div>
+        @Html.EditorFor(m => m.WrapChildrenInDiv)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.WrapChildrenInDiv)">@T("Wrap children in &lt;div&gt; tags?")</label>
+        <span class="hint">
+            @T("Check if you want to add additional &lt;div&gt; wrappers around child &lt;ul&gt; lists.")
+        </span>
+    </div>
+</fieldset>

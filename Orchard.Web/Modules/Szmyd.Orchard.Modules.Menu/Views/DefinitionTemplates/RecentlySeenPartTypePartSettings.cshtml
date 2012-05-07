@@ -1,0 +1,8 @@
+﻿@model Szmyd.Orchard.Modules.Menu.Settings.RecentlySeenPartTypePartSettings
+    <fieldset>
+    <div>
+        @Html.EditorFor(m => m.ShowCounts)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.ShowCounts)">@T("Should display visit counts?")</label>
+        </div>
+    </fieldset>
+

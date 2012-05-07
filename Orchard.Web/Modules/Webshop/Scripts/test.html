@@ -1,0 +1,20 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title></title>
+        <script type="text/javascript" src="catalogue.filter.js"></script>
+        <script type="text/javascript">
+            function init() {
+                var catalogueFilter = new CompanyGroup.Webshop.CatalogueFilter();
+
+                catalogueFilter.setManufacturerId("blahblah");
+
+                alert(catalogueFilter.getManufacturerId());
+            }
+        </script>
+
+	</head>
+	<body>
+	    <input type="button" onclick="init()" value="mehet" />
+	</body>
+</html>

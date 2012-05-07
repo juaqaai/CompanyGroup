@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2CD62034-55AB-4E57-AC8E-4256586E086F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Szmyd.Orchard.Modules.Menu</RootNamespace>
+    <AssemblyName>Szmyd.Orchard.Modules.Menu</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=2.2.4.900, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\autofac\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Images\arrows-ffffff.png" />
+    <Content Include="Content\Images\shadow.png" />
+    <Content Include="Scripts\hoverIntent.js" />
+    <Content Include="Scripts\jquery.bgiframe.min.js" />
+    <Content Include="Scripts\superfish.js" />
+    <Content Include="Scripts\supersubs.js" />
+    <Content Include="Styles\superfish.css" />
+    <Content Include="Styles\superfish-navbar.css" />
+    <Content Include="Styles\superfish-vertical.css" />
+    <Content Include="Styles\superfish_old.css" />
+    <None Include="Views\MenuAdmin\EditItem.cshtml" />
+    <Content Include="Views\Breadcrumbs.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Counter.cshtml" />
+    <Content Include="Views\DefinitionTemplates\ItemCounterPartTypePartSettings.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Counters.ItemCounter.cshtml" />
+    <Content Include="Views\Parts\Counters.ItemCounter.cshtml" />
+    <Content Include="Views\Parts\Menu.Breadcrumbs.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Scripts\Web.config" />
+    <Content Include="Styles\Web.config" />
+    <Content Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Module.txt" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Orchard.Widgets\Orchard.Widgets.csproj">
+      <Project>{194D3CCC-1153-474D-8176-FDE8D7D0D0BD}</Project>
+      <Name>Orchard.Widgets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Roles\Orchard.Roles.csproj">
+      <Project>{D10AD48F-407D-4DB5-A328-173EC7CB010F}</Project>
+      <Name>Orchard.Roles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
+      <Project>{79AED36E-ABD0-4747-93D3-8722B042454B}</Project>
+      <Name>Orchard.Users</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
+      <Project>{2D1D92BB-4555-4CBE-8D0E-63563D6CE4C6}</Project>
+      <Name>Orchard.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Orchard.Core.csproj">
+      <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
+      <Name>Orchard.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="AdminMenu.cs" />
+    <Compile Include="BreadcrumbsMigrations.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MenuCommands.cs" />
+    <Compile Include="Controllers\MenuAdminController.cs" />
+    <Compile Include="CountersMigrations.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Drivers\AdvancedMenuItemPartDriver.cs" />
+    <Compile Include="Drivers\BreadcrumbsPartDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Drivers\ItemCounterPartDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Drivers\MenuStylingPartDriver.cs" />
+    <Compile Include="Drivers\RecentlySeenPartDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\AdvancedMenuItem.cs" />
+    <Compile Include="Entities\RecentlySeenItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\SerializableCounter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Enums\CounterStoreType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Enums\CounterType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Enums\VisitCounterType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events.cs" />
+    <Compile Include="Handlers\AdvancedMenuItemPartHandler.cs" />
+    <Compile Include="Handlers\AdvancedMenuPartHandler.cs" />
+    <Compile Include="Handlers\BreadcrumbsPartHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\CountersHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\ItemCounterPartHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\PartWatcherHandler.cs" />
+    <Compile Include="Handlers\MenuStylingPartHandler.cs" />
+    <Compile Include="Handlers\RecentlySeenPartHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Counters\CounterRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Counters\ItemCounterPart.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Counters\ItemCounterPartRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Counters\RecentlySeenPart.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Counters\RecentlySeenPartRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\NavigationProvider.cs" />
+    <Compile Include="Enums\MenuItemType.cs" />
+    <Compile Include="Routes.cs" />
+    <Compile Include="Services\CounterService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\ICounterService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\MenuService.cs" />
+    <Compile Include="Settings\ItemCounterPartTypePartSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\MenuWidgetPartTypePartSettings.cs" />
+    <Compile Include="Shapes.cs" />
+    <Compile Include="Drivers\AdvancedMenuPartDriver.cs" />
+    <Compile Include="Drivers\MenuWidgetPartDriver.cs" />
+    <Compile Include="Filters\MenuFilter.cs" />
+    <Compile Include="Handlers\MenuWidgetPartHandler.cs" />
+    <Compile Include="Utilities\MenuItemsUtility.cs" />
+    <Compile Include="Utilities\UrlUtility.cs" />
+    <Compile Include="ViewModels\MenuItemsViewModel.cs" />
+    <Compile Include="ViewModels\MenuRelation.cs" />
+    <Content Include="Views\Menu.cshtml" />
+    <Compile Include="Migrations.cs" />
+    <Compile Include="Models\Menus\BreadcrumbsPart.cs" />
+    <Compile Include="Models\Menus\BreadcrumbsPartRecord.cs" />
+    <Compile Include="Models\Menus\MenuStylingPartRecord.cs" />
+    <Compile Include="Resources\ResourceManifest.cs" />
+    <Compile Include="Models\Menus\AdvancedMenuItemPart.cs" />
+    <Compile Include="Models\Menus\AdvancedMenuItemPartRecord.cs" />
+    <Compile Include="Models\Menus\AdvancedMenuPart.cs" />
+    <Compile Include="Models\Menus\AdvancedMenuPartRecord.cs" />
+    <Compile Include="Models\Menus\MenuSettingsPart.cs" />
+    <Compile Include="Models\Menus\MenuSettingsPartRecord.cs" />
+    <Compile Include="Enums\MenuStyles.cs" />
+    <Compile Include="Models\Menus\MenuStylingPart.cs" />
+    <Compile Include="Models\Menus\MenuWidgetPart.cs" />
+    <Compile Include="Models\Menus\MenuWidgetPartRecord.cs" />
+    <Compile Include="Permissions.cs" />
+    <Compile Include="Providers\HackedNavigationManager.cs" />
+    <Compile Include="Providers\AbstractNavigationProvider.cs" />
+    <Compile Include="Providers\INavigationProviderFactory.cs" />
+    <Compile Include="Services\IAdvancedMenuService.cs" />
+    <Compile Include="Services\MenuItemComparer.cs" />
+    <Compile Include="Providers\NavigationProviderFactory.cs" />
+    <Compile Include="Services\PartWatcher.cs" />
+    <Compile Include="Services\IPartWatcher.cs" />
+    <Compile Include="Enums\MenuWidgetMode.cs" />
+    <Compile Include="Handlers\MenuRelationPartHandler.cs" />
+    <Compile Include="Drivers\MenuRelationPartDriver.cs" />
+    <Compile Include="Models\Menus\MenuRelationPart.cs" />
+    <Compile Include="Settings\RecentlySeenPartTypePartSettings.cs" />
+    <Content Include="Views\Widget.Wrapper.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Placement.info">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts\Menu.Widget.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MenuItem.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts\Menu.Breadcrumbs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DefinitionTemplates\RecentlySeenPartTypePartSettings.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Menu.Widget.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Menu.RecentlySeen.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Menu.Styling.cshtml" />
+    <Content Include="Content\Web.config" />
+    <Content Include="Views\MenuStyle.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Menu.AdvancedItem.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Menu.AdvancedMenu.cshtml" />
+    <Content Include="Views\MenuAdmin\Create.cshtml" />
+    <Content Include="Views\MenuAdmin\Index.cshtml" />
+    <Content Include="Views\MenuAdmin\CreateItem.cshtml" />
+    <Content Include="Views\DefinitionTemplates\MenuWidgetPartTypePartSettings.cshtml" />
+    <None Include="Views\Parts\Menu.RecentlySeen.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\Menu.RelationPart.cshtml" />
+    <Content Include="Views\Parts\Menu.Styling.cshtml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild" DependsOnTargets="AfterBuildCompiler">
+    <PropertyGroup>
+      <AreasManifestDir>$(ProjectDir)\..\Manifests</AreasManifestDir>
+    </PropertyGroup>
+    <!-- If this is an area child project, uncomment the following line:
+    <CreateAreaManifest AreaName="$(AssemblyName)" AreaType="Child" AreaPath="$(ProjectDir)" ManifestPath="$(AreasManifestDir)" ContentFiles="@(Content)" />
+    -->
+    <!-- If this is an area parent project, uncomment the following lines:
+    <CreateAreaManifest AreaName="$(AssemblyName)" AreaType="Parent" AreaPath="$(ProjectDir)" ManifestPath="$(AreasManifestDir)" ContentFiles="@(Content)" />
+    <CopyAreaManifests ManifestPath="$(AreasManifestDir)" CrossCopy="false" RenameViews="true" />
+    -->
+  </Target>
+  <Target Name="AfterBuildCompiler" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>45979</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://orchard.codeplex.com</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
