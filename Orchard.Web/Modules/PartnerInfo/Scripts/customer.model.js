@@ -40,7 +40,7 @@
 
 var CompanyGroupCms = CompanyGroupCms || {};
 
-CompanyGroupCms.VisitorInfoViewModel = function () {
+CompanyGroupCms.VisitorInfo = function () {
 
     var self = this;
 
@@ -60,7 +60,7 @@ CompanyGroupCms.VisitorInfoViewModel = function () {
 
     self.recieveGoods = ko.observable(false);
 
-    self.visitorInfo = function (serviceUrl) {
+    self.authorizationData = function (serviceUrl) {
         var data = new Object();
         var dataString = $.toJSON(data);
         $.ajax({
@@ -171,3 +171,24 @@ CompanyGroupCms.VisitorInfoViewModel = function () {
     //			        }),
     //			    };
 };    //());
+
+
+CompanyGroupCms.VisitorInfoFactory = (function () {
+    var createVisitorInfo = function (companyName, personName, isValidLogin, isWebAdministrator, invoiceInfoEnabled, priceListDownloadEnabled, canOrder, recieveGoods) {
+        var visitor = new CompanyGroupCms.VisitorInfo();
+        visitor.companyName(companyName);
+        visitor.personName(personName);
+        visitor.isValidLogin(isValidLogin);
+        visitor.isWebAdministrator(isWebAdministrator);
+        visitor.invoiceInfoEnabled(invoiceInfoEnabled);
+        visitor.priceListDownloadEnabled(priceListDownloadEnabled);
+        visitor.canOrder(canOrder);
+        visitor.recieveGoods(recieveGoods);
+        return visitor;
+    }
+    return {
+        create: createVisitorInfo
+    };
+})();
+
+//CompanyGroupCms.VisitorInfoFactory.create(companyName, personName, isValidLogin, isWebAdministrator, invoiceInfoEnabled, priceListDownloadEnabled, canOrder, recieveGoods);

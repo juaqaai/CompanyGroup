@@ -108,9 +108,7 @@
 
 			$(document).ready(function () {
 
-			    var visitorInfoViewModel = new CompanyGroupCms.VisitorInfoViewModel();
-
-			    //var shoppingCartViewModel = new CompanyGroupCms.ShoppingCartViewModel();
+			    var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.create('', '', false, false, false, false, false, false);
 
 			    var flags = CompanyGroupCms.ProductFactory.CreateFlags(false, false, false, false, false);
 
@@ -134,14 +132,12 @@
 			    };
 
 
-			    alert(ko.toJSON(shoppingCartViewModel));
+			    //alert(ko.toJSON(shoppingCartViewModel));
 
 			    ko.applyBindings(AppViewModel);
 
-			    //CompanyGroupCms.Services.CustomerService.Instance().VisitorInfo('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
-
 			    //visitorInfoViewModel.isValidLogin(true);
-			    visitorInfoViewModel.visitorInfo('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
+			    AppViewModel.visitorInfo.authorizationData('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
 
 			    jQuery('.chosen').chosen();
 
@@ -1004,8 +1000,8 @@
                         <td>&nbsp;</td>
                       </tr>
                     </thead>
-                    <tbody>
-                          <tr data-bind="foreach: shoppingCart.lines">
+                    <tbody data-bind="foreach: shoppingCart.lines">
+                          <tr>
                             <td width="20%"nowrap="nowrap" data-bind="text: productId"> </td>
                             <td width="20%"nowrap="nowrap" data-bind="text: partNumber"></td>
                             <td width="20%" nowrap="nowrap" data-bind="text: customerPrice"> Ft</td>
