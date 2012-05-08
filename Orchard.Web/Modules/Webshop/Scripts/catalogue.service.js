@@ -123,7 +123,7 @@
                 if (result) {
                     if (result.Items.length > 0) {
                         $("#div_catalogue").empty();
-                        $("#productTemplate").tmpl(result).appendTo("#div_catalogue");
+                        //$("#productTemplate").tmpl(result).appendTo("#div_catalogue");
                         $("#div_pager_top").empty();
                         $("#div_pager_bottom").empty();
                         $("#pagerTemplate").tmpl(result).appendTo("#div_pager_top");

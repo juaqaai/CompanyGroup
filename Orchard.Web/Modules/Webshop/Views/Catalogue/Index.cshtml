@@ -241,6 +241,7 @@
 			<div id="div_catalogue" class="wrapper">
 				@*termék elem kezdete*@
 				@foreach (var product in @Model.Products.Items)
+                
 				{ <span class="expand_heading">
 					<table width="695" border="0" cellspacing="0" cellpadding="0">
 						<tr>
@@ -411,77 +412,60 @@
 				</tr>
 				</table>
 			</script>
-			<script id="productTemplate" type="text/x-jquery-tmpl">
+            @*termekelem eleje*@
 				{{each( i, item ) Items}}
-				<span class="expand_heading">
+				<span class="expand_heading" data-bind="foreach: productList.items">
 				<table width="695" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 				<td valign="top"><img src="@Url.Content("~/Media/images/plusicon.png")" alt="" /></td>
 				<td width="100%" valign="top" class="cus_prod_header_middle_cell">
-				<span class="cus_prod_table_item_number">${item.SequenceNumber}</span><span class="cus_product_data">${item.ProductId}<br /><span class="cus_prod_table_item_name">${item.ItemName} </span><br /><span class="cus_prod_table_item_code">${item.PartNumber} </span></span>
+				<span class="cus_prod_table_item_number" data-bind="text: sequenceNumber"></span><span class="cus_product_data" data-bind="text: productId"></span><br /><span class="cus_prod_table_item_name" data-bind="text: itemName"></span><br /><span class="cus_prod_table_item_code" data-bind="text: partNumber"></span>
 				</td>
 				<td align="right" valign="top" nowrap="nowrap">
-				{{if Visitor.IsValidLogin}}
-				<table width="200" border="0" cellspacing="1" cellpadding="2">
-				<tr>
-				<td nowrap="nowrap" style="background:#666; color:#fff; border:0px; text-align:right; font-size: 10px; ">Ár: <strong>${item.Price}</strong></td>
-				</tr>
-				</table>
-				{{/if}}</td>
+				    <table width="200" border="0" cellspacing="1" cellpadding="2" data-bind="visible: visitorInfo.isValidLogin()">
+				    <tr>
+				    <td nowrap="nowrap" style="background:#666; color:#fff; border:0px; text-align:right; font-size: 10px; ">Ár: <strong>${item.Price}</strong></td>
+				    </tr>
+				    </table>
+				</td>
 				</tr>
 				</table>
 				</span>
 				<div class="toggle_container">
 				<div class="box">
-				<table width="695" border="0" cellspacing="0" cellpadding="0" {{if item.IsInCart}} style="background-color:Yellow" {{/if}}>
+				<table width="695" border="0" cellspacing="0" cellpadding="0">@*isInCart*@
 				<tr>
 				<td valign="top">
 				<div class="cus_termekkep">
 					
 				@* szűrés utáni lista képei *@
 					
-				{{if Items.length > 0}}
 
-				<a class="popupimg" href="http://1juhasza/CompanyGroup.ServicesHost/PictureService.svc/GetItem/${item.PrimaryPicture.RecId}/${item.ProductId}/hrp/94/69"><img src="http://1juhasza/CompanyGroup.ServicesHost/PictureService.svc/GetItem/${item.PrimaryPicture.RecId}/${item.ProductId}/hrp/94/69" width="94" height="69" alt="" /></a>
+				<a class="popupimg" data-bind="visible: items.length > 0" href="http://1juhasza/CompanyGroup.ServicesHost/PictureService.svc/GetItem/${item.PrimaryPicture.RecId}/${item.ProductId}/hrp/94/69"><img src="http://1juhasza/CompanyGroup.ServicesHost/PictureService.svc/GetItem/${item.PrimaryPicture.RecId}/${item.ProductId}/hrp/94/69" width="94" height="69" alt="" /></a>
 				{{else}}
-				<img src="@Url.Content("~/Media/images/demopic.jpg")" width="180" height="134" alt="" />
-				{{/if}}
+				<img  data-bind="visible: items.length <= 0" src="@Url.Content("~/Media/images/demopic.jpg")" width="180" height="134" alt="" />
 				</div></td>
 				<td valign="top" class="cus_prod_table_middle_cell">
-				<div class="cus_prod_table_desc">
-				${item.Description}
+				<div class="cus_prod_table_desc"  data-bind="value: description">
 				</div></td>
 				<td align="right" valign="top" >
 				<table width="200" border="0" cellspacing="1" cellpadding="2">
 				<tr>
 				<td valign="top"><div class="cus_teteladatok">
 				{{if item.IsInStock && Visitor.IsValidLogin}}
-				<span>Belső raktár:</span> ${item.InnerStock}
-				<br/><span>Külső raktár:</span> ${item.OuterStock}
-				{{else item.PurchaseInProgress && Visitor.IsValidLogin}}
-				<span>Várható érkezés:</span>${ShippingDate}
-				{{else Visitor.IsValidLogin}}
-				<span>Rendelhető</span>
-				{{/if}}
-				{{if item.Bargain && Visitor.IsValidLogin}}
-				<br /><span>Használt: 4 600 Ft-tól </span>
-				{{/if}}
-				{{if Visitor.IsValidLogin}}
-				<br /><span>Garancia módja:<br/> ${item.GarantyMode}</span>
-				<br /><span>Garancia ideje: ${item.GarantyTime}</span>
-				{{/if}}
-				{{if item.Special && Visitor.IsValidLogin}}
-				<br/><span>hírlevél akció</span>
-				{{/if}}
-				{{if item.New && Visitor.IsValidLogin}}
-				<br/><span>új termék</span>
-				{{/if}}
-				{{if item.Discount && Visitor.IsValidLogin}}
-				<br/><span>leértékelt</span>
-				{{/if}}
-				{{if item.ItemState == 1 && Visitor.IsValidLogin}}
-				<br/><span>kifutó</span>
-				{{/if}}</div>
+				<span data-bind="visible: IsInStock && visitorInfo.IsValidLogin()">Belső raktár:</span> ${item.InnerStock}
+				<br/><span data-bind="visible: IsInStock && visitorInfo.IsValidLogin()">Külső raktár:</span> ${item.OuterStock}
+				<span data-bind="visible: IsInStock && PurchaseInProgress && visitorInfo.IsValidLogin()">Várható érkezés:</span>${ShippingDate}
+				<span data-bind="visible: IsInStock && visitorInfo.IsValidLogin()">Rendelhető</span>
+
+				<br /><span data-bind="visible: Bargain && visitorInfo.IsValidLogin()">Használt: 4 600 Ft-tól </span>
+				<br />Garancia módja:<br/><span data-bind="visible: visitorInfo.IsValidLogin(), text:GarantyMode"></span>
+				<br />Garancia ideje:<span data-bind="visible: visitorInfo.IsValidLogin(), text:GarantyTime"></span>
+				<br/><span data-bind="visible: Special && visitorInfo.IsValidLogin">hírlevél akció</span>
+				<br/><span data-bind="visible: New && visitorInfo.IsValidLogin()">új termék</span>
+				<br/><span data-bind="visible: Discount && visitorInfo.IsValidLogin()">leértékelt</span>
+				<br/><span data-bind="visible: ItemState == 1 && visitorInfo.IsValidLogin()">kifutó</span>
+				</div>
 				</td>
 				</tr>
 
@@ -521,7 +505,7 @@
 				</div>
 				</div>
 				{{/each}}
-			</script>
+                @*termekelem vege*@
 			<br />
 			<div id="div_pager_bottom">
 				<table align="center" border="0" cellpadding="3" cellspacing="1">

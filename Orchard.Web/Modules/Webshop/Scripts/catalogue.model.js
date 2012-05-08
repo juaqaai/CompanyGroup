@@ -2,17 +2,17 @@
 
 CompanyGroupCms.ProductList = function () {
     var self = this;
-    self.products = ko.observableArray([]);
+    self.items = ko.observableArray([]);
     self.listCount = ko.computed(function () {
-        return self.products.length;
+        return self.items.length;
     });
 
     self.addProduct = function (product, serviceUrl) {
-        self.products.push(product);
+        self.items.push(product);
     };
 
     self.removeProduct = function (product) {
-        self.products.remove(product);
+        self.items.remove(product);
         //alert(ko.toJSON(line));
     };
 
@@ -179,9 +179,9 @@ CompanyGroupCms.ProductFactory = (function () {
             product.thirdLevelCategory(category3);
             return product;
         },
-        CreateProductList: function (id, line) {
+        CreateProductList: function (items) {
             var list = new CompanyGroupCms.ProductList();
-            list.products([]);
+            list.items(items);
             return list;
         }
     };
