@@ -32,8 +32,17 @@ CompanyGroupCms.Product = function () {
     self.shippingDate = ko.observable('');
     self.itemState = ko.observable(0);
     self.flags = ko.observable();
-    self.pictures = ko.observableArray([]);     
+    self.pictures = ko.observableArray([]);
     self.primaryPicture = ko.observable();
+
+    self.pictureUrl = ko.computed(function () {
+        return CompanyGroupCms.Constants.Instance().ServiceBaseUrl + CompanyGroupCms.Constants.Instance().PictureServiceUrl + self.primaryPicture.recId() + '/' + self.productId() + '/hrp/94/69';
+    });
+
+    self.productDetailsUrl = ko.computed(function (controllerAction) {
+        return controllerAction + self.productId() + '/Details';
+    });
+
     self.description = ko.observable('');
     self.garanty = ko.observable();            
     self.productManager = ko.observable();     
