@@ -3,7 +3,9 @@
 CompanyGroupCms.ProductList = function () {
     var self = this;
     self.items = ko.observableArray([]);
-    self.listCount = ko.computed(function () {
+    self.listCount = ko.observable(0);
+    self.pager = ko.observable();
+    self.itemCount = ko.computed(function () {
         return self.items.length;
     });
 
@@ -17,6 +19,28 @@ CompanyGroupCms.ProductList = function () {
     };
 
 };
+
+CompanyGroupCms.Pager = function () {
+    var self = this;
+    self.firstEnabled = ko.observable(false);
+    self.lastEnabled = ko.observable(false);
+    self.previousEnabled = ko.observable(false);
+    self.nextEnabled = ko.observable(false);
+    self.lastPageIndex = ko.observable(0);
+    self.pageItemList = ko.observableArray([]);
+
+    self.addPage = function (page) {
+        self.pageItemList.push(page);
+    };
+}
+
+CompanyGroupCms.Page = function () {
+    var self = this;
+    self.selected = ko.observable(false);
+    self.index = ko.observable(0);
+    self.value = ko.observable('');
+}
+
 CompanyGroupCms.Product = function () {
     var self = this;
     self.manufacturer = ko.observable();
@@ -36,21 +60,22 @@ CompanyGroupCms.Product = function () {
     self.primaryPicture = ko.observable();
 
     self.pictureUrl = ko.computed(function () {
-        return CompanyGroupCms.Constants.Instance().ServiceBaseUrl + CompanyGroupCms.Constants.Instance().PictureServiceUrl + self.primaryPicture.recId + '/' + self.productId() + '/hrp/94/69';
+        return '\'' + CompanyGroupCms.Constants.Instance().ServiceBaseUrl + CompanyGroupCms.Constants.Instance().PictureServiceUrl + self.primaryPicture.recId + '/' + self.productId() + '/hrp/94/69' + '\'';
     });
 
-    self.productDetailsUrl = ko.computed(function (controllerAction) {
-        return controllerAction + self.productId() + '/Details';
+    self.productDetailsUrl = ko.computed(function () {
+        return CompanyGroupCms.Constants.Instance().getWebshopBaseUrl() + self.productId() + '/Details';
     });
 
     self.description = ko.observable('');
-    self.garanty = ko.observable();            
-    self.productManager = ko.observable();     
+    self.garanty = ko.observable();
+    self.productManager = ko.observable();
     self.dataAreaId = ko.observable('');
     self.isInStock = ko.observable(false);
     self.isInCart = ko.observable(false);
     self.sequenceNumber = ko.observable(0);
     self.purchaseInProgress = ko.observable(false);
+    self.shippingDate = ko.observable('');
 };
 
 CompanyGroupCms.Picture = function () {
@@ -179,15 +204,32 @@ CompanyGroupCms.ProductFactory = (function () {
         category3.name(name);
         return category3;
     };
+    var createPage = function (selected, index, value) {
+        var page = new CompanyGroupCms.Page();
+        page.selected(selected);
+        page.index(index);
+        page.value(value);
+        return page;
+    };
+    var createPager = function (firstEnabled, lastEnabled, previousEnabled, nextEnabled, lastPageIndex, pageItemList) {
+        var pager = new CompanyGroupCms.Pager();
+        pager.firstEnabled(firstEnabled);
+        pager.lastEnabled(lastEnabled);
+        pager.previousEnabled(previousEnabled);
+        pager.nextEnabled(nextEnabled);
+        pager.lastPageIndex(lastPageIndex);
+        pager.pageItemList(pageItemList);
+        return pager;
+    };
     return {
         CreateFlags: createFlags,
         CreateGaranty: createGaranty,
         CreatePicture: createPicture,
         CreateProductManager: createProductManager,
         CreateStock: createStock,
-        CreateManufacturer : createManufacturer, 
-        CreateFirstLevelCategory : createFirstLevelCategory,
-        CreateSecondLevelCategory : createSecondLevelCategory,
+        CreateManufacturer: createManufacturer,
+        CreateFirstLevelCategory: createFirstLevelCategory,
+        CreateSecondLevelCategory: createSecondLevelCategory,
         CreateThirdLevelCategory: createThirdLevelCategory,
         CreateProduct: function (currency, dataAreaId, description, category1, category2, category3, flags, garanty, isInCart, isInStock, itemName, itemState, manufacturer, partNumber, pictures, picture, price, productId, productManager, purchaseInProgress, sequenceNumber, shippingDate, stock) {
             var product = new CompanyGroupCms.Product();
@@ -216,11 +258,15 @@ CompanyGroupCms.ProductFactory = (function () {
             product.thirdLevelCategory(category3);
             return product;
         },
-        CreateProductList: function (items) {
+        CreateProductList: function (items, listCount, pager) {
             var list = new CompanyGroupCms.ProductList();
             list.items(items);
+            list.listCount(listCount);
+            list.pager(pager);
             return list;
-        }
+        },
+        CreatePage: createPage,
+        CreatePager: createPager
     };
 })();
 

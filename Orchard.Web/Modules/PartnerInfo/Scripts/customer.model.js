@@ -174,20 +174,20 @@ CompanyGroupCms.VisitorInfo = function () {
 
 
 CompanyGroupCms.VisitorInfoFactory = (function () {
-    var createVisitorInfo = function (companyName, personName, isValidLogin, isWebAdministrator, invoiceInfoEnabled, priceListDownloadEnabled, canOrder, recieveGoods) {
+    var createVisitorInfo = function (initialData) {
         var visitor = new CompanyGroupCms.VisitorInfo();
-        visitor.companyName(companyName);
-        visitor.personName(personName);
-        visitor.isValidLogin(isValidLogin);
-        visitor.isWebAdministrator(isWebAdministrator);
-        visitor.invoiceInfoEnabled(invoiceInfoEnabled);
-        visitor.priceListDownloadEnabled(priceListDownloadEnabled);
-        visitor.canOrder(canOrder);
-        visitor.recieveGoods(recieveGoods);
+        visitor.companyName(initialData.CompanyName);
+        visitor.personName(initialData.PersonName);
+        visitor.isValidLogin(initialData.IsValidLogin);
+        visitor.isWebAdministrator(initialData.IsWebAdministrator);
+        visitor.invoiceInfoEnabled(initialData.InvoiceInfoEnabled);
+        visitor.priceListDownloadEnabled(initialData.PriceListDownloadEnabled);
+        visitor.canOrder(initialData.CanOrder);
+        visitor.recieveGoods(initialData.RecieveGoods);
         return visitor;
     }
     return {
-        create: createVisitorInfo
+        Create: createVisitorInfo
     };
 })();
 

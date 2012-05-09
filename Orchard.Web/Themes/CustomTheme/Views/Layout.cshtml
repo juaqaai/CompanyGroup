@@ -110,7 +110,9 @@
 
 			$(document).ready(function () {
 
-			    var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.create('', '', false, false, false, false, false, false);
+                CompanyGroupCms.Constants.Instance().setWebshopBaseUrl = '@Url.Content("~/Webshop/Catalogue/")';
+
+			    var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.Create(@(Html.Raw(Json.Encode(ViewData["VisitorInfo"]))));
 
 			    var flags = CompanyGroupCms.ProductFactory.CreateFlags(false, false, false, false, false);
 
@@ -130,7 +132,9 @@
 
 			    var initialProductList = @(Html.Raw(Json.Encode(ViewData["InitialProductList"])));
 
-                var productList = CompanyGroupCms.ProductFactory.CreateProductList([]);
+                var pager = CompanyGroupCms.ProductFactory.CreatePager( initialProductList.Pager.FirstEnabled, initialProductList.Pager.LastEnabled, initialProductList.Pager.PreviousEnabled, initialProductList.Pager.NextEnabled, initialProductList.Pager.LastPageIndex, initialProductList.Pager.PageItemList);
+
+                var productListViewModel = CompanyGroupCms.ProductFactory.CreateProductList([], initialProductList.ListCount, pager);
 
                 $.each(initialProductList.Items, function(index, product) {
 
@@ -144,7 +148,7 @@
                     var productManager2 = CompanyGroupCms.ProductFactory.CreateProductManager(product.ProductManager.Email, product.ProductManager.Extension, product.ProductManager.Mobile, product.ProductManager.Name);
                     var picture2 = CompanyGroupCms.ProductFactory.CreatePicture(product.PrimaryPicture.FileName, product.PrimaryPicture.Primary, product.PrimaryPicture.RecId);
                     var prod = CompanyGroupCms.ProductFactory.CreateProduct(product.Currency, product.DataAreaId, product.Description, category1, category2, category3, flags2, garanty2, product.IsInCart, product.IsInStock, product.ItemName, product.ItemState, manufacturer, product.PartNumber, [], picture2, product.Price, product.ProductId, productManager2, product.PurchaseInProgress, product.SequenceNumber, product.ShippingDate, stock2);
-                    productList.addProduct(prod);
+                    productListViewModel.addProduct(prod);
                 });
 
                // alert(initialProductList.ListCount);
@@ -152,7 +156,7 @@
 			    var AppViewModel = {
 			        visitorInfo: visitorInfoViewModel,
 			        shoppingCart: shoppingCartViewModel, 
-                    catalogue:productList
+                    productList:productListViewModel
 			    };
 
 
@@ -161,7 +165,7 @@
 			    ko.applyBindings(AppViewModel);
 
 			    //visitorInfoViewModel.isValidLogin(true);
-			    AppViewModel.visitorInfo.authorizationData('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
+			    //AppViewModel.visitorInfo.authorizationData('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
 
 			    jQuery('.chosen').chosen();
 
@@ -1024,8 +1028,9 @@
                         <td>&nbsp;</td>
                       </tr>
                     </thead>
-                    <tbody data-bind="foreach: shoppingCart.lines">
-                          <tr>
+                    <tbody>
+                        <!-- ko foreach: shoppingCart.lines -->
+                        <tr>
                             <td width="20%"nowrap="nowrap" data-bind="text: productId"> </td>
                             <td width="20%"nowrap="nowrap" data-bind="text: partNumber"></td>
                             <td width="20%" nowrap="nowrap" data-bind="text: customerPrice"> Ft</td>
@@ -1034,15 +1039,16 @@
                             <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/attention.png")" border="0" title="Kötelező érvényű megrendelés!" alt=""/>&nbsp;</td>
                             <td nowrap="nowrap"><a href="javascript:void(0)"  data-bind="click: function() { $parent.shoppingCart.updateLine($data); }" title="Tétel mennyiség módosítása"><img src="@Url.Content("~/Media/images/basketicons/edit.png")" style="border:0px" alt="" /></a>&nbsp;</td>
                             <td nowrap="nowrap"><a href="javascript:void(0)"  data-bind="click: function() { $parent.shoppingCart.removeLine($data);}" title="Tétel törlése"><img src="@Url.Content("~/Media/images/basketicons/b_delete.png")" border="0" alt="" /></a></td>
-                          </tr>
-                          <tr>
-                              <td colspan="8"><hr />
+                        </tr>
+                        <!-- /ko -->
+                        <tr>
+                            <td colspan="8"><hr />
                               <span></span>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td colspan="8">Végösszeg: <span data-bind="text: shoppingCart.sumTotal"></span> Ft | Áfa: 4 838,00 Ft | <strong>Fizetendő: <span style="color:#900; font-size:14px;">22 758,00 Ft</span></strong></td>
-                          </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8">Végösszeg: <span data-bind="text: shoppingCart.sumTotal()"></span> Ft | Áfa: 4 838,00 Ft | <strong>Fizetendő: <span style="color:#900; font-size:14px;">22 758,00 Ft</span></strong></td>
+                        </tr>
                     </tbody>
                     </table>
                     }

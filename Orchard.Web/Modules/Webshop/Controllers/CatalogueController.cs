@@ -46,11 +46,14 @@ namespace Cms.Webshop.Controllers
 
             CompanyGroup.Dto.WebshopModule.Products products = this.PostJSonData<CompanyGroup.Dto.WebshopModule.Products>("ProductService", "GetAll", productFilter);
 
+            ViewData["InitialProductList"] = products;
+
             Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+
+            ViewData["VisitorInfo"] = visitor;
 
             Cms.Webshop.Models.Catalogue catalogue = new Cms.Webshop.Models.Catalogue(structures, products, visitor);
 
-            ViewData["InitialProductList"] = products;
 
             if (visitor.IsValidLogin)
             {

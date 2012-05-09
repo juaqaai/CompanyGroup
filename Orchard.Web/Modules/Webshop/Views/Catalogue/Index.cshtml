@@ -184,53 +184,51 @@
 			<div id="div_pager_top">
 				<table align="center" border="0" cellpadding="3" cellspacing="1">
 					<tr>
-						<td>Eredmény: @Model.Products.ListCount</td>
-						<td>@if (Model.Products.Pager.FirstEnabled)
-						{ 
+						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
+						<td>
+                        <!-- ko if: productList.pager.firstEnabled -->
                             <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> 
-                        }
-						else
-						{ 
+						<!-- /ko -->
+						<!-- ko if: !productList.pager.firstEnabled --> 
                             <span style="color: #999;">&lt;&lt;</span> 
-                        } </td>
-						<td>@if (Model.Products.Pager.PreviousEnabled)
-						{ 
+                        <!-- /ko --></td>
+						<td>
+                        <!-- ko if: productList.pager.previousEnabled -->
                             <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> 
-                        }
-						else
-						{ 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.pager.previousEnabled -->
                             <span style="color: #999;">&lt;</span> 
-                        } </td>
+                        <!-- /ko --></td>
 						<td align="center">
 						<select id="select_pager">
 						@foreach (var page in Model.Products.Pager.PageItemList)
-						{
-							if (page.Selected)
-							{ 
+      {
+          if (page.Selected)
+          { 
                                 <option value="@page.Index" selected="selected">@page.Value</option>
-							}
-							else
-							{
+          }
+          else
+          {
                                 <option value="@page.Index">@page.Value</option>
-							}
-						}
+          }
+      }
 						</select></td>
 						<td align="center">/</td>
-						<td align="center"><span id="spanTopLastPageIndex">@Model.Products.Pager.LastPageIndex</span></td>
-						<td align="right"> @if (Model.Products.Pager.NextEnabled)
-						{ 
-                             <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> 
-                        }
-						else
-						{ 
-                            <span>&gt;</span> } </td>
-						    <td align="right"> 
-                            @if (Model.Products.Pager.LastEnabled)
-						    { 
-                                <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> 
-                            }
-						else
-						{ <span>&gt;&gt;</span> } </td>
+						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.pager.lastPageIndex"></span></td>
+						<td align="right">
+                        <!-- ko if: productList.pager.nextEnabled -->
+                        <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.pager.nextEnabled -->
+                        <span>&gt;</span> 
+                        <!-- /ko --></td>
+						<td align="right"> 
+                        <!-- ko if: productList.pager.lastEnabled -->
+                        <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.pager.lastEnabled -->
+                        <span>&gt;&gt;</span> 
+                        <!-- /ko --></td>
 					</tr>
 				</table>
 			</div>
@@ -238,134 +236,7 @@
 		
 		<div id="cus_product_table">
 			@* listaelemek lenyíló/bezáródó *@
-			<div id="div_catalogue" class="wrapper">
-				@*termék elem kezdete*@
-				@foreach (var product in @Model.Products.Items)
-                
-				{ <span class="expand_heading">
-					<table width="695" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td valign="top"><img src="@Url.Content("~/Media/images/plusicon.png")" alt="" /></td>
-							<td width="100%" valign="top" class="cus_prod_header_middle_cell"><span class="cus_prod_table_item_number">@product.SequenceNumber</span> @product.ProductId <span class="cus_prod_table_item_name">@product.ItemName </span><span class="cus_prod_table_item_code">|  @product.PartNumber</span></td>
-							<td align="right" valign="top" nowrap="nowrap">
-                            @if (Model.Visitor.IsValidLogin)
-							{
-							<table width="200" border="0" cellspacing="1" cellpadding="2">
-								<tr>
-									<td nowrap="nowrap" style="background:#666; color:#fff; border:0px; text-align:right; font-size:10px; ">Ár: <strong>@String.Format("{0:c}", product.Price)</strong></td>
-								</tr>
-							</table> 
-                            }</td>
-						</tr>
-					</table> </span>
-				<div class="toggle_container">
-					<div class="box">
-						<table width="695" border="0" cellspacing="0" cellpadding="0" style="@if (product.IsInCart) { Html.Raw("background-color:Yellow"); }">
-							<tr>
-								<td valign="top">
-								<div class="cus_termekkep">
-									@if (product.Pictures.Items.Count > 0)
-									{ 
-                                        <a class="popupimg" href="@String.Format("http://1juhasza/CompanyGroup.ServicesHost/PictureService.svc/GetItem/{0}/{1}/{2}/{3}/{4}", product.PrimaryPicture.RecId, product.ProductId, "hrp", "94", "69")"><img src="@String.Format("http://1juhasza/CompanyGroup.ServicesHost/PictureService.svc/GetItem/{0}/{1}/{2}/{3}/{4}", product.PrimaryPicture.RecId, product.ProductId, "hrp", "94", "69")" width="94" height="69" alt="" /></a>
-									}
-									else
-									{ 
-                                        <img src="@Url.Content("~/Media/images/nopic.jpg")" width="94" height="69" alt="" />
-									}
-								</div></td>
-								<td valign="top" class="cus_prod_table_middle_cell">
-								<div class="cus_prod_table_desc">
-									@product.Description
-								</div></td>
-								<td align="right" valign="top" >
-								<table data-bind="visible: visitorInfo.isValidLogin()" width="200" border="0" cellspacing="1" cellpadding="2">
-									<tr>
-										<td valign="top">
-										<div class="cus_teteladatok">
-											@if (product.IsInStock && Model.Visitor.IsValidLogin)
-											{ <span>Belső raktár:</span> @String.Format("{0}", product.InnerStock)
-											<br/>
-											<span>Külső raktár:</span> @String.Format("{0}", product.OuterStock)
-											}
-											else if (product.PurchaseInProgress && Model.Visitor.IsValidLogin)
-											{ <span>Várható érkezés:</span>@String.Format("{0}", product.ShippingDate)
-											}
-											else if (Model.Visitor.IsValidLogin)
-											{ <span>Rendelhető</span>
-											}
-											@if (product.Bargain && Model.Visitor.IsValidLogin)
-											{
-											<br />
-											<span>Használt: 4 600 Ft-tól </span>
-											}
-											@if (Model.Visitor.IsValidLogin)
-											{
-											<br />
-											<span>Garancia módja: product.GarantyMode</span>
-											<br />
-											<span>Garancia ideje: product.GarantyTime</span>
-											}
-											@if (product.Special && Model.Visitor.IsValidLogin)
-											{
-											<br/>
-											<span>hírlevél akció</span>
-											}
-											@if (product.New && Model.Visitor.IsValidLogin)
-											{
-											<br/>
-											<span>új termék</span>
-											}
-											@if (product.Discount && Model.Visitor.IsValidLogin)
-											{
-											<br/>
-											<span>leértékelt</span>
-											}
-											@if (product.ItemState.Equals(1) && Model.Visitor.IsValidLogin)
-											{
-											<br/>
-											<span>kifutó</span>
-											}
-										</div></td>
-									</tr>
-								</table></td>
-							</tr>
-							<tr>
-								<td colspan="3" valign="top" class="cus_prod_table_more">
-								<table width="100%" border="0" cellspacing="1" cellpadding="0">
-									<tr>
-										<td nowrap="nowrap">
-										<div class="cus_prod_table_morelink">
-											<a href="@Url.Content(String.Format("~/Webshop/Catalogue/{0}/Details", product.ProductId))" title="Részletes termékadatlap" target="_blank">[+] Részletes adatlap</a>
-										</div></td>
-										<td nowrap="nowrap">
-										<div class="cus_prod_table_add_compare">
-											<input type="checkbox" name="checkbox" id="checkbox" />
-										</div></td>
-										<td width="100%"> Összehasonlító listához ad </td>
-										<td nowrap="nowrap">
-										<div class="cus_prod_table_quantity">
-											@if (Model.Visitor.IsValidLogin)
-                                            { 
-                                                <span>Kosárba</span>@Html.TextBox(String.Format("txt_quantity_{0}", product.ProductId), "0", new {size="2"})<span>db</span>
-                                            }
-										</div></td>
-										<td align="right" nowrap="nowrap">
-										<div class="cus_prod_table_basket">
-											@if (Model.Visitor.IsValidLogin)
-                                            {
-                                                <a href="javascript:void(0)" onclick="addShoppingCartItem(@product.ProductId)"><img class="basketicon" src="@Url.Content("~/Media/images/basket.png")" alt="kosár" style="width:16px; height:20px; border:0px; vertical-align:middle" /></a>
-                                            }
-										</div></td>
-									</tr>
-								</table>
-                                </td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				}
-				@*termék elem vége*@
-			</div>
+
 			<script id="pagerTemplate" type="text/x-jquery-tmpl">
 				<table align="center" border="0" cellpadding="2" cellspacing="1">
 				<tr>
@@ -412,6 +283,7 @@
 				</tr>
 				</table>
 			</script>
+			<div id="div_catalogue" class="wrapper">
             @*termekelem eleje*@
                 <!-- ko foreach: productList.items -->
 				<span class="expand_heading">
@@ -423,10 +295,10 @@
                             <br /><span class="cus_prod_table_item_code" data-bind="text: partNumber"></span>
 				            </td>
 				            <td align="right" valign="top" nowrap="nowrap">
-                                <!-- ko if: visitorInfo.isValidLogin() -->
+                                <!-- ko if: $parent.visitorInfo.isValidLogin() -->
 				                <table width="200" border="0" cellspacing="1" cellpadding="2">
 				                    <tr>
-				                        <td nowrap="nowrap" style="background:#666; color:#fff; border:0px; text-align:right; font-size: 10px;">Ár: <strong data-bind="value: price"></strong></td>
+				                        <td nowrap="nowrap" style="background:#666; color:#fff; border:0px; text-align:right; font-size: 10px;">Ár: <strong data-bind="text: price"></strong></td>
 				                    </tr>
 				                </table>
                                 <!-- /ko -->
@@ -449,39 +321,45 @@
 				                    </div>
                                 </td>
 				                <td valign="top" class="cus_prod_table_middle_cell">
-				                    <div class="cus_prod_table_desc"  data-bind="value: description"></div>
+				                    <div class="cus_prod_table_desc" data-bind="text: description"></div>
                                 </td>
 				                <td align="right" valign="top" >
 				                    <table width="200" border="0" cellspacing="1" cellpadding="2">
 				                    <tr>
 				                        <td valign="top">
-                                        <!-- ko if: visitorInfo.isValidLogin() -->
+                                        <!-- ko if: $parent.visitorInfo.isValidLogin() -->
                                         <div class="cus_teteladatok">
-				                            <span data-bind="visible: isInStock()">Belső raktár:</span> 
-				                            <br/><span data-bind="visible: isInStock()">Külső raktár:</span> 
-				                            <span data-bind="visible: !isInStock() && purchaseInProgress()">Várható érkezés:</span>
-				                            <span data-bind="visible: !isInStock && !purchaseInProgress()">Rendelhető</span>
+                                            <!-- ko if: isInStock() -->
+				                            Belső raktár: <span data-bind="text: stock.inner"></span><br/> 
+				                            Külső raktár: <span data-bind="text: stock.outer"></span> 
+                                            <!-- /ko -->
+                                            <!-- ko if: !isInStock() -->
+				                            <span data-bind="visible: purchaseInProgress()">Várható érkezés: </span><span data-bind="visible: purchaseInProgress(), text: shippingDate"></span>
+				                            <span data-bind="visible: !purchaseInProgress()">Rendelhető</span>
+                                            <!-- /ko -->
 				                            <br /><span data-bind="visible: bargain()">Használt: 4 600 Ft-tól </span>
-				                            <br />Garancia módja:<br/><span data-bind="text: garantyMode"></span>
-				                            <br />Garancia ideje:<span data-bind="text: garantyTime"></span>
-				                            <br/><span data-bind="visible: special">hírlevél akció</span>
-				                            <br/><span data-bind="visible: newItem">új termék</span>
-				                            <br/><span data-bind="visible: discount">leértékelt</span>
+				                            <br />Garancia módja:<br/><span data-bind="text: garanty.mode"></span>
+				                            <br />Garancia ideje:<span data-bind="text: garanty.time"></span>
+				                            <br/><span data-bind="visible: flags.special">hírlevél akció</span>
+				                            <br/><span data-bind="visible: flags.newItem">új termék</span>
+				                            <br/><span data-bind="visible: flags.discount">leértékelt</span>
 				                            <br/><span data-bind="visible: itemState == 1">kifutó</span>
 				                        </div>
                                         <!-- /ko -->
 				                        </td>
 				                    </tr>
 				                    </table>
+
+
                                 </td>
 				            </tr>
-				        <tr>
+				            <tr>
 				            <td colspan="3" valign="top" class="cus_prod_table_more">
 				                <table width="100%" border="0" cellspacing="1" cellpadding="0">
 				                    <tr>
 				                        <td nowrap="nowrap">
 				                            <div class="cus_prod_table_morelink">
-				                                <a data-bind="attr: { href: productDetailsUrl(@Url.Content("~/Webshop/Catalogue/")), title: itemName }" href="" title="Részletes termékadatlap" target="_blank">[+] Részletes adatlap</a>
+				                                <a data-bind="attr: { href: productDetailsUrl(), title: itemName }" href="" title="Részletes termékadatlap" target="_blank">[+] Részletes adatlap</a>
 				                            </div>
                                         </td>
 				                        <td nowrap="nowrap">
@@ -490,7 +368,7 @@
 				                        <td width="100%"> Összehasonlító listához ad </td>
 				                        <td nowrap="nowrap">
 				                            <div class="cus_prod_table_quantity">
-				                            <!-- ko if: visitorInfo.isValidLogin() -->
+				                            <!-- ko if: $parent.visitorInfo.isValidLogin() -->
 				                            <span>Kosárba</span>
 				                            <input name="textfield" type="text" value="0" size="2" />
 				                            <span>db</span>
@@ -499,13 +377,14 @@
                                         </td>
 				                        <td align="right" nowrap="nowrap">
 				                            <div class="cus_prod_table_basket">
-				                            <!-- ko if: visitorInfo.isValidLogin() -->
-				                            <img class="basketicon" src="@Url.Content("~/Media/images/basket.png")" alt="kosár" width="16" height="20" border="0" align="absmiddle" />
+				                            <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+				                            <a href="javascript:void(0)"><img class="basketicon" src="@Url.Content("~/Media/images/basket.png")" alt="kosár" width="16" height="20" border="0" align="absmiddle" /></a>
 				                            <!-- /ko -->
 				                            </div>
                                         </td>
 				                    </tr>
 				                </table>
+
                             </td>
 				        </tr>
 				    </table>
@@ -513,41 +392,42 @@
 				</div>
 				<!-- /ko -->
                 @*termekelem vege*@
+            </div>
 			<br />
 			<div id="div_pager_bottom">
 				<table align="center" border="0" cellpadding="3" cellspacing="1">
 					<tr>
 						<td>Eredmény: @Model.Products.ListCount</td>
 						<td>@if (Model.Products.Pager.FirstEnabled)
-						{ <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> }
-						else
-						{ <span style="color: #999;">&lt;&lt;</span> } </td>
+          { <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> }
+          else
+          { <span style="color: #999;">&lt;&lt;</span> } </td>
 						<td>@if (Model.Products.Pager.PreviousEnabled)
-						{ <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> }
-						else
-						{ <span style="color: #999;">&lt;</span> } </td>
+          { <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> }
+          else
+          { <span style="color: #999;">&lt;</span> } </td>
 						<td align="center">
 						<select id="select_pager">
 							@foreach (var page in Model.Products.Pager.PageItemList)
-							{
-							    if (page.Selected)
-							    { <option value="@page.Index" selected="selected">@page.Value</option>
-							    }
-							    else
-							    { <option value="@page.Index">@page.Value</option>
-							    }
-							}
+       {
+           if (page.Selected)
+           { <option value="@page.Index" selected="selected">@page.Value</option>
+           }
+           else
+           { <option value="@page.Index">@page.Value</option>
+           }
+       }
 						</select></td>
 						<td align="center">/</td>
 						<td align="center"><span id="spanTopLastPageIndex">@Model.Products.Pager.LastPageIndex</span></td>
 						<td align="right"> @if (Model.Products.Pager.NextEnabled)
-						{ <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> }
-						else
-						{ <span>&gt;</span> } </td>
+                         { <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> }
+                         else
+                         { <span>&gt;</span> } </td>
 						<td align="right"> @if (Model.Products.Pager.LastEnabled)
-						{ <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> }
-						else
-						{ <span>&gt;&gt;</span> } </td>
+                         { <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> }
+                         else
+                         { <span>&gt;&gt;</span> } </td>
 					</tr>
 				</table>
 			</div>

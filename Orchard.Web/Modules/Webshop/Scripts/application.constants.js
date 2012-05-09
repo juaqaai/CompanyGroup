@@ -2,12 +2,20 @@
 
 CompanyGroupCms.Constants = (function () {
 
+    var _webshopBaseUrl = '/cms/Webshop/Catalogue/';
+
     var instance;
 
     function create() {
         return {
             ServiceBaseUrl: 'http://1juhasza/CompanyGroup.ServicesHost/',
-            PictureServiceUrl: 'PictureService.svc/GetItem/'
+            PictureServiceUrl: 'PictureService.svc/GetItem/',
+            getWebshopBaseUrl: function () {
+                return _webshopBaseUrl;
+            },
+            setWebshopBaseUrl: function (webshopBaseUrl) {
+                _webshopBaseUrl = webshopBaseUrl;
+            }
         }
     }
     return {
