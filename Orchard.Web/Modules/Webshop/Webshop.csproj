@@ -71,6 +71,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\application.constants.js" />
     <Content Include="Scripts\catalogue.model.js" />
     <Content Include="Scripts\catalogue.service.js" />
     <Content Include="Scripts\chosen.js" />
