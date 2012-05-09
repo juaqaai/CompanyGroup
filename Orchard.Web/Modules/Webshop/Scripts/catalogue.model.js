@@ -7,7 +7,7 @@ CompanyGroupCms.ProductList = function () {
         return self.items.length;
     });
 
-    self.addProduct = function (product, serviceUrl) {
+    self.addProduct = function (product) {
         self.items.push(product);
     };
 
@@ -36,7 +36,7 @@ CompanyGroupCms.Product = function () {
     self.primaryPicture = ko.observable();
 
     self.pictureUrl = ko.computed(function () {
-        return CompanyGroupCms.Constants.Instance().ServiceBaseUrl + CompanyGroupCms.Constants.Instance().PictureServiceUrl + self.primaryPicture.recId() + '/' + self.productId() + '/hrp/94/69';
+        return CompanyGroupCms.Constants.Instance().ServiceBaseUrl + CompanyGroupCms.Constants.Instance().PictureServiceUrl + self.primaryPicture.recId + '/' + self.productId() + '/hrp/94/69';
     });
 
     self.productDetailsUrl = ko.computed(function (controllerAction) {
@@ -195,3 +195,4 @@ CompanyGroupCms.ProductFactory = (function () {
         }
     };
 })();
+

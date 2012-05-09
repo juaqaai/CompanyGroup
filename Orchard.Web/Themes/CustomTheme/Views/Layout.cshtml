@@ -45,8 +45,10 @@
     Script.Require(Url.Content("jQuery_UICore")).AtHead();
     Script.Require(Url.Content("jQuery_UIDatePicker")).AtHead();
     Script.Require(Url.Content("Knockout")).AtHead();
+    Script.Require(Url.Content("Constants")).AtHead(); 
     Script.Require(Url.Content("ShoppingCart")).AtHead();
-    Script.Require(Url.Content("Catalogue")).AtHead(); 
+    Script.Require(Url.Content("Catalogue")).AtHead();
+
         
     /* Some useful shortcuts or settings
     ***************************************************************/
@@ -126,9 +128,40 @@
 
 			    var shoppingCartViewModel = CompanyGroupCms.ShoppingCartFactory.CreateCart('wert12334', line);
 
+                            
+
+			    var initialProductList = @(Html.Raw(Json.Encode(ViewData["InitialProductList"])));
+
+                /*
+Manufacturer=[object Object]
+FirstLevelCategory=[object Object]
+SecondLevelCategory=[object Object]
+ThirdLevelCategory=[object Object]
+                
+                */
+                var productList = CompanyGroupCms.ProductFactory.CreateProductList([]);
+
+                $.each(initialProductList.Items, function(index, product) {
+
+                    var stock2 = CompanyGroupCms.ProductFactory.CreateStock(product.InnerStock, product.OuterStock, 0, 0);
+                    var garanty2 = CompanyGroupCms.ProductFactory.CreateGaranty(product.GarantyMode, product.GarantyTime);
+                    var flags2 = CompanyGroupCms.ProductFactory.CreateFlags(product.Bargain, product.Discount, product.IsInStock, product.New, product.Special);
+                    var category1 = {};
+                    var category2 = {};
+                    var category3 = {};
+                    var manufacturer = {};
+                    var productManager2 = CompanyGroupCms.ProductFactory.CreateProductManager(product.ProductManager.Email, product.ProductManager.Extension, product.ProductManager.Mobile, product.ProductManager.Name);
+                    var picture2 = CompanyGroupCms.ProductFactory.CreatePicture(product.PrimaryPicture.FileName, product.PrimaryPicture.Primary, product.PrimaryPicture.RecId);
+                    var prod = CompanyGroupCms.ProductFactory.CreateProduct(product.Currency, product.DataAreaId, product.Description, category1, category2, category3, flags2, garanty2, product.IsInCart, product.IsInStock, product.ItemName, product.ItemState, manufacturer, product.PartNumber, [], picture2, product.Price, product.ProductId, productManager2, product.PurchaseInProgress, product.SequenceNumber, product.ShippingDate, stock2);
+                    productList.addProduct(prod);
+                });
+
+               // alert(initialProductList.ListCount);
+
 			    var AppViewModel = {
 			        visitorInfo: visitorInfoViewModel,
-			        shoppingCart: shoppingCartViewModel
+			        shoppingCart: shoppingCartViewModel, 
+                    catalogue:productList
 			    };
 
 
@@ -656,17 +689,17 @@
 			    CompanyGroupCms.Services.ShoppingCartService.getInstance().addItem(addShoppingCartItemRequest);
             }
 		</script>
-		}
+    }
 
 		@if (Model.Header != null)
-		{
+  {
 		<header id="layout-header" class="group">
 			
 			<div id="header">
 				@Zone(Model.Header)
 			</div>
 		</header>
-		} <!-- *** alsó felnyíló panel div *** -->
+  } <!-- *** alsó felnyíló panel div *** -->
 		<div id="bottom_button_open">
 			<div id="cus_bottom_content_on">
 				<div id="openclose_button"><img src="@Url.Content("~/Media/images/openclose.png")" alt=""/>
@@ -850,7 +883,7 @@
 						<table data-bind="visible: visitorInfo.isValidLogin()" id="active_basket" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td><img src="@Url.Content("~/Media/images/basketbutton_01.png")"></td>
-								<td class="active_basket_middle_cell" nowrap="nowrap"><a href="javascript:void(0)" class="btn_basket_slide"><span style="color: #000">Aktív kosár:</span><span style="color: #900" data-bind="text: shoppingCart.sumTotal"> 17 920,00 Ft</span><span style="color: #000"> [ + Megnyitás ]</span></a></td>
+								<td class="active_basket_middle_cell" nowrap="nowrap"><a href="javascript:void(0)" class="btn_basket_slide"><span style="color: #000">Aktív kosár:</span><span style="color: #900" data-bind="text: shoppingCart.sumTotal()"> 17 920,00 Ft</span><span style="color: #000"> [ + Megnyitás ]</span></a></td>
 								<td><img src="@Url.Content("~/Media/images/basketbutton_03.png")"></td>
 							</tr>
 						</table>
@@ -864,9 +897,9 @@
 			</div>
 			<div id="cus_logo_and_pages_menu"><img src="@Url.Content("~/Media/images/hrp_bsc_logo.png")" alt=""/>
 				<!-- @if (Model.Navigation != null)
-				{
+         {
 				@Zone(Model.Navigation)
-				} -->
+         } -->
 				<!-- *** ide jön az axaptás menü *** -->
 				<div id="cus_ax_nav">
 					<ul id="navmenu_o">
