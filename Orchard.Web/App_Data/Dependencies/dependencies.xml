@@ -609,8 +609,8 @@
   </Dependency>
   <Dependency>
     <ModuleName>Webshop</ModuleName>
-    <VirtualPath>~/Modules/Webshop/bin/Webshop.dll</VirtualPath>
-    <LoaderName>PrecompiledExtensionLoader</LoaderName>
+    <VirtualPath>~/Modules/Webshop/Webshop.csproj</VirtualPath>
+    <LoaderName>DynamicExtensionLoader</LoaderName>
     <References>
       <Reference>
         <Name>CommonCore</Name>

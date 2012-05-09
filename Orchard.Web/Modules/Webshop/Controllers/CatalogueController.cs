@@ -50,6 +50,8 @@ namespace Cms.Webshop.Controllers
 
             Cms.Webshop.Models.Catalogue catalogue = new Cms.Webshop.Models.Catalogue(structures, products, visitor);
 
+            ViewData["InitialProductList"] = products;
+
             if (visitor.IsValidLogin)
             {
                 //CompanyGroup.Dto.WebshopModule.ShoppingCartCollection GetItemsByVisitorId(string visitorId)

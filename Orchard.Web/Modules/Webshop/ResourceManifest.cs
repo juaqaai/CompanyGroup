@@ -67,9 +67,13 @@ namespace Webshop
 
             manifest.DefineScript("Knockout").SetUrl("knockout-2.0.0.js").SetVersion("2.0.0");
 
+            manifest.DefineScript("Constants").SetUrl("application.constants.js", "application.constants.js").SetVersion("1.0.0");
+
             manifest.DefineScript("ShoppingCart").SetUrl("shoppingcart.model.js", "shoppingcart.model.js").SetVersion("1.0.0").SetDependencies("Knockout");
 
             manifest.DefineScript("Catalogue").SetUrl("catalogue.model.js", "catalogue.model.js").SetVersion("1.0.0").SetDependencies("Knockout");
+
+
         }
     }
 }
