@@ -62,8 +62,8 @@ namespace Webshop
 
             manifest.DefineScript("jQuery_Validate").SetUrl("jquery.validate.min.js").SetVersion("1.8.0").SetDependencies("jQuery");
 
-                manifest.DefineScript("jQuery_UICore").SetUrl("jquery.ui.core.js").SetVersion("1.0.0").SetDependencies("jQuery");
-                manifest.DefineScript("jQuery_UIDatePicker").SetUrl("jquery.ui.datepicker.js").SetVersion("1.0.0").SetDependencies("jQuery");
+            manifest.DefineScript("jQuery_UICore").SetUrl("jquery.ui.core.js").SetVersion("1.0.0").SetDependencies("jQuery");
+            manifest.DefineScript("jQuery_UIDatePicker").SetUrl("jquery.ui.datepicker.js").SetVersion("1.0.0").SetDependencies("jQuery");
 
             manifest.DefineScript("Knockout").SetUrl("knockout-2.0.0.js").SetVersion("2.0.0");
 

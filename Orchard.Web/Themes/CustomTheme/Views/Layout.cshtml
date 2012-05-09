@@ -128,17 +128,8 @@
 
 			    var shoppingCartViewModel = CompanyGroupCms.ShoppingCartFactory.CreateCart('wert12334', line);
 
-                            
-
 			    var initialProductList = @(Html.Raw(Json.Encode(ViewData["InitialProductList"])));
 
-                /*
-Manufacturer=[object Object]
-FirstLevelCategory=[object Object]
-SecondLevelCategory=[object Object]
-ThirdLevelCategory=[object Object]
-                
-                */
                 var productList = CompanyGroupCms.ProductFactory.CreateProductList([]);
 
                 $.each(initialProductList.Items, function(index, product) {
@@ -146,10 +137,10 @@ ThirdLevelCategory=[object Object]
                     var stock2 = CompanyGroupCms.ProductFactory.CreateStock(product.InnerStock, product.OuterStock, 0, 0);
                     var garanty2 = CompanyGroupCms.ProductFactory.CreateGaranty(product.GarantyMode, product.GarantyTime);
                     var flags2 = CompanyGroupCms.ProductFactory.CreateFlags(product.Bargain, product.Discount, product.IsInStock, product.New, product.Special);
-                    var category1 = {};
-                    var category2 = {};
-                    var category3 = {};
-                    var manufacturer = {};
+                    var category1 = CompanyGroupCms.ProductFactory.CreateFirstLevelCategory(product.FirstLevelCategory.Id, product.FirstLevelCategory.Name);
+                    var category2 = CompanyGroupCms.ProductFactory.CreateSecondLevelCategory(product.SecondLevelCategory.Id, product.SecondLevelCategory.Name);
+                    var category3 = CompanyGroupCms.ProductFactory.CreateThirdLevelCategory(product.ThirdLevelCategory.Id, product.ThirdLevelCategory.Name);
+                    var manufacturer = CompanyGroupCms.ProductFactory.CreateManufacturer(product.Manufacturer.Id, product.Manufacturer.Name);
                     var productManager2 = CompanyGroupCms.ProductFactory.CreateProductManager(product.ProductManager.Email, product.ProductManager.Extension, product.ProductManager.Mobile, product.ProductManager.Name);
                     var picture2 = CompanyGroupCms.ProductFactory.CreatePicture(product.PrimaryPicture.FileName, product.PrimaryPicture.Primary, product.PrimaryPicture.RecId);
                     var prod = CompanyGroupCms.ProductFactory.CreateProduct(product.Currency, product.DataAreaId, product.Description, category1, category2, category3, flags2, garanty2, product.IsInCart, product.IsInStock, product.ItemName, product.ItemState, manufacturer, product.PartNumber, [], picture2, product.Price, product.ProductId, productManager2, product.PurchaseInProgress, product.SequenceNumber, product.ShippingDate, stock2);

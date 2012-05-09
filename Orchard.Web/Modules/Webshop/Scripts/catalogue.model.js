@@ -155,12 +155,40 @@ CompanyGroupCms.ProductFactory = (function () {
         stock.serbian(serbian);
         return stock;
     };
+    var createManufacturer = function (id, name) {
+        var manufacturer = new CompanyGroupCms.Manufacturer();
+        manufacturer.id(id);
+        manufacturer.name(name);
+        return manufacturer;
+    };
+    var createFirstLevelCategory = function (id, name) {
+        var category1 = new CompanyGroupCms.FirstLevelCategory();
+        category1.id(id);
+        category1.name(name);
+        return category1;
+    };
+    var createSecondLevelCategory = function (id, name) {
+        var category2 = new CompanyGroupCms.SecondLevelCategory();
+        category2.id(id);
+        category2.name(name);
+        return category2;
+    };
+    var createThirdLevelCategory = function (id, name) {
+        var category3 = new CompanyGroupCms.ThirdLevelCategory();
+        category3.id(id);
+        category3.name(name);
+        return category3;
+    };
     return {
         CreateFlags: createFlags,
         CreateGaranty: createGaranty,
         CreatePicture: createPicture,
         CreateProductManager: createProductManager,
         CreateStock: createStock,
+        CreateManufacturer : createManufacturer, 
+        CreateFirstLevelCategory : createFirstLevelCategory,
+        CreateSecondLevelCategory : createSecondLevelCategory,
+        CreateThirdLevelCategory: createThirdLevelCategory,
         CreateProduct: function (currency, dataAreaId, description, category1, category2, category3, flags, garanty, isInCart, isInStock, itemName, itemState, manufacturer, partNumber, pictures, picture, price, productId, productManager, purchaseInProgress, sequenceNumber, shippingDate, stock) {
             var product = new CompanyGroupCms.Product();
             product.currency(currency);
