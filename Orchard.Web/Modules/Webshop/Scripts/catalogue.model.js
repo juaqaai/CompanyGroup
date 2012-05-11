@@ -29,16 +29,16 @@ CompanyGroupCms.Pager = function () {
     self.lastPageIndex = ko.observable(0);
     self.pageItemList = ko.observableArray([]);
 
-    self.addPage = function (page) {
-        self.pageItemList.push(page);
+    self.addPage = function (newPage) {
+        self.pageItemList.push(newPage);
     };
 }
 
-CompanyGroupCms.Page = function () {
+CompanyGroupCms.Page = function (selected, index, value) {
     var self = this;
-    self.selected = ko.observable(false);
-    self.index = ko.observable(0);
-    self.value = ko.observable('');
+    self.selected = ko.observable(selected);
+    self.index = ko.observable(index);
+    self.value = ko.observable(value);
 }
 
 CompanyGroupCms.Product = function () {
@@ -211,7 +211,7 @@ CompanyGroupCms.ProductFactory = (function () {
         page.value(value);
         return page;
     };
-    var createPager = function (firstEnabled, lastEnabled, previousEnabled, nextEnabled, lastPageIndex, pageItemList) {
+    var createPager = function (firstEnabled, lastEnabled, previousEnabled, nextEnabled, lastPageIndex, pageItems) {
 
         var pager = new CompanyGroupCms.Pager();
         pager.firstEnabled(firstEnabled);
@@ -220,12 +220,19 @@ CompanyGroupCms.ProductFactory = (function () {
         pager.nextEnabled(nextEnabled);
         pager.lastPageIndex(lastPageIndex);
         pager.pageItemList([]);
-        $.each(pageItemList, function (index, page) {
-            //alert(page.Selected + ' ; ' + page.Index + ' ; ' + page.Value);
-            var p = createPage(page.Selected, page.Index, page.Value);
+        $.each(pageItems, function (index, page) {
+            //console.log(page.Selected + ' ; ' + page.Index + ' ; ' + page.Value);
+            //var p = createPage(page.Selected, page.Index, page.Value);
+            var p = new CompanyGroupCms.Page(page.Selected, page.Index, page.Value);
+            //            page.selected(selected);
+            //            page.index(index);
+            //            page.value(value);
             pager.addPage(p);
-            //alert(p.selected() + ' ; ' + p.index() + ' ; ' + p.value());
+            pager.pageItemList.push(p);
+            //console.log(p.selected() + ' ; ' + p.index() + ' ; ' + p.value());
         });
+        console.log(pager.pageItemList.length);
+        console.log(pager.lastPageIndex());
         return pager;
     };
     return {
@@ -270,10 +277,10 @@ CompanyGroupCms.ProductFactory = (function () {
             list.items(items);
             list.listCount(listCount);
             list.pager(pager);
-//            alert(pager.pageItemList.length);
-//            for (var i = 0; i <= pager.pageItemList.length; i++) {
-//                console.log(pager.pageItemList[i].selected + ' ; ' + pager.pageItemList[i].index + ' ; ' + pager.pageItemList[i].value);
-//            }
+            //            alert(pager.pageItemList.length);
+            //            for (var i = 0; i <= pager.pageItemList.length; i++) {
+            //                console.log(pager.pageItemList[i].selected + ' ; ' + pager.pageItemList[i].index + ' ; ' + pager.pageItemList[i].value);
+            //            }
             return list;
         },
         CreatePage: createPage,
