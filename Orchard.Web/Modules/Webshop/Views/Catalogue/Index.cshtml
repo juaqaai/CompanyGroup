@@ -197,21 +197,24 @@
                             <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.pager.previousEnabled -->
-                            <span style="color: #999;">&lt;</span> 
+                            <span style="color: #999;">&lt;</span>
                         <!-- /ko --></td>
 						<td align="center">
-						<select id="select_pager">
+						
+                        <select data-bind="options: productList.pager.pageItemList, optionsText: 'value', optionsCaption: 'választás', value: 'index'"> </select>
+
+                        <select id="select_pager">
 						@foreach (var page in Model.Products.Pager.PageItemList)
-      {
-          if (page.Selected)
-          { 
-                                <option value="@page.Index" selected="selected">@page.Value</option>
-          }
-          else
-          {
-                                <option value="@page.Index">@page.Value</option>
-          }
-      }
+                        {
+                            if (page.Selected)
+                            { 
+                                                <option value="@page.Index" selected="selected">@page.Value</option>
+                            }
+                            else
+                            {
+                                                <option value="@page.Index">@page.Value</option>
+                            }
+                        }
 						</select></td>
 						<td align="center">/</td>
 						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.pager.lastPageIndex"></span></td>

@@ -212,13 +212,20 @@ CompanyGroupCms.ProductFactory = (function () {
         return page;
     };
     var createPager = function (firstEnabled, lastEnabled, previousEnabled, nextEnabled, lastPageIndex, pageItemList) {
+
         var pager = new CompanyGroupCms.Pager();
         pager.firstEnabled(firstEnabled);
         pager.lastEnabled(lastEnabled);
         pager.previousEnabled(previousEnabled);
         pager.nextEnabled(nextEnabled);
         pager.lastPageIndex(lastPageIndex);
-        pager.pageItemList(pageItemList);
+        pager.pageItemList([]);
+        $.each(pageItemList, function (index, page) {
+            //alert(page.Selected + ' ; ' + page.Index + ' ; ' + page.Value);
+            var p = createPage(page.Selected, page.Index, page.Value);
+            pager.addPage(p);
+            //alert(p.selected() + ' ; ' + p.index() + ' ; ' + p.value());
+        });
         return pager;
     };
     return {
@@ -236,7 +243,7 @@ CompanyGroupCms.ProductFactory = (function () {
             product.currency(currency);
             product.dataAreaId(dataAreaId);
             product.description(description);
-            product.firstLevelCategory = category1;
+            product.firstLevelCategory(category1);
             product.flags(flags);
             product.garanty(garanty);
             product.isInCart(isInCart);
@@ -263,6 +270,10 @@ CompanyGroupCms.ProductFactory = (function () {
             list.items(items);
             list.listCount(listCount);
             list.pager(pager);
+//            alert(pager.pageItemList.length);
+//            for (var i = 0; i <= pager.pageItemList.length; i++) {
+//                console.log(pager.pageItemList[i].selected + ' ; ' + pager.pageItemList[i].index + ' ; ' + pager.pageItemList[i].value);
+//            }
             return list;
         },
         CreatePage: createPage,
