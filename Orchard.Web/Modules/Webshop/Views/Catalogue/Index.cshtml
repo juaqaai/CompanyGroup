@@ -276,16 +276,16 @@
                                         <!-- ko if: $parent.visitorInfo.isValidLogin() -->
                                         <div class="cus_teteladatok">
                                             <!-- ko if: isInStock() -->
-				                            Belső raktár: <span data-bind="text: stock.inner"></span><br/> 
-				                            Külső raktár: <span data-bind="text: stock.outer"></span> 
+				                            Belső raktár: <span data-bind="text: stock.inner()"></span><br/> 
+				                            Külső raktár: <span data-bind="text: stock.outer()"></span> 
                                             <!-- /ko -->
                                             <!-- ko if: !isInStock() -->
 				                            <span data-bind="visible: purchaseInProgress()">Várható érkezés: </span><span data-bind="visible: purchaseInProgress(), text: shippingDate"></span>
 				                            <span data-bind="visible: !purchaseInProgress()">Rendelhető</span>
                                             <!-- /ko -->
 				                            <br /><span data-bind="visible: flags.bargain()">Használt: 4 600 Ft-tól </span>
-				                            <br />Garancia módja:<br/><span data-bind="text: garanty.mode"></span>
-				                            <br />Garancia ideje:<span data-bind="text: garanty.time"></span>
+				                            <br />Garancia módja:<br/><span data-bind="text: garanty.mode()"></span>
+				                            <br />Garancia ideje:<span data-bind="text: garanty.time()"></span>
 				                            <br/><span data-bind="visible: flags.special()">hírlevél akció</span>
 				                            <br/><span data-bind="visible: flags.newItem()">új termék</span>
 				                            <br/><span data-bind="visible: flags.discount()">leértékelt</span>

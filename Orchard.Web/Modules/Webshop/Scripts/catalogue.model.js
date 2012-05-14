@@ -237,30 +237,23 @@ CompanyGroupCms.Page = function () {
 
 CompanyGroupCms.Product = function () {
     var self = this;
-    self.manufacturer = ko.observable();
-    self.firstLevelCategory = ko.observable();
-    self.secondLevelCategory = ko.observable();
-    self.thirdLevelCategory = ko.observable();
+    self.manufacturer = CompanyGroupCms.CatalogueFactory.CreateManufacturer('', '');
+    self.firstLevelCategory = CompanyGroupCms.CatalogueFactory.CreateFirstLevelCategory('', '');
+    self.secondLevelCategory = CompanyGroupCms.CatalogueFactory.CreateSecondLevelCategory('', '');
+    self.thirdLevelCategory = CompanyGroupCms.CatalogueFactory.CreateThirdLevelCategory('','');
     self.productId = ko.observable('');
     self.partNumber = ko.observable('');
     self.itemName = ko.observable('');
-    self.stock = ko.observable();
+    self.stock = CompanyGroupCms.CatalogueFactory.CreateStock(0,0,0,0);
     self.price = ko.observable(0);
     self.currency = ko.observable('');
     self.shippingDate = ko.observable('');
     self.itemState = ko.observable(0);
     self.flags = CompanyGroupCms.CatalogueFactory.CreateFlags(false, false, false, false, false);
-
-//    self.bargain = ko.observable(false);
-//    self.discount = ko.observable(false);
-//    self.inStock = ko.observable(false);
-//    self.newItem = ko.observable(false);
-//    self.special = ko.observable(false);
-
     self.primaryPictureRecId = ko.observable(0);
     self.description = ko.observable('');
-    self.garanty = ko.observable();
-    self.productManager = ko.observable();
+    self.garanty = CompanyGroupCms.CatalogueFactory.CreateGaranty('', '');
+    self.productManager = CompanyGroupCms.CatalogueFactory.CreateProductManager('', '', '', '');
     self.dataAreaId = ko.observable('');
     self.isInStock = ko.observable(false);
     self.isInCart = ko.observable(false);
@@ -272,7 +265,7 @@ CompanyGroupCms.Product = function () {
         return self.primaryPictureRecId != 0;
     });
     self.pictureUrl = ko.computed(function () {
-        return CompanyGroupCms.Constants.Instance().getWebshopBaseUrl() + self.productId() + '/' + self.primaryPictureRecId() + '/hrp/94/69/Picture';
+        return CompanyGroupCms.Constants.Instance().getWebshopBaseUrl() + self.productId() + '/' + self.primaryPictureRecId() + '/' + self.dataAreaId() + '/94/69/Picture';
     });
     self.productDetailsUrl = ko.computed(function () {
         return CompanyGroupCms.Constants.Instance().getWebshopBaseUrl() + self.productId() + '/Details';
@@ -460,29 +453,40 @@ CompanyGroupCms.CatalogueFactory = (function () {
             product.currency(currency);
             product.dataAreaId(dataAreaId);
             product.description(description);
-            product.firstLevelCategory(category1);
+            product.firstLevelCategory.id(category1.id);
+            product.firstLevelCategory.name(category1.name);
             product.flags.bargain(flags.bargain);
             product.flags.discount(flags.discount);
             product.flags.inStock(flags.inStock);
             product.flags.newItem(flags.newItem);
             product.flags.special(flags.special);
-            product.garanty(garanty);
+            product.garanty.mode(garanty.mode);
+            product.garanty.time(garanty.time);
             product.isInCart(isInCart);
             product.isInStock(isInStock);
             product.itemName(itemName);
             product.itemState(itemState);
-            product.manufacturer(manufacturer);
+            product.manufacturer.id(manufacturer.id);
+            product.manufacturer.name(manufacturer.name);
             product.partNumber(partNumber);
             product.primaryPictureRecId(primaryPictureRecId);
             product.price(price);
             product.productId(productId);
-            product.productManager(productManager);
+            product.productManager.email(productManager.email);
+            product.productManager.extension(productManager.extension);
+            product.productManager.mobile(productManager.mobile);
+            product.productManager.name(productManager.name);
             product.purchaseInProgress(purchaseInProgress);
-            product.secondLevelCategory(category2);
+            product.secondLevelCategory.id(category2.id);
+            product.secondLevelCategory.name(category2.name);
             product.sequenceNumber(sequenceNumber);
             product.shippingDate(shippingDate);
-            product.stock(stock);
-            product.thirdLevelCategory(category3);
+            product.stock.inner(stock.inner);
+            product.stock.outer(stock.outer);
+            product.stock.secondHand(stock.secondHand);
+            product.stock.serbian(stock.serbian);
+            product.thirdLevelCategory.id(category3.id);
+            product.thirdLevelCategory.name(category3.name);
             return product;
         },
         CreateProductList: function (items, listCount, firstPageEnabled, lastPageEnabled, previousPageEnabled, nextPageEnabled, lastPageIndex) {

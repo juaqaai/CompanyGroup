@@ -171,7 +171,8 @@
 
 			    ko.applyBindings(AppViewModel);
 
-			    //visitorInfoViewModel.isValidLogin(true);
+			     console.log(AppViewModel.productList.firstPageEnabled());
+                 console.log(AppViewModel.productList.nextPageEnabled());
 			    //AppViewModel.visitorInfo.authorizationData('@Url.Content("~/PartnerInfo/Home/VisitorInfo")');
 
 			    jQuery('.chosen').chosen();
