@@ -49,7 +49,7 @@ CompanyGroupCms.ProductList = function (items) {
         self.pageItemList.removeAll();
     };
 
-    self.showPicture = function(product) {
+    self.showPicture = function (product) {
         var arr_pics = new Array();
         var data = new Object();
         data.ProductId = product.productId();
@@ -57,20 +57,20 @@ CompanyGroupCms.ProductList = function (items) {
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getPictureListServiceUrl(),   
+            url: CompanyGroupCms.Constants.Instance().getPictureListServiceUrl(),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 15000,
             dataType: "json",
             processData: true,
             success: function (result) {
-                    if (result.Items.length > 0) {
-                        $.each(result.Items, function (i, pic) {
-                            var item = new Object();
-                            item.href = CompanyGroupCms.Constants.Instance().getWebshopBaseUrl() + data.ProductId + '/' + pic.RecId + '/' + data.DataAreaId + '/500/500/Picture';
-                            item.title = data.ProductId;
-                            arr_pics.push(item);
-                            $.fancybox(
+                if (result.Items.length > 0) {
+                    $.each(result.Items, function (i, pic) {
+                        var item = new Object();
+                        item.href = CompanyGroupCms.Constants.Instance().getWebshopBaseUrl() + data.ProductId + '/' + pic.RecId + '/' + data.DataAreaId + '/500/500/Picture';
+                        item.title = data.ProductId;
+                        arr_pics.push(item);
+                        $.fancybox(
                             arr_pics,
                             {
                                 'padding': 0,
@@ -88,8 +88,8 @@ CompanyGroupCms.ProductList = function (items) {
                                     return '<a href="' + product.productDetailsUrl() + '"><span id="fancybox-title-over"> ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? '&nbsp; ' + title + '&nbsp;&nbsp;' + product.itemName() + '&nbsp;' : '') + '</span></a>';
                                 }
                             });
-                        });
-                    }
+                    });
+                }
 
             },
             error: function () {
@@ -97,7 +97,38 @@ CompanyGroupCms.ProductList = function (items) {
             }
         });
     };
-
+    self.firstPage = function () {
+        var currentPageIndex = catalogueListRequest.CurrentPageIndex();
+        if (currentPageIndex != 0) {
+            catalogueListRequest.CurrentPageIndex(0);
+            self.loadCatalogueList();
+        }
+    };
+    self.lastPage = function () {
+        var currentPageIndex = catalogueListRequest.CurrentPageIndex();
+        var lastPageIndex = $("#spanTopLastPageIndex").text();
+        if (currentPageIndex < (lastPageIndex - 1)) {
+            catalogueListRequest.CurrentPageIndex(lastPageIndex - 1);
+            self.loadCatalogueList();
+        }
+    };
+    self.nextPage = function () {
+        var currentPageIndex = catalogueListRequest.CurrentPageIndex();
+        var lastPageIndex = $("#spanTopLastPageIndex").text();
+        if (currentPageIndex < (lastPageIndex - 1)) {
+            currentPageIndex = currentPageIndex + 1;
+            catalogueListRequest.CurrentPageIndex(currentPageIndex);
+            self.loadCatalogueList();
+        }
+    };
+    self.previousPage = function () {
+        var currentPageIndex = catalogueListRequest.CurrentPageIndex();
+        if (currentPageIndex > 0) {
+            currentPageIndex = currentPageIndex - 1;
+            catalogueListRequest.CurrentPageIndex(currentPageIndex);
+            self.loadCatalogueList();
+        }
+    };
     self.loadCatalogueList = function () {
         var dataString = ko.toJSON(catalogueListRequest);
         $.ajax({
@@ -133,10 +164,10 @@ CompanyGroupCms.ProductList = function (items) {
                             var p = CompanyGroupCms.CatalogueFactory.CreatePage(page.Selected, page.Index, page.Value);
                             self.addPage(p);
                         });
-                        self.firstPageEnabled(result.Pager.FirstPageEnabled);
-                        self.lastPageEnabled(result.Pager.LastPageEnabled);
-                        self.previousPageEnabled(result.Pager.PreviousPageEnabled);
-                        self.nextPageEnabled(result.Pager.NextPageEnabled);
+                        self.firstPageEnabled(result.Pager.FirstEnabled);
+                        self.lastPageEnabled(result.Pager.LastEnabled);
+                        self.previousPageEnabled(result.Pager.PreviousEnabled);
+                        self.nextPageEnabled(result.Pager.NextEnabled);
                         self.lastPageIndex(result.Pager.LastPageIndex);
                     }
                     else {

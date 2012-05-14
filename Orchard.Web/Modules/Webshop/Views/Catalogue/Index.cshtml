@@ -187,7 +187,7 @@
 						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
 						<td>
                         <!-- ko if: productList.firstPageEnabled() -->
-                            <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> 
+                            <a href="javascript:void(0)" data-bind="click: function() { productList.firstPage($data); }">&lt;&lt;</a> 
 						<!-- /ko -->
 						<!-- ko if: !productList.firstPageEnabled() --> 
                             <span style="color: #999;">&lt;&lt;</span> 
@@ -195,7 +195,7 @@
                         </td>
 						<td>
                         <!-- ko if: productList.previousPageEnabled() -->
-                            <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> 
+                            <a href="javascript:void(0)" data-bind="click: function() { productList.previousPage($data); }">&lt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.previousPageEnabled() -->
                             <span style="color: #999;">&lt;</span>
@@ -208,7 +208,7 @@
 						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.lastPageIndex"></span></td>
 						<td align="right">
                         <!-- ko if: productList.nextPageEnabled() -->
-                        <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> 
+                        <a href="javascript:void(0)" data-bind="click: function() { productList.nextPage($data); }">&gt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.nextPageEnabled() -->
                         <span>&gt;</span> 
@@ -216,7 +216,7 @@
                         </td>
 						<td align="right"> 
                         <!-- ko if: productList.lastPageEnabled() -->
-                        <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> 
+                        <a href="javascript:void(0)" data-bind="click: function() { productList.lastPage($data); }">&gt;&gt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.lastPageEnabled() -->
                         <span>&gt;&gt;</span> 
@@ -345,7 +345,7 @@
 						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
 						<td>
                         <!-- ko if: productList.firstPageEnabled() -->
-                            <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> 
+                            <a href="javascript:void(0)" data-bind="click: function() { productList.firstPage($data); }">&lt;&lt;</a> 
 						<!-- /ko -->
 						<!-- ko if: !productList.firstPageEnabled() --> 
                             <span style="color: #999;">&lt;&lt;</span> 
@@ -353,7 +353,7 @@
                         </td>
 						<td>
                         <!-- ko if: productList.previousPageEnabled() -->
-                            <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> 
+                            <a href="javascript:void(0)"  data-bind="click: function() { productList.previousPage($data); }">&lt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.previousPageEnabled() -->
                             <span style="color: #999;">&lt;</span>
@@ -366,7 +366,7 @@
 						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.lastPageIndex"></span></td>
 						<td align="right">
                         <!-- ko if: productList.nextPageEnabled() -->
-                        <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> 
+                        <a href="javascript:void(0)" data-bind="click: function() { productList.nextPage($data); }">&gt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.nextPageEnabled() -->
                         <span>&gt;</span> 
@@ -374,7 +374,7 @@
                         </td>
 						<td align="right"> 
                         <!-- ko if: productList.lastPageEnabled() -->
-                        <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> 
+                        <a href="javascript:void(0)"data-bind="click: function() { productList.lastPage($data); }">&gt;&gt;</a> 
                         <!-- /ko -->
                         <!-- ko if: !productList.lastPageEnabled() -->
                         <span>&gt;&gt;</span> 
