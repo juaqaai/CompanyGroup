@@ -186,52 +186,42 @@
 					<tr>
 						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
 						<td>
-                        <!-- ko if: productList.pager.firstEnabled -->
+                        <!-- ko if: productList.firstPageEnabled() -->
                             <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> 
 						<!-- /ko -->
-						<!-- ko if: !productList.pager.firstEnabled --> 
+						<!-- ko if: !productList.firstPageEnabled() --> 
                             <span style="color: #999;">&lt;&lt;</span> 
-                        <!-- /ko --></td>
+                        <!-- /ko -->
+                        </td>
 						<td>
-                        <!-- ko if: productList.pager.previousEnabled -->
+                        <!-- ko if: productList.previousPageEnabled() -->
                             <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> 
                         <!-- /ko -->
-                        <!-- ko if: !productList.pager.previousEnabled -->
+                        <!-- ko if: !productList.previousPageEnabled() -->
                             <span style="color: #999;">&lt;</span>
-                        <!-- /ko --></td>
+                        <!-- /ko -->
+                        </td>
 						<td align="center">
-						
-                        <select data-bind="options: productList.pager.pageItemList, optionsText: 'value', optionsCaption: 'választás', value: 'index'"> </select>
-
-                        <select id="select_pager">
-						@foreach (var page in Model.Products.Pager.PageItemList)
-                        {
-                            if (page.Selected)
-                            { 
-                                                <option value="@page.Index" selected="selected">@page.Value</option>
-                            }
-                            else
-                            {
-                                                <option value="@page.Index">@page.Value</option>
-                            }
-                        }
-						</select></td>
+                            <select id="select_pager_top" data-bind="options: productList.pageItemList, optionsText: 'value', value: 'index'"> </select>
+                        </td>
 						<td align="center">/</td>
-						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.pager.lastPageIndex"></span></td>
+						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.lastPageIndex"></span></td>
 						<td align="right">
-                        <!-- ko if: productList.pager.nextEnabled -->
+                        <!-- ko if: productList.nextPageEnabled() -->
                         <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> 
                         <!-- /ko -->
-                        <!-- ko if: !productList.pager.nextEnabled -->
+                        <!-- ko if: !productList.nextPageEnabled() -->
                         <span>&gt;</span> 
-                        <!-- /ko --></td>
+                        <!-- /ko -->
+                        </td>
 						<td align="right"> 
-                        <!-- ko if: productList.pager.lastEnabled -->
+                        <!-- ko if: productList.lastPageEnabled() -->
                         <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> 
                         <!-- /ko -->
-                        <!-- ko if: !productList.pager.lastEnabled -->
+                        <!-- ko if: !productList.lastPageEnabled() -->
                         <span>&gt;&gt;</span> 
-                        <!-- /ko --></td>
+                        <!-- /ko -->
+                        </td>
 					</tr>
 				</table>
 			</div>
@@ -239,53 +229,6 @@
 		
 		<div id="cus_product_table">
 			@* listaelemek lenyíló/bezáródó *@
-
-			<script id="pagerTemplate" type="text/x-jquery-tmpl">
-				<table align="center" border="0" cellpadding="2" cellspacing="1">
-				<tr>
-				<td>Eredmény: ${ListCount}</td>
-				<td>{{if Pager.FirstEnabled}}
-				<a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a>
-				{{else}}
-				<span style="color: #999;">&lt;&lt;</span>
-				{{/if}}
-				</td>
-				<td>{{if Pager.PreviousEnabled}}
-				<a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a>
-				{{else}}
-				<span style="color: #999;">&lt;</span>
-				{{/if}}
-				</td>
-				<td align="center">
-				<select id="select_pager">
-				{{each( i, item ) Pager.PageItemList}}
-				{{if item.Selected }}
-				<option value="${item.Index}" selected="selected">${item.Value}</option>
-				{{else}}
-				<option value="itemIndex">${item.Value}</option>
-				{{/if}}
-				{{/each}}
-				</select>
-				</td>
-				<td align="center">/</td>
-				<td align="center"><span id="spanTopLastPageIndex">${Pager.LastPageIndex}</span></td>
-				<td align="right">
-				{{if Pager.NextEnabled}}
-				<a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a>
-				{{else}}
-				<span>&gt;</span>
-				{{/if}}
-				</td>
-				<td align="right">
-				{{if Pager.LastEnabled}}
-				<a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a>
-				{{else}}
-				<span>&gt;&gt;</span>
-				{{/if}}
-				</td>
-				</tr>
-				</table>
-			</script>
 			<div id="div_catalogue" class="wrapper">
             @*termekelem eleje*@
                 <!-- ko foreach: productList.items -->
@@ -315,10 +258,10 @@
 				            <tr>
 				                <td valign="top">
 				                    <div class="cus_termekkep">
-				                    <!-- ko if: pictures.length > 0 -->	
-				                    <a class="popupimg" data-bind="attr: { href: pictureUrl(), title: itemName }"><img data-bind="attr: { src: pictureUrl(), title: itemName }" src="" width="94" height="69" alt="" /></a>
+				                    <!-- ko if: pictureExist -->	
+				                    <a class="popupimg" data-bind="click: function() { $parent.productList.showPicture($data); }, attr: { href: pictureUrl(), title: itemName }"><img data-bind="attr: { src: pictureUrl(), title: itemName }" src="" width="94" height="69" alt="" /></a>
 				                    <!-- /ko -->
-                                    <!-- ko if: pictures.length == 0 -->
+                                    <!-- ko if: !pictureExist -->
 				                    <img src="@Url.Content("~/Media/images/demopic.jpg")" width="180" height="134" alt="" />
                                     <!-- /ko -->
 				                    </div>
@@ -340,19 +283,18 @@
 				                            <span data-bind="visible: purchaseInProgress()">Várható érkezés: </span><span data-bind="visible: purchaseInProgress(), text: shippingDate"></span>
 				                            <span data-bind="visible: !purchaseInProgress()">Rendelhető</span>
                                             <!-- /ko -->
-				                            <br /><span data-bind="visible: bargain()">Használt: 4 600 Ft-tól </span>
+				                            <br /><span data-bind="visible: flags.bargain()">Használt: 4 600 Ft-tól </span>
 				                            <br />Garancia módja:<br/><span data-bind="text: garanty.mode"></span>
 				                            <br />Garancia ideje:<span data-bind="text: garanty.time"></span>
-				                            <br/><span data-bind="visible: flags.special">hírlevél akció</span>
-				                            <br/><span data-bind="visible: flags.newItem">új termék</span>
-				                            <br/><span data-bind="visible: flags.discount">leértékelt</span>
+				                            <br/><span data-bind="visible: flags.special()">hírlevél akció</span>
+				                            <br/><span data-bind="visible: flags.newItem()">új termék</span>
+				                            <br/><span data-bind="visible: flags.discount()">leértékelt</span>
 				                            <br/><span data-bind="visible: itemState == 1">kifutó</span>
 				                        </div>
                                         <!-- /ko -->
 				                        </td>
 				                    </tr>
 				                    </table>
-
 
                                 </td>
 				            </tr>
@@ -396,44 +338,51 @@
 				<!-- /ko -->
                 @*termekelem vege*@
             </div>
-			<br />
+			<br />@*alsó lapozó eleje*@
 			<div id="div_pager_bottom">
 				<table align="center" border="0" cellpadding="3" cellspacing="1">
 					<tr>
-						<td>Eredmény: @Model.Products.ListCount</td>
-						<td>@if (Model.Products.Pager.FirstEnabled)
-          { <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> }
-          else
-          { <span style="color: #999;">&lt;&lt;</span> } </td>
-						<td>@if (Model.Products.Pager.PreviousEnabled)
-          { <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> }
-          else
-          { <span style="color: #999;">&lt;</span> } </td>
+						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
+						<td>
+                        <!-- ko if: productList.firstPageEnabled() -->
+                            <a href="javascript:void(0)" onclick="pager_click(1)">&lt;&lt;</a> 
+						<!-- /ko -->
+						<!-- ko if: !productList.firstPageEnabled() --> 
+                            <span style="color: #999;">&lt;&lt;</span> 
+                        <!-- /ko -->
+                        </td>
+						<td>
+                        <!-- ko if: productList.previousPageEnabled() -->
+                            <a href="javascript:void(0)" onclick="pager_click(2)">&lt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.previousPageEnabled() -->
+                            <span style="color: #999;">&lt;</span>
+                        <!-- /ko -->
+                        </td>
 						<td align="center">
-						<select id="select_pager">
-							@foreach (var page in Model.Products.Pager.PageItemList)
-       {
-           if (page.Selected)
-           { <option value="@page.Index" selected="selected">@page.Value</option>
-           }
-           else
-           { <option value="@page.Index">@page.Value</option>
-           }
-       }
-						</select></td>
+                            <select id="select_pager_bottom" data-bind="options: productList.pageItemList, optionsText: 'value', value: 'index'"> </select>
+                        </td>
 						<td align="center">/</td>
-						<td align="center"><span id="spanTopLastPageIndex">@Model.Products.Pager.LastPageIndex</span></td>
-						<td align="right"> @if (Model.Products.Pager.NextEnabled)
-                         { <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> }
-                         else
-                         { <span>&gt;</span> } </td>
-						<td align="right"> @if (Model.Products.Pager.LastEnabled)
-                         { <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> }
-                         else
-                         { <span>&gt;&gt;</span> } </td>
+						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.lastPageIndex"></span></td>
+						<td align="right">
+                        <!-- ko if: productList.nextPageEnabled() -->
+                        <a href="javascript:void(0)" onclick="pager_click(3)">&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.nextPageEnabled() -->
+                        <span>&gt;</span> 
+                        <!-- /ko -->
+                        </td>
+						<td align="right"> 
+                        <!-- ko if: productList.lastPageEnabled() -->
+                        <a href="javascript:void(0)" onclick="pager_click(4)">&gt;&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.lastPageEnabled() -->
+                        <span>&gt;&gt;</span> 
+                        <!-- /ko -->
+                        </td>
 					</tr>
 				</table>
-			</div>
+			</div>@*alsó lapozó vége*@
 			@* ajánlott termékek blokk div *@
 			<div id="cus_recommended_prod_container">
 				<h4>Ajánlott termékeink</h4>

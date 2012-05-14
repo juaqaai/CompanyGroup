@@ -57,6 +57,21 @@ namespace Cms.Webshop {
                              }, 
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
+                                                         "Webshop/Catalogue/{productId}/{recId}/{dataAreaId}/{maxWidth}/{maxHeight}/Picture",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Webshop"},
+                                                                                      {"controller", "Catalogue"},
+                                                                                      {"action", "Picture"},
+                                                                                      {"productId", ""}, {"recId", ""}
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Webshop"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             },
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
                                                          "Webshop/Pricelist",
                                                          new RouteValueDictionary {
                                                                                       {"area", "Webshop"},

@@ -122,12 +122,12 @@
             success: function (result) {
                 if (result) {
                     if (result.Items.length > 0) {
-                        $("#div_catalogue").empty();
+                        //$("#div_catalogue").empty();
                         //$("#productTemplate").tmpl(result).appendTo("#div_catalogue");
-                        $("#div_pager_top").empty();
-                        $("#div_pager_bottom").empty();
-                        $("#pagerTemplate").tmpl(result).appendTo("#div_pager_top");
-                        $("#pagerTemplate").tmpl(result).appendTo("#div_pager_bottom");
+                        //$("#div_pager_top").empty();
+                        //$("#div_pager_bottom").empty();
+                        //$("#pagerTemplate").tmpl(result).appendTo("#div_pager_top");
+                        //$("#pagerTemplate").tmpl(result).appendTo("#div_pager_bottom");
                     }
                     else {
                         alert('Nincs eleme a listának.');

@@ -115,6 +115,36 @@ namespace Cms.CommonCore.Controllers
             catch { return default(T); }
         }
 
+        /// <summary>
+        /// retriewe raw byte array data from an application service url
+        /// </summary>
+        /// <param name="serviceName"></param>
+        /// <param name="resource"></param>
+        /// <returns></returns>
+        protected byte[] DownloadData(string serviceName, string resource)
+        { 
+            CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(serviceName), "Service name can not be null or empty!");
+
+            CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(resource), "Resource name can not be null or empty!");
+
+            RestSharp.RestClient client = null;
+
+            try
+            {
+                client = new RestSharp.RestClient(BaseUrl(serviceName));
+
+                RestSharp.RestRequest request = new RestSharp.RestRequest(RestSharp.Method.GET);
+
+                request.Resource = resource;
+
+                return client.DownloadData(request);
+            }
+            catch 
+            {
+                return new byte[] {};
+            }
+        }
+
         #endregion
 
         #region "login, logout"
@@ -157,13 +187,13 @@ namespace Cms.CommonCore.Controllers
 
                     visitor.ErrorMessage = String.Empty;
                 }
-                return Json(new { Visitor = visitor });
+                return Json(visitor);
             }
             catch (CompanyGroup.Helpers.DesignByContractException ex)
             {
-                return Json(new { Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message }});
+                return Json(new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message });
             }
-            catch { return Json(new { Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = "A bejelentkezés nem sikerült! (hiba)" } }); }
+            catch { return Json(new Cms.CommonCore.Models.Visitor() { ErrorMessage = "A bejelentkezés nem sikerült! (hiba)" }); }
         }
 
         /// Sign out from the system

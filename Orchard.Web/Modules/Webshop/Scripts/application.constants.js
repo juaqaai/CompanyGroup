@@ -3,6 +3,10 @@
 CompanyGroupCms.Constants = (function () {
 
     var _webshopBaseUrl = '/cms/Webshop/Catalogue/';
+    var _structureServiceUrl = '';
+    var _productListServiceUrl = '';
+    var _pictureListServiceUrl = '';
+    var _customerServiceUrl = '';
 
     var instance;
 
@@ -15,6 +19,30 @@ CompanyGroupCms.Constants = (function () {
             },
             setWebshopBaseUrl: function (webshopBaseUrl) {
                 _webshopBaseUrl = webshopBaseUrl;
+            },
+            getStructureServiceUrl: function () {
+                return _structureServiceUrl;
+            },
+            setStructureServiceUrl: function (structureServiceUrl) {
+                _structureServiceUrl = structureServiceUrl;
+            },
+            getProductListServiceUrl: function () {
+                return _productListServiceUrl;
+            },
+            setProductListServiceUrl: function (productListServiceUrl) {
+                _productListServiceUrl = productListServiceUrl;
+            },
+            getPictureListServiceUrl: function () {
+                return _pictureListServiceUrl;
+            },
+            setPictureListServiceUrl: function (pictureListServiceUrl) {
+                _pictureListServiceUrl = pictureListServiceUrl;
+            },
+            getCustomerServiceUrl: function () {
+                return _customerServiceUrl;
+            },
+            setCustomerServiceUrl: function (customerServiceUrl) {
+                _customerServiceUrl = customerServiceUrl;
             }
         }
     }
@@ -28,4 +56,4 @@ CompanyGroupCms.Constants = (function () {
     }
 })();
 
-//CompanyGroupCms.Constants.Instance().ServiceBaseUrl;
+// CompanyGroupCms.Constants.Instance().setWebshopBaseUrl;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Orchard.Themes;
@@ -129,10 +130,25 @@ namespace Cms.Webshop.Controllers
             return View("Details", new Cms.Webshop.Models.CatalogueItem( structures, product, visitor));
         }
 
-        [WebshopAuthorizedAttribute(true, UserGroups = "WebAdministrator")]
-        public void Test()
-        { 
-            
+        //[WebshopAuthorizedAttribute(true, UserGroups = "WebAdministrator")]
+        [HttpGet]
+        public FileStreamResult Picture(string productId, string recId, string maxWidth, string maxHeight)
+        {
+            byte[] picture = this.DownloadData("PictureService", String.Format("GetItem/{0}/{1}/{2}/{3}/{4}", productId, recId, DataAreaId, maxWidth, maxHeight));
+
+            //Stream GetItem(string recId, string productId, string dataAreaId, string maxWidth, string maxHeight)
+
+            return new FileStreamResult(new MemoryStream(picture), "image/jpeg");
+        }
+
+        [HttpPost]
+        public JsonResult GetListByProduct([Bind(Prefix = "")] CompanyGroup.Dto.ServiceRequest.PictureFilter request)
+        {
+            request.DataAreaId = CatalogueController.DataAreaId;
+
+            CompanyGroup.Dto.WebshopModule.Pictures pictures = this.PostJSonData<CompanyGroup.Dto.WebshopModule.Pictures>("PictureService", "GetListByProduct", request);
+
+            return Json(new { Items = pictures.Items }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
         }
 
     }

@@ -98,9 +98,10 @@
     {
         <script type="text/javascript" language="javascript">
 
-            var catalogueFilter = new CatalogueFilter();
+            //var catalogueFilter = new CatalogueFilter();
+            var catalogueListRequest = CompanyGroupCms.CatalogueFactory.CreateCatalogueListRequest();
 
-			var catalogueService = new CatalogueService();
+			//var catalogueService = new CatalogueService();
 
 			/*
 			{"ErrorMessage":"","Id":"4f9456c36ee0121ebc496c69","CompanyId":"V016818","CompanyName":"Web Holding Kft.","PersonId":"KAPCS05869","PersonName":"Kőházi Ádám","LoggedIn":false,"IsValidLogin":false,
@@ -110,21 +111,25 @@
 
 			$(document).ready(function () {
 
-                CompanyGroupCms.Constants.Instance().setWebshopBaseUrl = '@Url.Content("~/Webshop/Catalogue/")';
+                CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+                CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+                CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+                CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+                CompanyGroupCms.Constants.Instance().setCustomerServiceUrl('@Url.Content("~/PartnerInfo/Home/SignIn")');
 
 			    var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.Create(@(Html.Raw(Json.Encode(ViewData["VisitorInfo"]))));
 
-			    var flags = CompanyGroupCms.ProductFactory.CreateFlags(false, false, false, false, false);
+			    var flags = CompanyGroupCms.CatalogueFactory.CreateFlags(false, false, false, false, false);
 
-			    var garanty = CompanyGroupCms.ProductFactory.CreateGaranty('pick_up_and_return', '1901.01.01');
+			    var garanty = CompanyGroupCms.CatalogueFactory.CreateGaranty('pick_up_and_return', '1901.01.01');
 
 			    var pictures = [];
 
-			    var picture = CompanyGroupCms.ProductFactory.CreatePicture('thumbnail.jpg', true, 1000649);
+			    var picture = CompanyGroupCms.CatalogueFactory.CreatePicture('thumbnail.jpg', true, 1000649);
 
-			    var productManager = CompanyGroupCms.ProductFactory.CreateProductManager('juaqaai@inf.elte.hu', '457', '30 20 36 448', 'Attila Juhasz');
+			    var productManager = CompanyGroupCms.CatalogueFactory.CreateProductManager('juaqaai@inf.elte.hu', '457', '30 20 36 448', 'Attila Juhasz');
 
-			    var stock = CompanyGroupCms.ProductFactory.CreateStock(0, 200, 0, 2);
+			    var stock = CompanyGroupCms.CatalogueFactory.CreateStock(0, 200, 0, 2);
 
 			    var line = CompanyGroupCms.ShoppingCartFactory.CreateLine('HUF', 10638, 'bsc', flags, garanty, '452435435645646465fdgdgeg356535', false, 0, 'hu', 'ecs148', pictures, picture, 'p623456', productManager, false, 3, '1900.01.01', stock);
 
@@ -132,30 +137,28 @@
 
 			    var initialProductList = @(Html.Raw(Json.Encode(ViewData["InitialProductList"])));
 
-                var pager = CompanyGroupCms.ProductFactory.CreatePager( initialProductList.Pager.FirstEnabled, initialProductList.Pager.LastEnabled, initialProductList.Pager.PreviousEnabled, initialProductList.Pager.NextEnabled, initialProductList.Pager.LastPageIndex, initialProductList.Pager.PageItemList );
+                var productListViewModel = CompanyGroupCms.CatalogueFactory.CreateProductList(initialProductList.Items, initialProductList.ListCount, initialProductList.Pager.FirstEnabled, initialProductList.Pager.LastEnabled, initialProductList.Pager.PreviousEnabled, initialProductList.Pager.NextEnabled, initialProductList.Pager.LastPageIndex);
 
-                            //alert(pager.pageItemList.length);
-//                for (var i = 0; i <= pager.pageItemList.length; i++) {
-//                    console.log(pager.pageItemList[i].selected + ' ; ' + pager.pageItemList[i].index + ' ; ' + pager.pageItemList[i].value);
-//                }
-                var productListViewModel = CompanyGroupCms.ProductFactory.CreateProductList([], initialProductList.ListCount, pager);
+//                $.each(initialProductList.Items, function(index, product) {
 
-                $.each(initialProductList.Items, function(index, product) {
+//                    var stock2 = CompanyGroupCms.CatalogueFactory.CreateStock(product.InnerStock, product.OuterStock, 0, 0);
+//                    var garanty2 = CompanyGroupCms.CatalogueFactory.CreateGaranty(product.GarantyMode, product.GarantyTime);
+//                    var flags2 = CompanyGroupCms.CatalogueFactory.CreateFlags(product.Bargain, product.Discount, product.IsInStock, product.New, product.Special);
+//                    var category1 = CompanyGroupCms.CatalogueFactory.CreateFirstLevelCategory(product.FirstLevelCategory.Id, product.FirstLevelCategory.Name);
+//                    var category2 = CompanyGroupCms.CatalogueFactory.CreateSecondLevelCategory(product.SecondLevelCategory.Id, product.SecondLevelCategory.Name);
+//                    var category3 = CompanyGroupCms.CatalogueFactory.CreateThirdLevelCategory(product.ThirdLevelCategory.Id, product.ThirdLevelCategory.Name);
+//                    var manufacturer = CompanyGroupCms.CatalogueFactory.CreateManufacturer(product.Manufacturer.Id, product.Manufacturer.Name);
+//                    var productManager2 = CompanyGroupCms.CatalogueFactory.CreateProductManager(product.ProductManager.Email, product.ProductManager.Extension, product.ProductManager.Mobile, product.ProductManager.Name);
+//                    var prod = CompanyGroupCms.CatalogueFactory.CreateProduct(product.Currency, product.DataAreaId, product.Description, category1, category2, category3, flags2, garanty2, product.IsInCart, product.IsInStock, product.ItemName, product.ItemState, manufacturer, product.PartNumber, product.PrimaryPicture.RecId, product.Price, product.ProductId, productManager2, product.PurchaseInProgress, product.SequenceNumber, product.ShippingDate, stock2);
+//                    productListViewModel.addProduct(prod);
+//                });
 
-                    var stock2 = CompanyGroupCms.ProductFactory.CreateStock(product.InnerStock, product.OuterStock, 0, 0);
-                    var garanty2 = CompanyGroupCms.ProductFactory.CreateGaranty(product.GarantyMode, product.GarantyTime);
-                    var flags2 = CompanyGroupCms.ProductFactory.CreateFlags(product.Bargain, product.Discount, product.IsInStock, product.New, product.Special);
-                    var category1 = CompanyGroupCms.ProductFactory.CreateFirstLevelCategory(product.FirstLevelCategory.Id, product.FirstLevelCategory.Name);
-                    var category2 = CompanyGroupCms.ProductFactory.CreateSecondLevelCategory(product.SecondLevelCategory.Id, product.SecondLevelCategory.Name);
-                    var category3 = CompanyGroupCms.ProductFactory.CreateThirdLevelCategory(product.ThirdLevelCategory.Id, product.ThirdLevelCategory.Name);
-                    var manufacturer = CompanyGroupCms.ProductFactory.CreateManufacturer(product.Manufacturer.Id, product.Manufacturer.Name);
-                    var productManager2 = CompanyGroupCms.ProductFactory.CreateProductManager(product.ProductManager.Email, product.ProductManager.Extension, product.ProductManager.Mobile, product.ProductManager.Name);
-                    var picture2 = CompanyGroupCms.ProductFactory.CreatePicture(product.PrimaryPicture.FileName, product.PrimaryPicture.Primary, product.PrimaryPicture.RecId);
-                    var prod = CompanyGroupCms.ProductFactory.CreateProduct(product.Currency, product.DataAreaId, product.Description, category1, category2, category3, flags2, garanty2, product.IsInCart, product.IsInStock, product.ItemName, product.ItemState, manufacturer, product.PartNumber, [], picture2, product.Price, product.ProductId, productManager2, product.PurchaseInProgress, product.SequenceNumber, product.ShippingDate, stock2);
-                    productListViewModel.addProduct(prod);
+                $.each(initialProductList.Pager.PageItemList, function(index, page) {
+                    var p = CompanyGroupCms.CatalogueFactory.CreatePage(page.Selected, page.Index, page.Value);
+                    productListViewModel.addPage(p);   
                 });
 
-               // alert(initialProductList.ListCount);
+               //console.log(productListViewModel.pageItemList());
 
 			    var AppViewModel = {
 			        visitorInfo: visitorInfoViewModel,
@@ -163,7 +166,7 @@
                     productList:productListViewModel
 			    };
 
-
+                //console.log(AppViewModel.productList.pageItemList());
 			    //alert(ko.toJSON(shoppingCartViewModel));
 
 			    ko.applyBindings(AppViewModel);
@@ -174,26 +177,18 @@
 			    jQuery('.chosen').chosen();
 
 			    jQuery('.chosen').unbind('change').bind('change', function () {
-
-
-			        //var selected = $(this).find('option').eq(this.selectedIndex);
-			        //alert($(this).attr('id')) + ' index: ' + this.selectedIndex + ' val: ' + $(selected).val());
-
 			        if ($(this).attr('id') == 'manufacturerList') {
-			            catalogueFilter.setManufacturerIdList($('#manufacturerList').val());
-			            //$(selected).val()
-			            catalogueService.loadStructure(false, true, true, true, '@Url.Content("~/Webshop/Catalogue/GetStructure")');
-			            catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			            catalogueListRequest.ManufacturerIdList($('#manufacturerList').val());
+			            AppViewModel.productList.loadStructure(false, true, true, true);
+			            AppViewModel.productList.loadCatalogueList();
 			        } else if ($(this).attr('id') == 'category1List') {
-			            //alert($('#category1List').val());
-			            catalogueFilter.setCategory1IdList($('#category1List').val());
-			            //$(selected).val()
-			            catalogueService.loadStructure(true, false, true, true, '@Url.Content("~/Webshop/Catalogue/GetStructure")');
-			            catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			            catalogueListRequest.Category1IdList($('#category1List').val());
+			            AppViewModel.productList.loadStructure(true, false, true, true);
+			            AppViewModel.productList.loadCatalogueList();
 			        } else if ($(this).attr('id') == 'category2List') {
-			            catalogueFilter.setCategory2IdList($('#category2List').val());
-			            catalogueService.loadStructure(true, true, false, true, '@Url.Content("~/Webshop/Catalogue/GetStructure")');
-			            catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			            catalogueListRequest.Category2IdList($('#category2List').val());
+			            AppViewModel.productList.loadStructure(true, true, false, true);
+			            AppViewModel.productList.loadCatalogueList();
 			        }
 			    });
 			    //dupla klikk tiltása
@@ -244,15 +239,11 @@
 			        //type : 'iframe'
 			    });
 
-
-			    $('.popupimg').fancybox({
-			        transitionIn: 'elastic',
-			        transitionOut: 'elastic',
-			        type: 'image'
-
-			    });
-
-
+//			    $('.popupimg').fancybox({
+//			        transitionIn: 'elastic',
+//			        transitionOut: 'elastic',
+//			        type: 'image'
+//			    });
 
 			    //fenti, lenyíló kosár panel eleje
 			    $(".btn_basket_slide").click(function () {
@@ -334,7 +325,6 @@
 			    });
 
 			    //termékadatlap tabjai
-
 			    $('.tabs a').click(function () {
 			        switch_tabs($(this));
 			    });
@@ -342,18 +332,6 @@
 			    //tabok vége
 
 			    //Lenyíló menük delay beállítása
-
-			    // $('#navmenu').mouseover(function() {
-			    // $('#navmenu ul li').slideDown(300).delay(2000).fadeIn(400);
-			    // });
-
-
-			    // $('#navmenu').mouseover(function() {
-			    // $('ul#navmenu ul li').slideDown('fast', function() {
-			    // // Animation complete.
-			    // });
-			    // });
-
 			    $("#navmenu").mouseover(function () {
 			        $("ul#navmenu ul li").slideDown("slow");
 			        $(this).toggleClass("active");
@@ -489,73 +467,59 @@
 
 			    //dátum bevitel után a szállítás jóváhagyása checkbox aktívra vált /////////////////////
 
-			    // $("input[name='naptar']").change(function () {
-			    // if ($("input[name='naptar']").val() != 'Kattintson ide') {
-			    // $('#chk_idopont').removeAttr('disabled');            
-			    // }
-			    // });
-
-			    //az aktívra váltott szállítás jóváhagyása checkbox bejelölésekor, a dátum beviteli mező readonly -ra vált /////////////////
-
-			    // $("input[name='chk_idopont']").change(function () {
-			    // if ($("input[name='chk_idopont']:checked").val() == '1') {
-			    // $('#naptar').attr('disabled', 'disabled');
-			    // }
-			    // });
-
 			    //rendelés feladás logikai kapcsolók vége /////////////////////////////
 
 			    /**/
 
 			    $("#anchSequenceIdUp").click(function () {
-			        catalogueFilter.setSequence(2);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(2);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceIdDown").click(function () {
-			        catalogueFilter.setSequence(3);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(3);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceNameUp").click(function () {
-			        catalogueFilter.setSequence(4);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(4);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceNameDown").click(function () {
-			        catalogueFilter.setSequence(5);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(5);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequencePriceUp").click(function () {
-			        catalogueFilter.setSequence(6);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(6);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequencePriceDown").click(function () {
-			        catalogueFilter.setSequence(7);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(7);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceStockUp").click(function () {
-			        catalogueFilter.setSequence(8);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(8);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceStockDown").click(function () {
-			        catalogueFilter.setSequence(9);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(9);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceGarantyUp").click(function () {
-			        catalogueFilter.setSequence(10);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(10);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceGarantyDown").click(function () {
-			        catalogueFilter.setSequence(11);
-			        catalogueFilter.setCurrentPageIndex(0);
-			        catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+			        catalogueListRequest.setSequence(11);
+			        catalogueListRequest.setCurrentPageIndex(0);
+			        AppViewModel.productList.loadCatalogueList();
 			    });
 
 			    $('#preloader').ajaxStart(function () {
@@ -571,9 +535,7 @@
 			    $("#form_login").validate({
 			        submitHandler: function () {
 			            //CompanyGroupCms.Services.CustomerService.Instance().SignIn($('#txt_username').val(), $('#txt_password').val(), $('input[name=__RequestVerificationToken]').val(), '@Url.Content("~/PartnerInfo/Home/SignIn")');
-
 			            AppViewModel.visitorInfo.signIn($('#txt_username').val(), $('#txt_password').val(), $('input[name=__RequestVerificationToken]').val(), '@Url.Content("~/PartnerInfo/Home/SignIn")');
-
 			            return false;
 			        },
 			        invalidHandler: function (e, validator) {
@@ -637,35 +599,35 @@
 			}
 
 			function pager_click(index) {
-				var currentPageIndex = catalogueFilter.getCurrentPageIndex();
+				var currentPageIndex = catalogueListRequest.getCurrentPageIndex();
 				var lastPageIndex = $("#spanTopLastPageIndex").text();
 				if(index === 1) {
 					if(currentPageIndex != 0) {
-						catalogueFilter.setCurrentPageIndex(0);
-						catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+						catalogueListRequest.setCurrentPageIndex(0);
+						AppViewModel.productList.loadCatalogueList();
 					}
 				} else if(index === 2) {
 					if(currentPageIndex > 0) {
 						currentPageIndex = currentPageIndex - 1;
-						catalogueFilter.setCurrentPageIndex(currentPageIndex);
-						catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+						catalogueListRequest.setCurrentPageIndex(currentPageIndex);
+						AppViewModel.productList.loadCatalogueList();
 					}
 				} else if(index === 3) {
 					if(currentPageIndex < (lastPageIndex - 1)) {
 						currentPageIndex = currentPageIndex + 1;
-						catalogueFilter.setCurrentPageIndex(currentPageIndex);
-						catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+						catalogueListRequest.setCurrentPageIndex(currentPageIndex);
+						AppViewModel.productList.loadCatalogueList();
 					}
 				} else if(index === 4) {
 					if(currentPageIndex < (lastPageIndex - 1)) {
-						catalogueFilter.setCurrentPageIndex(lastPageIndex - 1);
-						catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+						catalogueListRequest.setCurrentPageIndex(lastPageIndex - 1);
+						AppViewModel.productList.loadCatalogueList();
 					}
 				}
 			}
 
 			function refreshContent(value) {
-				catalogueService.loadCatalogueList('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+				AppViewModel.productList.loadCatalogueList();
 				if(value) {
 					$('#span_visitorinfo_inner').show();
 					$('#span_visitorinfo_outer').hide();
