@@ -137,7 +137,7 @@
 
 			    var initialProductList = @(Html.Raw(Json.Encode(ViewData["InitialProductList"])));
 
-                var productListViewModel = CompanyGroupCms.CatalogueFactory.CreateProductList(initialProductList.Items, initialProductList.ListCount, initialProductList.Pager.FirstEnabled, initialProductList.Pager.LastEnabled, initialProductList.Pager.PreviousEnabled, initialProductList.Pager.NextEnabled, initialProductList.Pager.LastPageIndex);
+                var productListViewModel = CompanyGroupCms.CatalogueFactory.CreateProductList(initialProductList.Items, initialProductList.ListCount, initialProductList.Pager.FirstEnabled, initialProductList.Pager.LastEnabled, initialProductList.Pager.PreviousEnabled, initialProductList.Pager.NextEnabled, initialProductList.Pager.LastPageIndex, initialProductList.Pager.selectedPageIndex);
 
 //                $.each(initialProductList.Items, function(index, product) {
 

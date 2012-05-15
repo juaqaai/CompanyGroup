@@ -13,7 +13,7 @@ CompanyGroupCms.ProductList = function (items) {
         var manufacturer = CompanyGroupCms.CatalogueFactory.CreateManufacturer(item.Manufacturer.Id, item.Manufacturer.Name);
         var productManager = CompanyGroupCms.CatalogueFactory.CreateProductManager(item.ProductManager.Email, item.ProductManager.Extension, item.ProductManager.Mobile, item.ProductManager.Name);
         return CompanyGroupCms.CatalogueFactory.CreateProduct(item.Currency, item.DataAreaId, item.Description, category1, category2, category3, flags, garanty, item.IsInCart, item.IsInStock,
-                                                            item.ItemName, item.ItemState, manufacturer, item.PartNumber, item.PrimaryPicture.RecId, item.Price, item.ProductId, productManager, item.PurchaseInProgress, item.SequenceNumber, item.ShippingDate, stock);
+                                                              item.ItemName, item.ItemState, manufacturer, item.PartNumber, item.PrimaryPicture.RecId, item.Price, item.ProductId, productManager, item.PurchaseInProgress, item.SequenceNumber, item.ShippingDate, stock);
     }));
 
     self.removeAllItems = function () {
@@ -36,6 +36,7 @@ CompanyGroupCms.ProductList = function (items) {
     self.nextPageEnabled = ko.observable(false);
     self.lastPageIndex = ko.observable(0);
     self.pageItemList = ko.observableArray([]);
+    self.selectedPageIndex = ko.observable(0);
     //    self.pageItemList = ko.observableArray(ko.utils.arrayMap(pageItems, function(page) {
     //        return { selected: page.Selected, index: page.Index, value: page.Value };
     //    }));
@@ -520,7 +521,7 @@ CompanyGroupCms.CatalogueFactory = (function () {
             product.thirdLevelCategory.name(category3.name);
             return product;
         },
-        CreateProductList: function (items, listCount, firstPageEnabled, lastPageEnabled, previousPageEnabled, nextPageEnabled, lastPageIndex) {
+        CreateProductList: function (items, listCount, firstPageEnabled, lastPageEnabled, previousPageEnabled, nextPageEnabled, lastPageIndex, selectedPageIndex) {
             var list = new CompanyGroupCms.ProductList(items);
             //list.items([]);
             list.listCount(listCount);
@@ -530,6 +531,7 @@ CompanyGroupCms.CatalogueFactory = (function () {
             list.nextPageEnabled(nextPageEnabled);
             list.lastPageIndex(lastPageIndex);
             list.pageItemList([]);
+            list.selectedPageIndex(selectedPageIndex);
             //            alert(pager.pageItemList.length);
             //            for (var i = 0; i <= pager.pageItemList.length; i++) {
             //                console.log(pager.pageItemList[i].selected + ' ; ' + pager.pageItemList[i].index + ' ; ' + pager.pageItemList[i].value);
