@@ -104,14 +104,14 @@ CompanyGroupCms.VisitorInfo = function () {
             processData: true,
             success: function (result) {
                 if (result) {
-                    self.isValidLogin(result.IsValidLogin);
-                    self.companyName(result.CompanyName);
-                    self.personName(result.PersonName);
-                    self.isWebAdministrator(result.Permission.IsWebAdministrator);
-                    self.invoiceInfoEnabled(result.Permission.InvoiceInfoEnabled);
-                    self.priceListDownloadEnabled(result.Permission.PriceListDownloadEnabled);
-                    self.canOrder(result.Permission.CanOrder);
-                    self.recieveGoods(result.Permission.RecieveGoods);
+                    self.isValidLogin(false);
+                    self.companyName('');
+                    self.personName('');
+                    self.isWebAdministrator(false);
+                    self.invoiceInfoEnabled(false);
+                    self.priceListDownloadEnabled(false);
+                    self.canOrder(false);
+                    self.recieveGoods(false);
                 }
                 else {
                     alert('SignOut result failed');
