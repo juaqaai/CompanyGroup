@@ -115,7 +115,7 @@
                 CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
                 CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
                 CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
-                CompanyGroupCms.Constants.Instance().setCustomerServiceUrl('@Url.Content("~/PartnerInfo/Home/SignIn")');
+                CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
 
 			    var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.Create(@(Html.Raw(Json.Encode(ViewData["VisitorInfo"]))));
 
@@ -530,12 +530,12 @@
 			    });
 
 			    $("#anchor_signout").click(function () {
-			        AppViewModel.visitorInfo.signOut('@Url.Content("~/PartnerInfo/Home/SignOut")');
+			        AppViewModel.visitorInfo.signOut();
 			    });
 			    $("#form_login").validate({
 			        submitHandler: function () {
 			            //CompanyGroupCms.Services.CustomerService.Instance().SignIn($('#txt_username').val(), $('#txt_password').val(), $('input[name=__RequestVerificationToken]').val(), '@Url.Content("~/PartnerInfo/Home/SignIn")');
-			            AppViewModel.visitorInfo.signIn($('#txt_username').val(), $('#txt_password').val(), $('input[name=__RequestVerificationToken]').val(), '@Url.Content("~/PartnerInfo/Home/SignIn")');
+			            AppViewModel.visitorInfo.signIn($('#txt_username').val(), $('#txt_password').val(), $('input[name=__RequestVerificationToken]').val());
 			            return false;
 			        },
 			        invalidHandler: function (e, validator) {

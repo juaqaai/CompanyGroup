@@ -60,12 +60,12 @@ CompanyGroupCms.VisitorInfo = function () {
 
     self.recieveGoods = ko.observable(false);
 
-    self.authorizationData = function (serviceUrl) {
+    self.authorizationData = function () {
         var data = new Object();
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: serviceUrl,
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'VisitorInfo',
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
@@ -83,20 +83,20 @@ CompanyGroupCms.VisitorInfo = function () {
                     self.recieveGoods(result.Permission.RecieveGoods);
                 }
                 else {
-                    alert('VisitorInfo result failed');
+                    alert('authorizationData result failed');
                 }
             },
             error: function () {
-                alert('VisitorInfo call failed');
+                alert('authorizationData call failed');
             }
         });
     };
-    this.signOut = function (serviceUrl) {
+    this.signOut = function () {
         var data = new Object();
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: serviceUrl,
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'SignOut',
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
@@ -123,7 +123,7 @@ CompanyGroupCms.VisitorInfo = function () {
         });
     };
 
-    this.signIn = function (userName, password, token, serviceUrl) {
+    this.signIn = function (userName, password, token) {
         var data = new Object();
         data.UserName = userName;
         data.Password = password;
@@ -131,7 +131,7 @@ CompanyGroupCms.VisitorInfo = function () {
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: serviceUrl,
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'SignIn',
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,

@@ -7,6 +7,7 @@ CompanyGroupCms.Constants = (function () {
     var _productListServiceUrl = '';
     var _pictureListServiceUrl = '';
     var _customerServiceUrl = '';
+    var _partnerInfoServiceUrl = '';  //"~/PartnerInfo/Home/"
 
     var instance;
 
@@ -43,6 +44,12 @@ CompanyGroupCms.Constants = (function () {
             },
             setCustomerServiceUrl: function (customerServiceUrl) {
                 _customerServiceUrl = customerServiceUrl;
+            },
+            getPartnerInfoServiceUrl: function () {
+                return _partnerInfoServiceUrl;
+            },
+            setPartnerInfoServiceUrl: function (partnerInfoServiceUrl) {
+                _partnerInfoServiceUrl = partnerInfoServiceUrl;
             }
         }
     }
