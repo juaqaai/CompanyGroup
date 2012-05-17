@@ -12,37 +12,51 @@ CompanyGroupCms.ShoppingCart = function () {
         return total;
     });
 
-    self.addLine = function (line, serviceUrl) {
+    self.addLine = function (product) {
 
-        self.lines.push(line);
+        console.log(product);
 
-//        var dataString = ko.toJSON(line);
-//        $.ajax({
-//            type: "POST",
-//            url: serviceUrl,
-//            data: dataString,
-//            contentType: "application/json; charset=utf-8",
-//            timeout: 10000,
-//            dataType: "json",
-//            processData: true,
-//            success: function (result) {
-//                if (result) {
-//                    if (result) {
+        $.floatingMessage('<span style="font-family: verdana; font-size: 13px; color:#fff;"> A kiválasztott termék:<br /><strong>' + product.productId() + '</strong><br />bekerült a kosárba.</span>', {
+            time: 5000,
+            align: 'right',
+            verticalAlign: 'bottom',
+            show: 'blind',
+            hide: 'puff',
+            stuffEaseTime: 100,
+            stuffEasing: 'easeInExpo',
+            moveEaseTime: 200,
+            moveEasing: 'easeOutBounce'
+        })
 
-//                        self.lines.push(line);
-//                    }
-//                    else {
-//                        alert('Nincs eleme a listának.');
-//                    }
-//                }
-//                else {
-//                    alert('addLine result failed');
-//                }
-//            },
-//            error: function () {
-//                alert('addLine call failed');
-//            }
-//        });
+        //self.lines.push(line);
+
+        //        var dataString = ko.toJSON(line);
+        //        $.ajax({
+        //            type: "POST",
+        //            url: serviceUrl,
+        //            data: dataString,
+        //            contentType: "application/json; charset=utf-8",
+        //            timeout: 10000,
+        //            dataType: "json",
+        //            processData: true,
+        //            success: function (result) {
+        //                if (result) {
+        //                    if (result) {
+
+        //                        self.lines.push(line);
+        //                    }
+        //                    else {
+        //                        alert('Nincs eleme a listának.');
+        //                    }
+        //                }
+        //                else {
+        //                    alert('addLine result failed');
+        //                }
+        //            },
+        //            error: function () {
+        //                alert('addLine call failed');
+        //            }
+        //        });
     };
 
     self.updateLine = function (line) {
@@ -86,7 +100,7 @@ CompanyGroupCms.ShoppingCart = function () {
         });
     };
 
-    self.removeCart = function (cartId, serviceUrl) {   
+    self.removeCart = function (cartId, serviceUrl) {
         var data = new Object();
         data.CartId = cartId;
         var dataString = $.toJSON(data);

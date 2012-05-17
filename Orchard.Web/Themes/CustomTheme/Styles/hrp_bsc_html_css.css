@@ -37,6 +37,14 @@ body {
     padding-top: 8px;
     position: fixed;
 }
+
+#akcio_badge {
+    position:absolute;
+    margin-left: 215px;
+    margin-top: 0px;
+}
+
+
 #cus_header1:hover {
     /*background: #4B5F6D;*/
 }
@@ -169,7 +177,7 @@ body {
     float: left;
 }
 #cus_banner_table {
-    background: #DEDEDE;
+    background: #F0F0F0;
     width: 275px;
     height: auto;
     border-top:2px #666 solid;
@@ -188,6 +196,11 @@ body {
     color: #f00;
     height: 1px;
 }
+
+#bannerpelda {
+    
+    margin-left:5px;
+  }
 #div_pager {
 
     background: #DDD;
@@ -780,7 +793,7 @@ ul#navmenu_order li:hover ul, ul#navmenu_order ul li:hover ul, ul#navmenu_order 
 /* Root = Horizontal, Secondary = Vertical */
 ul#navmenu_o {
     margin-left: 0px;
-    margin-top: 0px;
+    margin-top: 3px;
     margin-bottom: 0px;
     border: 0 none;
     padding: 0;
@@ -1121,6 +1134,7 @@ ul#usermenu li:hover ul, ul#usermenu ul li:hover ul, ul#usermenu ul ul li:hover 
 
 #active_basket {
     margin-top: 3px;
+    cursor:pointer;
 }
 .active_basket_middle_cell {
     background-image: url('../../../media/images/basketbutton_02.png');
@@ -1280,7 +1294,7 @@ ul.tabs li a:hover {
     color: #fff;
     background: #999;
 }
-/*************************************** jobb felső felbukkanó üzenetek ***************************************************/
+/*************************************** jobb alsó felbukkanó üzenetek ***************************************************/
 
 #cus_floatingmessage {
     z-index: 2000;
@@ -1290,7 +1304,7 @@ ul.tabs li a:hover {
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.8);
     -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.8);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.8);
-    background: #000;
+    background: #AD0C59;
     border: 1px #999 solid;
 }
 /******************************************************** fancybox ablakok **********************************************************/
@@ -1524,3 +1538,12 @@ ul.tabs li a:hover {
     background: url('../../../Media/images/fancybox.png') -55px -90px no-repeat;
 }
 
+#import_basket_list_win {
+    background-color: #CCC;
+    background-image: url('../../../Media/images/loginpanelbg.jpg');
+    background-repeat: no-repeat;
+    background-position: center -150px;
+    color:#666;
+    font-size:11px;
+    padding:10px;
+}

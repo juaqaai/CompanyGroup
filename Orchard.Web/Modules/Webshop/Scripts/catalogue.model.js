@@ -130,6 +130,56 @@ CompanyGroupCms.ProductList = function (items) {
             self.loadCatalogueList();
         }
     };
+    self.sequenceByPriceUp = function () {
+        catalogueListRequest.Sequence(6);
+        catalogueListRequest.CurrentPageIndex(0);
+        loadCatalogueList();
+    };
+    self.sequenceByPriceDown = function () {
+        catalogueListRequest.Sequence(7);
+        catalogueListRequest.CurrentPageIndex(0);
+        loadCatalogueList();
+    };
+    self.sequenceByPartNumberUp = function () {
+        catalogueListRequest.Sequence(2);
+        catalogueListRequest.CurrentPageIndex(0);
+        self.loadCatalogueList();
+    };
+    self.sequenceByPartNumberDown = function () {
+        catalogueListRequest.Sequence(3);
+        catalogueListRequest.CurrentPageIndex(0);
+        self.loadCatalogueList();
+    };
+    self.sequenceByNameUp = function () {
+        catalogueListRequest.Sequence(4);
+        catalogueListRequest.CurrentPageIndex(0);
+        self.loadCatalogueList();
+    };
+    self.sequenceByNameDown = function () {
+        catalogueListRequest.Sequence(5);
+        catalogueListRequest.CurrentPageIndex(0);
+        self.loadCatalogueList();
+    };
+    self.sequenceByStockUp = function () {
+        catalogueListRequest.Sequence(8);
+        catalogueListRequest.CurrentPageIndex(0);
+        loadCatalogueList();
+    };
+    self.sequenceByStockDown = function () {
+        catalogueListRequest.Sequence(9);
+        catalogueListRequest.CurrentPageIndex(0);
+        loadCatalogueList();
+    };
+    self.sequenceByGarantyUp = function () {
+        catalogueListRequest.Sequence(10);
+        catalogueListRequest.CurrentPageIndex(0);
+        loadCatalogueList();
+    };
+    self.sequenceByGarantyDown = function () {
+        catalogueListRequest.Sequence(11);
+        catalogueListRequest.CurrentPageIndex(0);
+        loadCatalogueList();
+    };
     self.loadCatalogueList = function () {
         var dataString = ko.toJSON(catalogueListRequest);
         $.ajax({
@@ -184,7 +234,9 @@ CompanyGroupCms.ProductList = function (items) {
             }
         });
     };
-
+    self.downloadCatalogue = function (data) {
+        console.log(data);
+    };
     this.loadStructure = function (loadManufacturer, loadCategory1, loadCategory2, loadCategory3) {
         var dataString = ko.toJSON(catalogueListRequest);
         $.ajax({

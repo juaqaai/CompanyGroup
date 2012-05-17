@@ -240,15 +240,14 @@
 			        //type : 'iframe'
 			    });
 
-
-				$('#import_win').fancybox({
-				    transitionIn: 'fade',
-				    transitionOut: 'fade',
-
-				  });
+//			    $('.popupimg').fancybox({
+//			        transitionIn: 'elastic',
+//			        transitionOut: 'elastic',
+//			        type: 'image'
+//			    });
 
 			    //fenti, lenyíló kosár panel eleje
-			    $(".active_basket").click(function () {
+			    $(".btn_basket_slide").click(function () {
 			        $("#basket_panel").slideToggle("fast");
 			        $(this).toggleClass("active");
 			        return false;
@@ -283,7 +282,7 @@
 			    });
 
 			    //mindent lenyit/becsuk lista elemek eleje
-			    $(".toggle_container").hide();
+			    $(".toggle_container").show();
 			    $(".expand_heading").toggle(function () {
 			        $(this).addClass("active");
 			    }, function () {
@@ -415,13 +414,10 @@
 			    //raktári átvétel
 			    $("input[name='radio_szallitasimod']").change(function () {
 			        if ($("input[name='radio_szallitasimod']:checked").val() == '1') {
-			        	$("#feladas").removeClass("feladasopciok_block"); 
-			            $("#feladas").addClass("feladasopciok_ok"); 
-			            $('.feladasopciok_ok').removeAttr("disabled");
+			            $('#cim_off').show();
+			            $('#idopont_off').show();
 			            $('#szallcimadat_off').show();
 			            $('#kiszallitas_off').show();
-			            $('#custom_number').removeAttr("disabled");
-			            $('#user_comment').removeAttr("disabled");
 			        }
 			    });
 
@@ -446,10 +442,6 @@
 			        $('#atutalas_off').hide();
 			        $('#eloreutalas_off').hide();
 			        $('#utanvet_off').hide();
-		        $('.feladasopciok_ok').attr("disabled", "disabled");
-			        $('#custom_number').attr("disabled", "disabled");
-			        $('#user_comment').attr("disabled", "disabled");
-			        $("#feladas").addClass("feladasopciok_block");
 			    });
 
 			    //szállítási idő naptármodul
@@ -472,99 +464,62 @@
 
 			    });
 
-			    //Kézi dátumozás tiltása
-			    
-			    $("input[name='naptar']").keypress(function(e){
-				    var keycode =  e.keyCode ? e.keyCode : e.which;
-				
-				    if(keycode == 8){ // backspace
-				        // do somethiing
-				        $("input[name='naptar']").val("Kattintson ide");
-				    }
-				
-				    if(keycode == 46){ // delete
-				        // do somethiing
-				        alert(keycode);
-				    } 
-				
-				});
-			    
-			    //Feladás gomb aktiválás dátum választás után
-			    
-			    $("input[name='naptar']").change(function () {
-			        if ($("input[name='naptar']").val() != 'Kattintson ide') {
-			        	$("#feladas").removeClass("feladasopciok_block"); 
-			            $("#feladas").addClass("feladasopciok_ok"); 
-			            $('.feladasopciok_ok').removeAttr("disabled");
-			            $('#custom_number').removeAttr("disabled");
-			            $('#user_comment').removeAttr("disabled"); 
-			        }
-			    });
-			    
-			     //// Véletlen szám és elő + utótag az importált kosarakhoz ////
-			     
-			     function randomnumber() {
-			     	
-			     	var currentDate = new Date()
-					  var day = currentDate.getDate()
-					  var month=('0'+(currentDate.getMonth()+1)).slice(-2)
-					  var year = currentDate.getFullYear()
-			     	
-					document.basketlist_import.import_basket_name.value=('Importált kosár - ' + Math.round(Math.random()*99999+1) + ' - ' +  year + "." + month + "." + day + ".");
-					}
-					
-					onload=randomnumber
-			    
-			    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+			    //dátum - cím jóváhagyás
+
+			    //dátum bevitel után a szállítás jóváhagyása checkbox aktívra vált /////////////////////
+
+			    //rendelés feladás logikai kapcsolók vége /////////////////////////////
+
+			    /**/
 
 			    $("#anchSequenceIdUp").click(function () {
-			        catalogueListRequest.Sequence(2);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(2);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceIdDown").click(function () {
-			        catalogueListRequest.Sequence(3);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(3);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceNameUp").click(function () {
-			        catalogueListRequest.Sequence(4);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(4);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceNameDown").click(function () {
-			        catalogueListRequest.Sequence(5);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(5);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequencePriceUp").click(function () {
-			        catalogueListRequest.Sequence(6);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(6);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequencePriceDown").click(function () {
-			        catalogueListRequest.Sequence(7);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(7);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceStockUp").click(function () {
-			        catalogueListRequest.Sequence(8);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(8);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceStockDown").click(function () {
-			        catalogueListRequest.Sequence(9);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(9);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceGarantyUp").click(function () {
-			        catalogueListRequest.Sequence(10);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(10);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 			    $("#anchSequenceGarantyDown").click(function () {
-			        catalogueListRequest.Sequence(11);
-			        catalogueListRequest.CurrentPageIndex(0);
+			        catalogueListRequest.setSequence(11);
+			        catalogueListRequest.setCurrentPageIndex(0);
 			        AppViewModel.productList.loadCatalogueList();
 			    });
 
@@ -902,9 +857,6 @@
 				</table>
 			</div>
 			<div id="cus_logo_and_pages_menu"><img src="@Url.Content("~/Media/images/hrp_bsc_logo.png")" alt=""/>
-		<div id="akcio_badge"><a href="#"><img src="@Url.Content("~/Media/images/akcio_badge.png")" border="0"></a></div>
-				
-				<img src="@Url.Content("~/Media/images/hrp_bsc_logo.png")" alt=""/>
 				<!-- @if (Model.Navigation != null)
          {
 				@Zone(Model.Navigation)
@@ -943,7 +895,7 @@
 								</li>
 								<!-- menubanner -->
 								<li>
-									<a href="#"><img src="@Url.Content("~/Media/images/menubanner.png")" width="144px" border="0" vspace="4" alt="" /></a>
+									<a href="#"><img src="@Url.Content("~/Media/images/menubanner.png")" width="144px" border="0" vspace="4" /></a>
 								</li>
 								<!-- ********** -->
 							</ul>
@@ -1009,12 +961,9 @@
                         <td nowrap="nowrap">&nbsp;<img src="@Url.Content("~/Media/images/basketicons/new.png")" alt="" /></td>
                         <td nowrap="nowrap"><a href="#">Új kosár</a>&nbsp;</td>
                         <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/b_delete.png")" alt="" /> </td>
-                        <td nowrap="nowrap"><a href="#">Aktív kosár törlése</a>&nbsp;</td>
+                        <td nowrap="nowrap"><a href="#">Kosár törlése</a>&nbsp;</td>
                         <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/b_save.png")" alt="" /></td>
-                        <td nowrap="nowrap"><a href="#">Aktív kosár mentése</a>&nbsp;</td>
-                        <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/import.png")" alt="" /></td>
-                        <td nowrap="nowrap" width="100%"><a id="import_win" href="#import_basket_list_win" >Lista fájl importálása</a></td>
-
+                        <td nowrap="nowrap" width="100%"><a href="#">Aktív kosár mentése</a></td>
                         <td align="right"><select name="select" id="opened_shoppingcart_list" >
                           <option selected="selected">Nyitott kosarak listája</option>
                           <option>Nyitott példa kosár 01</option>
@@ -1130,12 +1079,13 @@
 	<div id="cus_rendeles_feladas">
 	
 	<form>
-	  <table width="980" border="0" cellpadding="3" cellspacing="2">
-	  <tr>
-        <td nowrap="nowrap"><strong> Fizetési opciók</strong></td>
-        <td nowrap="nowrap">&nbsp;</td>
-        <td nowrap="nowrap"><strong>Szállítási opciók</strong></td>
-        <td nowrap="nowrap"><strong>Szállítási adatok</strong></td>
+		
+	<table width="660" border="0" cellspacing="2" cellpadding="3">
+  <tr>
+    <td width="25%" nowrap="nowrap"><strong> Fizetési opciók</strong></td>
+    <td width="25%" nowrap="nowrap"></td>
+    <td width="25%" nowrap="nowrap"><strong>Szállítási opciók</strong></td>
+    <td width="25%" nowrap="nowrap"><strong>Szállítási adatok</strong></td>
   </tr>
 <!--   <tr>
     <td>&nbsp;</td>
@@ -1144,81 +1094,60 @@
     <td>&nbsp;</td>
   </tr> -->
   <tr>
-        <td valign="top" style="width:160px; height:37px;"><div id="keszpenz_off"></div>
-          <div id="kos_gombok_fiz">
-            <input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="1" />
-            Készpénzes fizetés <br />
-            <strong style="font-size: 10px;">[22 758,00 Ft]</strong> </div></td>
-        <td valign="top"  style="width:160px; height:37px;"><div id="eloreutalas_off"></div>
-          <div id="kos_gombok_fiz">
-            <input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="3" />
-            Előreutalás </div></td>
-        <td valign="top"  style="width:160px; height:37px;"><div id="raktari_off"></div>
-          <div id="kos_gombok_szall">
-            <input type="radio" name="radio_szallitasimod" id="radio_szallitasimod" value="1" />
-        Raktári átvétel </div></td>
-        <td><!--<div id="cim_off"></div> <div id="kos_gombok_szalladat">Szállítási cím<br /><input type="checkbox" name="chk_cim" id="chk_cim" /> [Jóváhagyás]</div> -->
+    <td nowrap="nowrap"><div id="keszpenz_off"></div><div id="kos_gombok_fiz"><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="1" >Készpénzes fizetés<br /><strong style="font-size: 10px;">[22 758,00 Ft]</strong></div></td>
+    <td nowrap="nowrap"><div id="eloreutalas_off"></div><div id="kos_gombok_fiz"><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="3">Előreutalás</div></td>
+    <td nowrap="nowrap"><div id="raktari_off"></div><div id="kos_gombok_szall"><input type="radio" name="radio_szallitasimod" id="radio_szallitasimod" value="1">Raktári átvétel</div></td>
+    <td ><!--<div id="cim_off"></div> <div id="kos_gombok_szalladat">Szállítási cím<br /><input type="checkbox" name="chk_cim" id="chk_cim" /> [Jóváhagyás]</div> -->
      <div id="szallcimadat_off"></div>	
     <div id="szallcimadat">
     	
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="szalladatok_tabla">
-              <tr>
-                <td width="100%" valign="top"><strong>Kiszállítási cím</strong><br />
-                  <br />
-                  7540 Vérteserdősmakkosmária Kossuth Lajos utca 123/b II. em. 124m </td>
-                <td align="right" valign="top"><strong>Szállítási időpont</strong><br />
-                  <br />
-                  <input name="naptar" id="naptar" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
-              </tr>
-            </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="szalladatok_tabla">
+  		<tr>
+    		<td rowspan="2" width="100%" valign="top">7540 Vérteserdősmakkosmária Kossuth Lajos utca 123/b II. em. 124m</td>
+    		<td valign="top" align="right">dátum megadása</td>
+  		</tr>
+  		<tr>
+
+    		<td valign="bottom" align="right">
+				<input name="naptar" id="naptar" type="text" value="Kattintson ide" style="color:#999; width: 150px; height: 25px; font-size:16px; text-align:center; margin-left:35px;" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'">
+			
+    			
+    		</td>
+  		</tr>
+	</table>
+    	
     </div></td>
   </tr>
-      <tr>
-        <td valign="top"  style="width:160px; height:37px;"><div id="atutalas_off"></div>
-          <div id="kos_gombok_fiz">
-            <input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="2" />
-            Átutalásos fizetés <br />
-            <strong style="font-size: 10px;">[20 500,00 Ft]</strong> </div></td>
-        <td valign="top"  style="width:160px; height:37px;"><div id="utanvet_off"></div>
-          <div id="kos_gombok_fiz">
-            <input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="4" />
-            Utánvét </div></td>
-        <td valign="top"  style="width:160px; height:37px;"><div id="kiszallitas_off"></div>
-          <div id="kos_gombok_szall">
-            <input type="radio" name="radio_szallitasimod" id="radio_szallitasimod" value="2" />
-            Kiszállítást kér </div></td>
-        <td>&nbsp;</td>
-        </tr>
-      <tr>
-        <td colspan="4">
-        <table id="basket_foot" width="970" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td valign="top"> Egyedi rendelés azonosító<br />
-              <input type="text" name="custom_number" value="" id="custom_number" disabled="true"/>
-              <br /></td>
-            <td width="100%" valign="top" style="padding-left:5px;"> Megjegyzés<br />
-              <input type="text" name="user_comment" id="user_comment" disabled="true" /></td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td colspan="4"><div id="basket_buttons">
-          <input type="reset" name="nullazo" id="nullazo" value="Módosít" onclick="nullazo();" class="feladasopciok_nullaz" />
-          <input type="submit" name="feladas" id="feladas" value="Feladás"  class="feladasopciok_block" disabled="true" />
-        </div>
-          Ha rendelési listájában, valamely termék mellett <img src="@Url.Content("~/media/images/basketicons/attention.png")" border="0"/ title="Kötelező érvényű megrendelés!" /> ikont lát, az a kötelező érvényű megrendelést jelöli. Ennek szabálya értelmében... blah... blah... blah...</td>
-      </tr>
-      </table>
+  <tr>
+    <td nowrap="nowrap"><div id="atutalas_off"></div><div id="kos_gombok_fiz"><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="2" /> Átutalásos fizetés<br /><strong style="font-size: 10px;">[20 500,00 Ft]</strong></div></td>
+    <td nowrap="nowrap"><div id="utanvet_off"></div><div id="kos_gombok_fiz"><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="4">Utánvét</div></td>
+    <td nowrap="nowrap"><div id="kiszallitas_off"></div><div id="kos_gombok_szall"><input type="radio" name="radio_szallitasimod" id="radio_szallitasimod" value="2">Kiszállítást kér</div></td>
+    <td ><!--<div id="idopont_off"></div> <div id="kos_gombok_szalladat">Szállítási időpont<br /><input type="checkbox" name="chk_idopont" id="chk_idopont" value="1" disabled="disabled"/> [Jóváhagyás]</div> -->
+    	   	
+ <!--    <div id="szallidopontadat"></div> -->
+    
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="4">
+    	
+    		<div id="basket_buttons"><input type="reset" name="nullazo" id="nullazo" value="" onClick="nullazo();" class="feladasopciok_nullaz" /> <input type="submit" name="feladas" id="feladas" value=""  class="feladasopciok_ok" /></div>
+    	
+    	Ha rendelési listájában, valamely termék mellett <img src="@Url.Content("~/Media/images/basketicons/attention.png")" border="0"/ title="Kötelező érvényű megrendelés!"> ikont lát, az a kötelező érvényű megrendelést jelöli. Ennek szabálya értelmében... blah... blah... blah...</td>
+  </tr>
+</table>
 	</form>
 
 	
 	</div>
-				<div id="cus_ajanlat_vegfelhasznalo">
-					Végfelhasználói árajánlat készítése
-				</div>
-				<div id="cus_ajanlat_finance">
-					HRP Finance árajánlat készítése
-				</div>
+<div id="cus_ajanlat_vegfelhasznalo">Végfelhasználói árajánlat készítése</div>
+<div id="cus_ajanlat_finance">HRP Finance árajánlat készítése</div>
 				<!-- *** felső kosár panel div vége *** -->
 			</div>
 			
@@ -1375,28 +1304,6 @@
 				</tbody>
 				</table> -->
 			</div>
-			<div style="display: none;">
-<div id="import_basket_list_win">
-				<form id="basketlist_import" name="basketlist_import" enctype="multipart/form-data" method="post" action="">
-				  <strong>Lista fájl importálása kosárba</strong><br /><br />
-				  <table border="0" cellspacing="3" cellpadding="10">
-				    <tr>
-				      <td>Fájl kiválasztása</td>
-				      <td><input type="file" name="import_basket_file" id="import_basket_file" /></td>
-				    </tr>
-				    <tr>
-				      <td>Kosár elnevezése</td>
-				      <td><input type="text" size="32" name="import_basket_name" id="import_basket_name" disabled="disabled" /></td>
-				    </tr>
-				    <tr>
-				      <td>&nbsp;</td>
-				      <td><input type="submit" name="button" id="button" value="Feltöltés indítása" /></td>
-				    </tr>
-				  </table>
-				</form>
-			</div>
-			</div>
-			
 			<div style="display: none;">
 				<div id="div_login">
 					@using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_login" }))

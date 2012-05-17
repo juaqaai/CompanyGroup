@@ -192,11 +192,6 @@ color:#F6F6F6;
     background:#000;
   }
   
-#kos_gombok_szalladat:hover {
-    background:#000;
-  }
-
-
 #raktari_off {
     position:absolute;
     background:#fff;
@@ -208,26 +203,6 @@ color:#F6F6F6;
   }
   
 #kiszallitas_off {
-    position:absolute;
-    background:#fff;
-    color:#fff;
-    width: 160px;
-    height:37px;
-    padding:0px;
-    opacity: 0.65;
-  }
-  
-#cim_off {
-    position:absolute;
-    background:#fff;
-    color:#fff;
-    width: 160px;
-    height:37px;
-    padding:0px;
-    opacity: 0.65;
-  }
-  
-#idopont_off {
     position:absolute;
     background:#fff;
     color:#fff;
@@ -285,10 +260,10 @@ color:#F6F6F6;
     position:absolute;
     margin-left:0px;
     margin-top: -19px;
-    color:#000000;
-    width: 464px;
+    color:#666;
+    width: 460px;
     height:auto;
-    background:#BBBBBB;
+    background:#ccc;
     /*display:none;*/
     padding:6px;
 }
@@ -297,8 +272,8 @@ color:#F6F6F6;
     position:absolute;
     margin-left:0px;
     margin-top: -19px;
-    color:#000000;
-    width: 464px;
+    color:#666;
+    width: 460px;
     height:68px;
     background:#FFF;
     /*display:none;*/
@@ -307,43 +282,82 @@ color:#F6F6F6;
     z-index: 2000;
 }
 
-/*#szallidopontadat {
-    position:absolute;
-    margin-left:0px;
-    margin-top: -20px;
-    color:#000000;
-    width: 464px;
-    height:32px;
-    background:#BBBBBB;
-    display:none;
-    padding:3px;
-}*/
-
 .szalladatok_tabla {
     height: 68px;
     
   }
 
 .feladasopciok_nullaz {
-    width: 32px;
-    height:32px;
-    margin-right:5px;
-    margin-bottom:10px;
+    width: 120px;
+    height:37px;
     border:0;
-    background-image: url('../../../Media/images/reset.png') ;
-    cursor:pointer;
+    background:#333;
+    color:#fff;
+    font-weight:bold;
+    font-size:11px;
+    cursor: pointer;
 }
 
 .feladasopciok_ok {
-    width: 32px;
-    height:32px;
-    margin-bottom:10px;
+    width: 120px;
+    height:37px;
     border:0;
-    background-image: url('../../../Media/images/send.png') ;
+    background:#7FAA13;
+    color:#fff;
+    font-weight:bold;
+    font-size:11px;
     cursor: pointer;
+}
+
+.feladasopciok_block {
+    width: 120px;
+    height:37px;
+    border:0;
+    background:#999;
+    color:#fff;
+    font-weight:bold;
+    font-size:11px;
+    cursor: not-allowed;
 }
 
 #basket_buttons {
     position:absolute;
-    margin-left: 895px;
+    margin-left: 725px;
+    margin-top:-47px;
+}
+
+#custom_number {
+   width: 155px;
+   height:37px;
+   font-size:11px;
+   color:#666;
+   text-align:center;
+   margin-top:5px;
+  }
+  
+#user_comment {
+   width: 530px;
+   height:38px;
+   color:#666;
+   font-size:11px;
+   padding-left:10px;
+   padding-right:10px;
+   margin-top:5px;
+}
+
+#basket_foot {
+    border-top:1px #666 dotted;
+}
+
+#naptar {
+    background:#fff url('../../../Media/images/datepick.png');
+    background-repeat: no-repeat;
+    background-position: 137px;
+    padding: 5px;
+    color:#999;
+    width: 150px;
+    height: 25px;
+    font-size:16px;
+    text-align:left;
+    border:1px #ccc solid;
 }
