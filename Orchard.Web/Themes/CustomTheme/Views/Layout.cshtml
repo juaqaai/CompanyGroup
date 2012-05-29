@@ -7,7 +7,7 @@
         return HasText(zoneNumsFilled) ? classNamePrefix + zoneNumsFilled : "";
     }
 }
-@{
+@{  
     /* Global includes for the theme
     ***************************************************************/
     Style.Include("http://fonts.googleapis.com/css?family=Lobster&subset=latin");
@@ -45,7 +45,8 @@
     Script.Require(Url.Content("jQuery_UICore")).AtHead();
     Script.Require(Url.Content("jQuery_UIDatePicker")).AtHead();
     Script.Require(Url.Content("Knockout")).AtHead();
-    Script.Require(Url.Content("Constants")).AtHead(); 
+    Script.Require(Url.Content("Constants")).AtHead();
+    Script.Require(Url.Content("Requests")).AtHead(); 
     Script.Require(Url.Content("ShoppingCart")).AtHead();
     Script.Require(Url.Content("Catalogue")).AtHead();
 
@@ -98,11 +99,6 @@
     {
         <script type="text/javascript" language="javascript">
 
-            //var catalogueFilter = new CatalogueFilter();
-            var catalogueListRequest = CompanyGroupCms.CatalogueFactory.CreateCatalogueListRequest();
-
-			//var catalogueService = new CatalogueService();
-
 			/*
 			{"ErrorMessage":"","Id":"4f9456c36ee0121ebc496c69","CompanyId":"V016818","CompanyName":"Web Holding Kft.","PersonId":"KAPCS05869","PersonName":"Kőházi Ádám","LoggedIn":false,"IsValidLogin":false,
 			"Permission":{"IsWebAdministrator":false,"InvoiceInfoEnabled":true,"PriceListDownloadEnabled":true,"CanOrder":true,"RecieveGoods":true},
@@ -116,25 +112,41 @@
                 CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
                 CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
                 CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
+                CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
 
 			    var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.Create(@(Html.Raw(Json.Encode(ViewData["VisitorInfo"]))));
 
-			    var flags = CompanyGroupCms.CatalogueFactory.CreateFlags(false, false, false, false, false);
+                //var visitorInfoViewModel = CompanyGroupCms.VisitorInfoFactory.Create({"ErrorMessage":null,"Id":"4fbb5b656ee012160ca02d65","CompanyId":"V016818","CompanyName":"Web Holding Kft.","PersonId":"KAPCS05869","PersonName":"Kőházi Ádám","LoggedIn":true,"IsValidLogin":true,"Permission":{"IsWebAdministrator":false,"InvoiceInfoEnabled":false,"PriceListDownloadEnabled":false,"CanOrder":true,"RecieveGoods":false},"Roles":["InvoiceInfoReader","PriceListReader","CanOrder"],"History":[]});
 
-			    var garanty = CompanyGroupCms.CatalogueFactory.CreateGaranty('pick_up_and_return', '1901.01.01');
+//			    var flags = CompanyGroupCms.CatalogueFactory.CreateFlags(false, false, false, false, false);
 
-			    var pictures = [];
+//			    var garanty = CompanyGroupCms.CatalogueFactory.CreateGaranty('pick_up_and_return', '1901.01.01');
 
-			    var picture = CompanyGroupCms.CatalogueFactory.CreatePicture('thumbnail.jpg', true, 1000649);
+//			    var pictures = [];
 
-			    var productManager = CompanyGroupCms.CatalogueFactory.CreateProductManager('juaqaai@inf.elte.hu', '457', '30 20 36 448', 'Attila Juhasz');
+//			    var picture = CompanyGroupCms.CatalogueFactory.CreatePicture('thumbnail.jpg', true, 1000649);
 
-			    var stock = CompanyGroupCms.CatalogueFactory.CreateStock(0, 200, 0, 2);
+//			    var productManager = CompanyGroupCms.CatalogueFactory.CreateProductManager('juaqaai@inf.elte.hu', '457', '30 20 36 448', 'Attila Juhasz');
 
-			    var line = CompanyGroupCms.ShoppingCartFactory.CreateLine('HUF', 10638, 'bsc', flags, garanty, '452435435645646465fdgdgeg356535', false, 0, 'hu', 'ecs148', pictures, picture, 'p623456', productManager, false, 3, '1900.01.01', stock);
+//			    var stock = CompanyGroupCms.CatalogueFactory.CreateStock(0, 200, 0, 2);
 
-			    var shoppingCartViewModel = CompanyGroupCms.ShoppingCartFactory.CreateCart('wert12334', line);
+//			    var line = CompanyGroupCms.ShoppingCartFactory.CreateLine('HUF', 10638, 'bsc', flags, garanty, '452435435645646465fdgdgeg356535', false, 0, 'hu', 'ecs148', pictures, picture, 'p623456', productManager, false, 3, '1900.01.01', stock);
 
+                var initialShoppingCart = @(Html.Raw(Json.Encode(ViewData["ActiveCart"]))); // {"Items":[],"SumTotal":0,"Id":""};
+
+                var initialStoredCarts = @(Html.Raw(Json.Encode(ViewData["StoredCarts"])));
+
+                var initialOpenedCarts = @(Html.Raw(Json.Encode(ViewData["OpenedCarts"])));
+
+                var initialShoppingCartOpenStatus = @(Html.Raw(Json.Encode(ViewData["ShoppingCartOpenStatus"])));
+
+                var initialCatalogueOpenStatus = @(Html.Raw(Json.Encode(ViewData["CatalogueOpenStatus"])));
+                
+                /*[{"Id":"4fba031e6ee01218d879110f","Name":"test", "Active": false},
+                {"Id":"4fba0a0b6ee01216287934d4","Name":"2012.5.21 11:25", "Active": true}];*/
+
+			    var shoppingCartViewModel = CompanyGroupCms.ShoppingCartFactory.CreateCart(initialShoppingCart.Id, initialShoppingCart.Items, initialStoredCarts, initialOpenedCarts, initialCatalogueOpenStatus, initialShoppingCartOpenStatus);
+                
 			    var initialProductList = @(Html.Raw(Json.Encode(ViewData["InitialProductList"])));
 
                 var productListViewModel = CompanyGroupCms.CatalogueFactory.CreateProductList(initialProductList.Items, initialProductList.ListCount, initialProductList.Pager.FirstEnabled, initialProductList.Pager.LastEnabled, initialProductList.Pager.PreviousEnabled, initialProductList.Pager.NextEnabled, initialProductList.Pager.LastPageIndex, initialProductList.Pager.selectedPageIndex);
@@ -179,15 +191,15 @@
 
 			    jQuery('.chosen').unbind('change').bind('change', function () {
 			        if ($(this).attr('id') == 'manufacturerList') {
-			            catalogueListRequest.ManufacturerIdList($('#manufacturerList').val());
+			            CompanyGroupCms.CatalogueListRequest.ManufacturerIdList = $('#manufacturerList').val();
 			            AppViewModel.productList.loadStructure(false, true, true, true);
 			            AppViewModel.productList.loadCatalogueList();
 			        } else if ($(this).attr('id') == 'category1List') {
-			            catalogueListRequest.Category1IdList($('#category1List').val());
+			            CompanyGroupCms.CatalogueListRequest.Category1IdList = $('#category1List').val();
 			            AppViewModel.productList.loadStructure(true, false, true, true);
 			            AppViewModel.productList.loadCatalogueList();
 			        } else if ($(this).attr('id') == 'category2List') {
-			            catalogueListRequest.Category2IdList($('#category2List').val());
+			            CompanyGroupCms.CatalogueListRequest.Category2IdList = $('#category2List').val();
 			            AppViewModel.productList.loadStructure(true, true, false, true);
 			            AppViewModel.productList.loadCatalogueList();
 			        }
@@ -200,6 +212,10 @@
 			    //cus teljes háttérkép eleje
 			    $.vegas({
 			        src: '@Url.Content("~/Media/images/background6.jpg")'
+			    });
+
+                $('#saved_shoppingcart_list').change(function () {
+			        AppViewModel.shoppingCart.activateCart($('#saved_shoppingcart_list').val());
 			    });
 
 			    //cus alsó (ajánlott) termék lapozó eleje
@@ -215,20 +231,6 @@
 			        current: 'current'
 			    });
 
-			    //cus kosárba kerülő termék (jobb felső) értesítő ablak eleje
-//			    $('.basketicon').click(function () {
-//			        $.floatingMessage('<span style="font-family: verdana; font-size: 13px; color:#fff;"> A kiválasztott termék:<br /><strong>Toshiba C660 notebook</strong><br />bekerült a kosárba.</span>', {
-//			            time: 5000,
-//			            align: 'right',
-//			            verticalAlign: 'bottom',
-//			            show: 'blind',
-//			            hide: 'puff',
-//			            stuffEaseTime: 100,
-//			            stuffEasing: 'easeInExpo',
-//			            moveEaseTime: 200,
-//			            moveEasing: 'easeOutBounce'
-//			        })
-//			    });
 			    //FanyBox felbukkanó ablakok eleje
 			    $('#loginwin').fancybox({
 			        autoDimensions: true,
@@ -243,16 +245,21 @@
 
 				$('#import_win').fancybox({
 				    transitionIn: 'fade',
-				    transitionOut: 'fade',
+				    transitionOut: 'fade'
 
-				  });
+				});
+
+				$('#basket_save').fancybox({
+				transitionIn: 'fade',
+				transitionOut: 'fade'
+				});
 
 			    //fenti, lenyíló kosár panel eleje
-			    $(".active_basket").click(function () {
-			        $("#basket_panel").slideToggle("fast");
-			        $(this).toggleClass("active");
-			        return false;
-			    });
+//			    $("#active_basket").click(function () {
+//			        $("#basket_panel").slideToggle("fast");
+//			        $(this).toggleClass("active");
+//			        return false;
+//			    });
 			    //kosár tábla a lenyíló panelben és a továbblépés modulok
 
 			    $("#cus_rendeles_feladas").hide();
@@ -515,59 +522,6 @@
 					
 					onload=randomnumber
 			    
-			    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			    $("#anchSequenceIdUp").click(function () {
-			        catalogueListRequest.Sequence(2);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceIdDown").click(function () {
-			        catalogueListRequest.Sequence(3);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceNameUp").click(function () {
-			        catalogueListRequest.Sequence(4);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceNameDown").click(function () {
-			        catalogueListRequest.Sequence(5);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequencePriceUp").click(function () {
-			        catalogueListRequest.Sequence(6);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequencePriceDown").click(function () {
-			        catalogueListRequest.Sequence(7);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceStockUp").click(function () {
-			        catalogueListRequest.Sequence(8);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceStockDown").click(function () {
-			        catalogueListRequest.Sequence(9);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceGarantyUp").click(function () {
-			        catalogueListRequest.Sequence(10);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-			    $("#anchSequenceGarantyDown").click(function () {
-			        catalogueListRequest.Sequence(11);
-			        catalogueListRequest.CurrentPageIndex(0);
-			        AppViewModel.productList.loadCatalogueList();
-			    });
-
 			    $('#preloader').ajaxStart(function () {
 			        $('#preloader').show();
 			    }).ajaxStop(function () {
@@ -633,6 +587,33 @@
 			            txt_qty: "A mező kitöltése kötelező!"
 			        }
 			    });
+
+			    $("#form_savecart").validate({
+			        submitHandler: function () {
+			            AppViewModel.shoppingCart.saveCart($('#txt_cartname').val());
+			            return false;
+			        },
+			        invalidHandler: function (e, validator) {
+			            var errors = validator.numberOfInvalids();
+			            if (errors) {
+			                var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+			                $("#savecart_errors").html(message);
+			                $("#savecart_errors").show();
+			            } else {
+			                $("#savecart_errors").hide();
+			            }
+			        },
+			        //errorLabelContainer: $("#login_errors"),
+			        rules: {
+			            txt_cartname: {
+			                required: true
+			            }
+			        },
+			        messages: {
+			            txt_cartname: "A kosár nevének kitöltése kötelező!"
+			        }
+			    });
+
 			});
 
 			function switch_tabs(obj) {
@@ -641,34 +622,6 @@
 			    var id = obj.attr("rel");
 			    $('#' + id).show();
 			    obj.addClass("selected");
-			}
-
-			function pager_click(index) {
-				var currentPageIndex = catalogueListRequest.getCurrentPageIndex();
-				var lastPageIndex = $("#spanTopLastPageIndex").text();
-				if(index === 1) {
-					if(currentPageIndex != 0) {
-						catalogueListRequest.setCurrentPageIndex(0);
-						AppViewModel.productList.loadCatalogueList();
-					}
-				} else if(index === 2) {
-					if(currentPageIndex > 0) {
-						currentPageIndex = currentPageIndex - 1;
-						catalogueListRequest.setCurrentPageIndex(currentPageIndex);
-						AppViewModel.productList.loadCatalogueList();
-					}
-				} else if(index === 3) {
-					if(currentPageIndex < (lastPageIndex - 1)) {
-						currentPageIndex = currentPageIndex + 1;
-						catalogueListRequest.setCurrentPageIndex(currentPageIndex);
-						AppViewModel.productList.loadCatalogueList();
-					}
-				} else if(index === 4) {
-					if(currentPageIndex < (lastPageIndex - 1)) {
-						catalogueListRequest.setCurrentPageIndex(lastPageIndex - 1);
-						AppViewModel.productList.loadCatalogueList();
-					}
-				}
 			}
 
 			function refreshContent(value) {
@@ -685,15 +638,6 @@
 					$('#anchor_signout').hide();
 				}
 			}
-
-			function addShoppingCartItem(productId) {
-
-			    var quantity = 1;
-
-			    addShoppingCartItemRequest(productId, 0, quantity, '@Url.Content("~/Webshop/ShoppingCart/AddItem")');
-
-			    CompanyGroupCms.Services.ShoppingCartService.getInstance().addItem(addShoppingCartItemRequest);
-            }
 		</script>
     }
 
@@ -886,11 +830,11 @@
 						<td width="100%" nowrap="nowrap">&nbsp;</td>
 						<td align="right" nowrap="nowrap">
 						
-						<table data-bind="visible: visitorInfo.isValidLogin()" id="active_basket" border="0" cellpadding="0" cellspacing="0">
+						<table data-bind="visible: visitorInfo.isValidLogin(), click: function() { shoppingCart.saveShoppingCartOpenStatus(); }" id="active_basket" border="0" cellpadding="0" cellspacing="0">
 							<tr>
-								<td><img src="@Url.Content("~/Media/images/basketbutton_01.png")"></td>
-								<td class="active_basket_middle_cell" nowrap="nowrap"><a href="javascript:void(0)" class="btn_basket_slide"><span style="color: #000">Aktív kosár:</span><span style="color: #900" data-bind="text: shoppingCart.sumTotal()"> 17 920,00 Ft</span><span style="color: #000"> [ + Megnyitás ]</span></a></td>
-								<td><img src="@Url.Content("~/Media/images/basketbutton_03.png")"></td>
+								<td><img src="@Url.Content("~/Media/images/basketbutton_01.png")" alt="" /></td>
+								<td class="active_basket_middle_cell" nowrap="nowrap"><a href="javascript:void(0)" class="btn_basket_slide"><span style="color: #000">Aktív kosár: </span><span style="color: #900" data-bind="text: shoppingCart.sumTotal()"></span><span style="color: #000"> [ + Megnyitás ]</span></a></td>
+								<td><img src="@Url.Content("~/Media/images/basketbutton_03.png")" alt="" /></td>
 							</tr>
 						</table>
 						
@@ -902,9 +846,9 @@
 				</table>
 			</div>
 			<div id="cus_logo_and_pages_menu"><img src="@Url.Content("~/Media/images/hrp_bsc_logo.png")" alt=""/>
-		<div id="akcio_badge"><a href="#"><img src="@Url.Content("~/Media/images/akcio_badge.png")" border="0"></a></div>
+		    <div id="akcio_badge"><a href="#"><img src="@Url.Content("~/Media/images/akcio_badge.png")" border="0" alt=""></a></div>
 				
-				<img src="@Url.Content("~/Media/images/hrp_bsc_logo.png")" alt=""/>
+
 				<!-- @if (Model.Navigation != null)
          {
 				@Zone(Model.Navigation)
@@ -1007,25 +951,47 @@
                     <table width="984" border="0" cellspacing="0" cellpadding="2">
                       <tr>
                         <td nowrap="nowrap">&nbsp;<img src="@Url.Content("~/Media/images/basketicons/new.png")" alt="" /></td>
-                        <td nowrap="nowrap"><a href="#">Új kosár</a>&nbsp;</td>
+                        <td nowrap="nowrap"><a href="javascript:void(0)" data-bind="click: function() { shoppingCart.addCart(); }">Új kosár</a>&nbsp;</td>
                         <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/b_delete.png")" alt="" /> </td>
-                        <td nowrap="nowrap"><a href="#">Aktív kosár törlése</a>&nbsp;</td>
+                        <td nowrap="nowrap"><a href="javascript:void(0)" data-bind="click: function() { shoppingCart.removeCart(); }">Aktív kosár törlése</a>&nbsp;</td>
                         <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/b_save.png")" alt="" /></td>
-                        <td nowrap="nowrap"><a href="#">Aktív kosár mentése</a>&nbsp;</td>
+                      <td nowrap="nowrap"><a id="basket_save" href="#save_basket_win">Aktív kosár mentése</a>&nbsp;</td>
                         <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/import.png")" alt="" /></td>
                         <td nowrap="nowrap" width="100%"><a id="import_win" href="#import_basket_list_win" >Lista fájl importálása</a></td>
 
-                        <td align="right"><select name="select" id="opened_shoppingcart_list" >
+                        <!-- <td align="right"><select name="select" id="opened_shoppingcart_list" >
                           <option selected="selected">Nyitott kosarak listája</option>
                           <option>Nyitott példa kosár 01</option>
                           <option>Nyitott példa kosár 02</option>
                           <option>Nyitott példa kosár 03</option>
-                        </select></td>
-                        <td align="right"><select name="select" id="saved_shoppingcart_list" >
-                          <option selected="selected">Mentett kosarak listája</option>
-                          <option>Példa kosár mentésre 01</option>
-                          <option>Példa kosár mentésre 02</option>
-                          <option>Példa kosár mentésre 03</option>
+                        </select></td> -->
+                        <td align="right"><select name="select" id="saved_shoppingcart_list">
+                        <option style="font-weight: bold; margin-left:-3px; padding-bottom:2px; padding-top:2px; background: #7FAA13; color:#fff;" value="">Mentett / nyitott kosarak listája</option>
+                        <optgroup label="Mentett kosarak">
+                        <!-- ko foreach: shoppingCart.storedCarts -->
+
+                          <!-- ko if: !active() --> 
+                          <option class="saved_basket_list_icon" data-bind="value: id(), text: name()"></option>
+                          <!-- /ko -->
+                          <!-- ko if: active() --> 
+                          <option class="saved_basket_list_icon" data-bind="value: id(), text: name()" selected="selected"></option>
+                          <!-- /ko -->
+
+                          <!-- /ko -->  
+                        </optgroup>
+                                            
+                        <optgroup label="Nyitott kosarak">
+                          <!-- ko foreach: shoppingCart.openedCarts -->
+
+                          <!-- ko if: !active() -->
+                          <option class="open_basket_list_icon" data-bind="value: id(), text: name()"></option>
+                          <!-- /ko -->
+                          <!-- ko if: active() --> 
+                          <option class="open_basket_list_icon" data-bind="value: id(), text: name()" selected="selected"></option>
+                          <!-- /ko -->
+
+                          <!-- /ko -->
+                        </optgroup>
                         </select></td>
                       </tr>
                     </table>
@@ -1048,14 +1014,14 @@
                     <tbody>
                         <!-- ko foreach: shoppingCart.lines -->
                         <tr>
-                            <td width="20%"nowrap="nowrap" data-bind="text: productId"> </td>
-                            <td width="20%"nowrap="nowrap" data-bind="text: partNumber"></td>
-                            <td width="20%" nowrap="nowrap" data-bind="text: customerPrice"> Ft</td>
-                            <td width="20%" nowrap="nowrap"><input data-bind='value: quantity, valueUpdate: "afterkeydown"' style = "width: 35px; margin: 2px 0 0 6px" name="txt_quantity" /> db</td>
-                            <td width="20%"><span data-bind="text: itemTotal"></span> Ft</td>
+                            <td width="20%"nowrap="nowrap" data-bind="text: productId()"> </td>
+                            <td width="20%"nowrap="nowrap" data-bind="text: partNumber()"></td>
+                            <td width="20%" nowrap="nowrap" data-bind="text: customerPrice()"> Ft</td>
+                            <td width="20%" nowrap="nowrap"><input data-bind="value: quantity, valueUpdate: 'afterkeydown'" style = "width: 35px; margin: 2px 0 0 6px" /> db</td>
+                            <td width="20%"><span data-bind="text: itemTotal()"></span> Ft</td>
                             <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/attention.png")" border="0" title="Kötelező érvényű megrendelés!" alt=""/>&nbsp;</td>
-                            <td nowrap="nowrap"><a href="javascript:void(0)"  data-bind="click: function() { $parent.shoppingCart.updateLine($data); }" title="Tétel mennyiség módosítása"><img src="@Url.Content("~/Media/images/basketicons/edit.png")" style="border:0px" alt="" /></a>&nbsp;</td>
-                            <td nowrap="nowrap"><a href="javascript:void(0)"  data-bind="click: function() { $parent.shoppingCart.removeLine($data);}" title="Tétel törlése"><img src="@Url.Content("~/Media/images/basketicons/b_delete.png")" border="0" alt="" /></a></td>
+                            <td nowrap="nowrap"><a href="javascript:void(0)" data-bind="click: function() { $parent.shoppingCart.updateLine($data); }" title="Tétel mennyiség módosítása"><img src="@Url.Content("~/Media/images/basketicons/edit.png")" style="border:0px" alt="" /></a>&nbsp;</td>
+                            <td nowrap="nowrap"><a href="javascript:void(0)" data-bind="click: function() { $parent.shoppingCart.removeLine($data); }" title="Tétel törlése"><img src="@Url.Content("~/Media/images/basketicons/b_delete.png")" border="0" alt="" /></a></td>
                         </tr>
                         <!-- /ko -->
                         <tr>
@@ -1064,7 +1030,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="8">Végösszeg: <span data-bind="text: shoppingCart.sumTotal()"></span> Ft | Áfa: 4 838,00 Ft | <strong>Fizetendő: <span style="color:#900; font-size:14px;">22 758,00 Ft</span></strong></td>
+                            <td colspan="8"><!-- Végösszeg: <span data-bind="text: shoppingCart.sumTotal()"></span> Ft |  Áfa: <span data-bind="text: shoppingCart.sumTotal()"></span> Ft | --> <strong>Fizetendő: <span style="color:#900; font-size:14px;"><span data-bind="text: shoppingCart.sumTotal()"></span> Ft</span></strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -1101,7 +1067,7 @@
         <tr>
         <td colspan="8">
     	
-        Végösszeg: ${SumTotal} Ft | Áfa: 4 838,00 Ft | <strong>Fizetendő: <span style="color:#900; font-size:14px;">22 758,00 Ft</span></strong>
+        <!-- Végösszeg: ${SumTotal} Ft |  Áfa: 4 838,00 Ft | --> <strong>Fizetendő: <span style="color:#900; font-size:14px;">22 758,00 Ft</span></strong>
 
         </td>
         </tr>
@@ -1164,11 +1130,21 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="szalladatok_tabla">
               <tr>
                 <td width="100%" valign="top"><strong>Kiszállítási cím</strong><br />
-                  <br />
-                  7540 Vérteserdősmakkosmária Kossuth Lajos utca 123/b II. em. 124m </td>
-                <td align="right" valign="top"><strong>Szállítási időpont</strong><br />
-                  <br />
-                  <input name="naptar" id="naptar" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
+											<br />
+											
+											<select style="width: 280px; border: 1px solid #fff; font-size: 15px; color:#999; background: #fff; padding: 6px;">
+												<option style="padding-top: 5px;">7540 Vérteserdősmakkosmária-alsó Kossuth Lajos utca 123/b II. em. 124m</option>
+												<option style="padding: 2px;">7540 Vérteserdősmakkosmária-alsó Kossuth Lajos utca 123/b II. em. 124m</option>
+												<option style="padding: 2px;">7540 Vérteserdősmakkosmária-alsó Kossuth Lajos utca 123/b II. em. 124m</option>
+												<option style="padding: 2px;">7540 Vérteserdősmakkosmária-alsó Kossuth Lajos utca 123/b II. em. 124m</option>
+												<option style="padding: 2px; background: #333; color: #fff;" >Új telephely felvétele</option>
+											</select>
+											</td>
+											<td align="right" valign="top"><strong>Szállítási időpont</strong>
+											<br />
+											<br />
+											<input name="naptar" id="naptar" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" />
+											</td>
               </tr>
             </table>
     </div></td>
@@ -1363,18 +1339,9 @@
       }
 					</footer>
 				</div>
-				<!--    <table id="cus_copyright" border="0" cellpadding="0" cellspacing="0" width="990" align="center">
-				<tbody>
-				<tr>
-				<td class="cus_copyright_table_small_text" colspan="2" align="center"><a href="#">felhaszn&aacute;l&aacute;si felt&eacute;telek</a> &bull; <a href="#">adatv&eacute;delmi nyilatkozat</a> &bull; <a href="#">sz&aacute;ll&iacute;t&aacute;si &eacute;s fizet&eacute;si felt&eacute;telek</a> &bull; <a href="#">vissz&aacute;ru felt&eacute;telek</a> &bull; <a href="#">garancia &eacute;rv&eacute;nyes&iacute;t&eacute;se</a> &bull; <a href="#">v&aacute;s&aacute;rl&aacute;s a web&aacute;ruh&aacute;zban</a><hr /></td>
-				</tr>
-				<tr>
-				<td>k&eacute;p helye</td>
-				<td class="cus_copyright_table_small_text" align="center">Az &aacute;rak az &Aacute;F&Aacute;-t nem tartalmazz&aacute;k &eacute;s a mindenkori doll&aacute;r, illetve euro &aacute;rfolyam f&uuml;ggv&eacute;ny&eacute;ben v&aacute;ltozhatnak. Az akci&oacute;k a felt&uuml;ntetett időpontig, illetve visszavon&aacute;sig &eacute;rv&eacute;nyesek. Az &aacute;rv&aacute;ltoztat&aacute;s jog&aacute;t fenntartjuk. Az oldal tartalm&aacute;nak felhaszn&aacute;l&aacute;s&aacute;hoz, m&aacute;sol&aacute;s&aacute;hoz az oldal tulajdonos&aacute;nak enged&eacute;lye sz&uuml;ks&eacute;ges. &copy;2002-2011 HRP Hungary Kft. Minden jog fenntartva.</td>
-				</tr>
-				</tbody>
-				</table> -->
+
 			</div>
+			<!-- Kosár impor ablak -->
 			<div style="display: none;">
 <div id="import_basket_list_win">
 				<form id="basketlist_import" name="basketlist_import" enctype="multipart/form-data" method="post" action="">
@@ -1397,10 +1364,33 @@
 			</div>
 			</div>
 			
+			<!-- kosár mentése ablak -->
+			<div style="display: none;">
+                <div id="save_basket_win">
+				    <form id="form_savecart" enctype="multipart/form-data" method="post" action="@Url.Content("~/ShoppingCart/SaveCart")">
+				      <strong>Kosár mentése</strong><br /><br />
+                      <div id="savecart_errors"></div>
+				      <table border="0" cellspacing="3" cellpadding="10">
+				        <tr>
+				          <td>Kosár elnevezése</td>
+				          <td><input type="text" size="32" name="txt_cartname" id="txt_cartname" />
+                          <label class="error" for="txt_cartname" generated="true" style="display:none; color:#900;">A kosárnév kitöltése kötelező</label>
+                          </td>
+				        </tr>
+				        <tr>
+				          <td>&nbsp;</td>
+				          <td><input type="submit" value="Kosár mentése" /></td>
+				        </tr>
+				      </table>
+				    </form>
+			    </div>
+			</div>
+			
+			<!-- bejelentkezés ablak -->
 			<div style="display: none;">
 				<div id="div_login">
 					@using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_login" }))
-     { <div id="login_errors"></div>
+                    { <div id="login_errors"></div>
 					<table width="470" border="0" align="center" cellpadding="10" cellspacing="1" >
 						<tr>
 							<td colspan="2" nowrap="nowrap"><h3>Bejelentkezés regisztrált partnereink részére</h3></td>
@@ -1422,7 +1412,7 @@
 						<tr>
 							<td>&nbsp;</td>
 							<td>
-							<input type="submit" name="button" id="button" value="Belépés" style="border-radius: 5px;" />
+							<input type="submit" value="Belépés" style="border-radius: 5px;" />
 							</td>
 						</tr>
 					</table>
@@ -1432,7 +1422,7 @@
 							<td align="right" nowrap="nowrap"> Még nem partnerünk? <a href="#" style="color:#fff; text-decoration: none;">Regisztráljon!</a></td>
 						</tr>
 					</table>
-     }
+                }
 				</div>
 			</div>
 

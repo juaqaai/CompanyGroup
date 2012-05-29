@@ -1,5 +1,11 @@
 @charset "utf-8";
 
+optgroup {
+   font-weight: bold;
+   font-style:normal;
+   padding-left:0px;
+}
+
 #cus_basket {
 	border:1px solid #ccc;
 	margin-top: 5px;
@@ -123,29 +129,54 @@ color:#F6F6F6;
 	cursor:pointer;
 }
 
-#opened_shoppingcart_list {
-    margin-top:0px;
-    padding-top:3px;
-    padding-left:3px;
-    padding-right:3px;
-    padding-bottom:3px;
-    font-size:13px;
-    border: #ccc 1px solid;
-    color:#fff;
-    background:#333;
-  }
-  
 #saved_shoppingcart_list {
+    width: 280px;
     margin-top:0px;
-    padding-top:3px;
-    padding-left:3px;
-    padding-right:3px;
-    padding-bottom:3px;
+    padding:2px;
     font-size:13px;
     border: #ccc 1px solid;
     color:#fff;
     background:#333;
   }
+
+/*#saved_shoppingcart_list option {
+    
+    background:#333;
+    background-image: url('../../../Media/images/floppy.png');
+    background-repeat: no-repeat;
+    background-position: 2px;
+    padding-top:2px;
+    padding-bottom:2px;
+    padding-left: 22px;
+    margin-bottom:2px;
+    
+}
+  */
+.saved_basket_list_icon {
+    
+    background:#333;
+    background-image: url('../../../Media/images/floppy.png');
+    background-repeat: no-repeat;
+    background-position: 2px;
+    padding-top:2px;
+    padding-bottom:2px;
+    padding-left: 22px;
+    margin-bottom:2px;
+    
+}
+
+.open_basket_list_icon {
+    
+    background:#333;
+    background-image: url('../../../Media/images/open.png');
+    background-repeat: no-repeat;
+    background-position: 2px;
+    padding-top:2px;
+    padding-bottom:2px;
+    padding-left: 22px;
+    margin-bottom:2px;
+    
+}
   
 #kos_gombok_fiz {
     background:#333;
@@ -361,3 +392,4 @@ color:#F6F6F6;
     text-align:left;
     border:1px #ccc solid;
 }
+

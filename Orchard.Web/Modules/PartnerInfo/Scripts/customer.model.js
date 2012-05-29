@@ -138,7 +138,7 @@ CompanyGroupCms.VisitorInfo = function () {
             dataType: "json",
             processData: true,
             success: function (result) {
-                if (result) {
+                if (result.IsValidLogin) {
                     $.fancybox.close();
                     self.isValidLogin(result.IsValidLogin);
                     self.companyName(result.CompanyName);
@@ -150,7 +150,8 @@ CompanyGroupCms.VisitorInfo = function () {
                     self.recieveGoods(result.Permission.RecieveGoods);
                 }
                 else {
-                    alert('SignIn call failed!');
+                    $("#login_errors").html(result.ErrorMessage);
+                    $("#login_errors").show(); ;
                 }
             },
             error: function () {

@@ -326,14 +326,18 @@
 				                            </div>
                                         </td>
 				                        <td nowrap="nowrap">
-				                            <div class="cus_prod_table_add_compare"><input type="checkbox" name="checkbox" id="checkbox" /></div>
+				                            <div class="cus_prod_table_add_compare" data-bind="visible: $parent.visitorInfo.isValidLogin()"><input type="checkbox" name="checkbox" id="checkbox" /></div>
                                         </td>
-				                        <td width="100%"> Összehasonlító listához ad </td>
+				                        <td width="100%">
+                                        <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+                                        Összehasonlító listához ad 
+                                        <!-- /ko -->
+                                        </td>
 				                        <td nowrap="nowrap">
 				                            <div class="cus_prod_table_quantity">
 				                            <!-- ko if: $parent.visitorInfo.isValidLogin() -->
 				                            <span>Kosárba</span>
-				                            <input name="textfield" type="text" value="0" size="2" />
+				                            <input type="text" data-bind="value: quantity,  valueUpdate: 'afterkeydown'" size="2" />
 				                            <span>db</span>
 				                            <!-- /ko -->
 				                            </div>

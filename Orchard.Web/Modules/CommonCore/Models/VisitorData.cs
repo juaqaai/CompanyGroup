@@ -10,20 +10,44 @@ namespace Cms.CommonCore.Models
     {
         public VisitorData()
         {
-            ObjectId = String.Empty;
+            this.ObjectId = String.Empty;
 
-            Language = String.Empty;        
+            this.Language = String.Empty;
+
+            this.IsShoppingCartOpened = false;
+
+            this.IsCatalogueOpened = false;
         }
 
-        public VisitorData(string objectId, string language)
+        public VisitorData(string objectId, string language, bool isShoppingCartOpened, bool isCatalogueOpened)
         {
-            ObjectId = objectId;
+            this.ObjectId = objectId;
 
-            Language = language;
+            this.Language = language;
+
+            this.IsShoppingCartOpened = isShoppingCartOpened;
+
+            this.IsCatalogueOpened = isCatalogueOpened;
         }
 
+        /// <summary>
+        /// egyedi látogató azonosító
+        /// </summary>
         public string ObjectId { set; get; }
 
+        /// <summary>
+        /// beállított nyelv
+        /// </summary>
         public string Language { set; get; }
+
+        /// <summary>
+        /// kosár nyitva van-e?
+        /// </summary>
+        public bool IsShoppingCartOpened { set; get; }
+
+        /// <summary>
+        /// katalógus nyitva van-e?
+        /// </summary>
+        public bool IsCatalogueOpened { set; get; }
     }
 }

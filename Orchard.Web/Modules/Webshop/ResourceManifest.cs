@@ -73,7 +73,7 @@ namespace Webshop
 
             manifest.DefineScript("Catalogue").SetUrl("catalogue.model.js", "catalogue.model.js").SetVersion("1.0.0").SetDependencies("Knockout");
 
-
+            manifest.DefineScript("Requests").SetUrl("catalogue.model.js", "application.requests.js").SetVersion("1.0.0");
         }
     }
 }

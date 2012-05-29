@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\application.constants.js" />
+    <Content Include="Scripts\application.requests.js" />
     <Content Include="Scripts\catalogue.model.js" />
     <Content Include="Scripts\catalogue.service.js" />
     <Content Include="Scripts\chosen.js" />
@@ -114,13 +115,18 @@
     <Compile Include="Models\DeleteShoppingCart.cs" />
     <Compile Include="Models\DeleteShoppingCartItem.cs" />
     <Compile Include="Models\FirstLevelCategories.cs" />
+    <Compile Include="Models\GetCartByKey.cs" />
+    <Compile Include="Models\GetCartCollectionByVisitorId.cs" />
     <Compile Include="Models\ManufacturerItem.cs" />
     <Compile Include="Models\Manufacturers.cs" />
     <Compile Include="Models\NewShoppingCart.cs" />
     <Compile Include="Models\Products.cs" />
+    <Compile Include="Models\CatalogueOpenStatus.cs" />
+    <Compile Include="Models\SaveShoppingCart.cs" />
+    <Compile Include="Models\ShoppingCartOpenStatus.cs" />
     <Compile Include="Models\SecondLevelCategories.cs" />
     <Compile Include="Models\ShoppingCartCollection.cs" />
-    <Compile Include="Models\AddShoppingCartItem.cs" />
+    <Compile Include="Models\AddShoppingCartLine.cs" />
     <Compile Include="Models\StructureItem.cs" />
     <Compile Include="Models\Structures.cs" />
     <Compile Include="Models\ThirdLevelCategories.cs" />

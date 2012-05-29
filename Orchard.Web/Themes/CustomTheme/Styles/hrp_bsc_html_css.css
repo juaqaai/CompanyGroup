@@ -41,7 +41,7 @@ body {
 #akcio_badge {
     position:absolute;
     margin-left: 215px;
-    margin-top: 0px;
+    margin-top: -72px;
 }
 
 
@@ -1539,6 +1539,16 @@ ul.tabs li a:hover {
 }
 
 #import_basket_list_win {
+    background-color: #CCC;
+    background-image: url('../../../Media/images/loginpanelbg.jpg');
+    background-repeat: no-repeat;
+    background-position: center -150px;
+    color:#666;
+    font-size:11px;
+    padding:10px;
+}
+
+#save_basket_win {
     background-color: #CCC;
     background-image: url('../../../Media/images/loginpanelbg.jpg');
     background-repeat: no-repeat;

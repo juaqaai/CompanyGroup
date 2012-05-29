@@ -89,6 +89,8 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\Empty.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\Response.cs" />
     <Compile Include="Models\SignIn.cs" />
     <Compile Include="Models\SignOut.cs" />
     <Compile Include="Models\Visitor.cs" />

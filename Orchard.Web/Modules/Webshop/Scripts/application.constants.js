@@ -7,7 +7,8 @@ CompanyGroupCms.Constants = (function () {
     var _productListServiceUrl = '';
     var _pictureListServiceUrl = '';
     var _customerServiceUrl = '';
-    var _partnerInfoServiceUrl = '';  //"~/PartnerInfo/Home/"
+    var _partnerInfoServiceUrl = '';  
+    var _shoppingCartServiceBaseUrl = '';
 
     var instance;
 
@@ -50,6 +51,15 @@ CompanyGroupCms.Constants = (function () {
             },
             setPartnerInfoServiceUrl: function (partnerInfoServiceUrl) {
                 _partnerInfoServiceUrl = partnerInfoServiceUrl;
+            },
+            getShoppingCartServiceBaseUrl: function () {
+                return _shoppingCartServiceUrl;
+            },
+            setShoppingCartServiceBaseUrl: function (shoppingCartServiceUrl) {
+                _shoppingCartServiceBaseUrl = shoppingCartServiceUrl;
+            },
+            getShoppingCartServiceUrl: function (url) {
+                return _shoppingCartServiceBaseUrl + url;
             }
         }
     }

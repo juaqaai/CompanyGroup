@@ -55,16 +55,28 @@ namespace Cms.Webshop.Controllers
 
             Cms.Webshop.Models.Catalogue catalogue = new Cms.Webshop.Models.Catalogue(structures, products, visitor);
 
+            Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts;
 
             if (visitor.IsValidLogin)
             {
-                //CompanyGroup.Dto.WebshopModule.ShoppingCartCollection GetItemsByVisitorId(string visitorId)
-                CompanyGroup.Dto.WebshopModule.ShoppingCartCollection shoppingCartCollection = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCartCollection>("ShoppingCartService", "GetItemsByVisitorId", visitor.Id);
+                ViewData["ActiveCart"] = this.GetActiveCart(visitor);
 
-                CompanyGroup.Dto.WebshopModule.ShoppingCart activeCart = shoppingCartCollection.Carts.Find(x => x.Id.Equals(shoppingCartCollection.ActiveCartId)); //new Cms.Webshop.Models.ShoppingCartCollection();
-
-                ViewData["ActiveCartItems"] = activeCart != null ? activeCart.Items : new List<CompanyGroup.Dto.WebshopModule.ShoppingCartItem>();
+                storedOpenedCarts = this.GetStoredOpenedShoppingCartCollectionByVisitor(visitor);
             }
+            else
+            {
+                ViewData["ActiveCart"] = new CompanyGroup.Dto.WebshopModule.ShoppingCart();
+
+                storedOpenedCarts = new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
+            }
+
+            ViewData["StoredCarts"] = storedOpenedCarts.StoredItems;
+
+            ViewData["OpenedCarts"] = storedOpenedCarts.OpenedItems;
+
+            ViewData["ShoppingCartOpenStatus"] = this.ReadShoppingCartOpenedFromCookie();
+
+            ViewData["CatalogueOpenStatus"] = this.ReadCatalogueOpenedFromCookie();
 
             return View("Index", catalogue);
         }

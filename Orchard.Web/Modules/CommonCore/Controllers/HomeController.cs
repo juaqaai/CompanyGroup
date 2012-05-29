@@ -35,7 +35,7 @@ namespace Cms.CommonCore.Controllers
             return String.Format(ServiceBaseUrl, serviceName);
         }
 
-        #region "RestSharp post, get"
+        #region "RestSharp (T PostJSonData<T>(string serviceName, string resource, object requestBody) where T : new()), T GetJSonData<T>(string serviceName, string resource) where T : new(), byte[] DownloadData(string serviceName, string resource))"
 
         /// <summary>
         /// post json data to an application service url
@@ -147,7 +147,7 @@ namespace Cms.CommonCore.Controllers
 
         #endregion
 
-        #region "login, logout"
+        #region "JsonResult SignIn([Bind(Prefix = "")] Cms.CommonCore.Models.SignIn request), JsonResult SignOut([Bind(Prefix = "")] Cms.CommonCore.Models.SignOut request), JsonResult VisitorInfo(), Cms.CommonCore.Models.Visitor GetVisitorInfo()"
 
         /// <summary>
         /// Enter into the system
@@ -248,10 +248,10 @@ namespace Cms.CommonCore.Controllers
 
         #endregion
 
-        #region "cookie"
+        #region "private cookie funkciók - ReadCookie, WriteCookie"
 
         /// <summary>
-        /// read data from http cookie (string -> Json conversion)
+        /// visitor adatok kiolvasása http cookie-ból (string -> Json conversion)
         /// </summary>
         /// <returns></returns>
         private Cms.CommonCore.Models.VisitorData ReadCookie()
@@ -268,7 +268,7 @@ namespace Cms.CommonCore.Controllers
         }
 
         /// <summary>
-        /// write data to http cookie
+        /// visitor adatok mentése http cookie-ba
         /// </summary>
         /// <param name="visitorData"></param>
         private void WriteCookie(Cms.CommonCore.Models.VisitorData visitorData)
@@ -277,16 +277,19 @@ namespace Cms.CommonCore.Controllers
             {
                 CompanyGroup.Helpers.DesignByContract.Require((visitorData != null), "Object can not be null or empty!");
 
+                //konverzió json string-be
                 string json = CompanyGroup.Helpers.JsonConverter.ToJSON<Cms.CommonCore.Models.VisitorData>(visitorData);
 
                 System.Web.HttpCookie cookie = this.Request.Cookies.Get(HomeController.CookieName);
 
+                //ha nincs cookie, akkor létrehozásra kerül
                 if (cookie == null)
                 {
                     this.Response.Cookies.Add(new System.Web.HttpCookie(HomeController.CookieName, json) { Expires = DateTime.Now.AddDays(30d) });
                 }
                 else
                 {
+                    //van cookie, értékadás, lejárati dátum beállítás történik
                     cookie.Value = json;
 
                     cookie.Expires = DateTime.Now.AddDays(30d);
@@ -299,7 +302,7 @@ namespace Cms.CommonCore.Controllers
 
         #endregion
 
-        #region "ObjectId"
+        #region "ObjectId cookie functions (string ReadObjectIdFromCookie(), void WriteObjectIdToCookie(string objectId), void RemoveObjectIdFromCookie())"
 
         /// <summary>
         /// read objectId string from http cookie
@@ -355,7 +358,7 @@ namespace Cms.CommonCore.Controllers
 
         #endregion
 
-        #region "Language"
+        #region "Language cookie functions (string ReadLanguageFromCookie(), void WriteLanguageToCookie(string language), void RemoveLanguageFromCookie())"
 
         /// <summary>
         /// read language string from http cookie
@@ -407,6 +410,154 @@ namespace Cms.CommonCore.Controllers
                 this.WriteCookie(visitorData);
             }
             catch { }
+        }
+
+        #endregion
+
+        #region "IsShoppingCartOpened cookie functions (string ReadIsShoppingCartOpenedFromCookie(), void WriteIsShoppingCartOpenedToCookie(string language), void RemoveIsShoppingCartOpenedFromCookie())"
+
+        /// <summary>
+        /// read IsCartOpened value from http cookie
+        /// </summary>
+        /// <returns></returns>
+        protected bool ReadShoppingCartOpenedFromCookie()
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                return visitorData.IsShoppingCartOpened;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// write the IsShoppingCartOpened value to http cookie (if the named cookie exists than existing cookie will be used, otherwise new cookie will be created)
+        /// The cookie expiring date is: current date + 30 day 
+        /// </summary>
+        /// <param name="objectId"></param>
+        protected void WriteShoppingCartOpenedToCookie(bool isShoppingCartOpened)
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                visitorData.IsShoppingCartOpened = isShoppingCartOpened;
+
+                this.WriteCookie(visitorData);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// delete isShoppingCartOpened value from the http cookie
+        /// </summary>
+        /// <param name="objectId"></param>
+        protected void RemoveShoppingCartOpenedFromCookie()
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                visitorData.IsShoppingCartOpened = false;
+
+                this.WriteCookie(visitorData);
+            }
+            catch { }
+        }
+
+        #endregion
+
+        #region "IsCatalogueOpened cookie functions (string ReadIsCatalogueOpenedFromCookie(), void WriteIsCatalogueOpenedToCookie(string language), void RemoveIsCatalogueOpenedFromCookie())"
+
+        /// <summary>
+        /// read IsCatalogueOpened value from http cookie
+        /// </summary>
+        /// <returns></returns>
+        protected bool ReadCatalogueOpenedFromCookie()
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                return visitorData.IsCatalogueOpened;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// write the IsCatalogueOpened value to http cookie (if the named cookie exists than existing cookie will be used, otherwise new cookie will be created)
+        /// The cookie expiring date is: current date + 30 day 
+        /// </summary>
+        /// <param name="objectId"></param>
+        protected void WriteCatalogueOpenedToCookie(bool isCatalogueOpened)
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                visitorData.IsCatalogueOpened = isCatalogueOpened;
+
+                this.WriteCookie(visitorData);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// delete IsCatalogueOpened value from the http cookie
+        /// </summary>
+        /// <param name="objectId"></param>
+        protected void RemoveCatalogueOpenedFromCookie()
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                visitorData.IsCatalogueOpened = false;
+
+                this.WriteCookie(visitorData);
+            }
+            catch { }
+        }
+
+        #endregion
+
+        #region "ShoppingCart"
+
+        /// <summary>
+        /// CompanyGroup.Dto.WebshopModule.StoredShoppingCartCollection GetStoredShoppingCartCollectionByVisitor(CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor request)
+        /// </summary>
+        /// <returns></returns>
+        public Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection GetStoredOpenedShoppingCartCollectionByVisitor(Cms.CommonCore.Models.Visitor visitor)
+        {
+            try
+            {
+                if (visitor == null)
+                {
+                    return new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
+                }
+
+                CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor request = new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(visitor.LanguageId, visitor.CompanyId, visitor.PersonId);
+
+                CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection>("ShoppingCartService", "GetStoredOpenedShoppingCartCollectionByVisitor", request);
+
+                return new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection(response.StoredItems, response.OpenedItems);
+            }
+            catch (Exception ex) { return new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection() { ErrorMessage = ex.Message }; }            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="visitor"></param>
+        /// <returns></returns>
+        public Cms.CommonCore.Models.Response.ShoppingCart GetActiveCart(Cms.CommonCore.Models.Visitor visitor)
+        {
+            CompanyGroup.Dto.ServiceRequest.GetActiveCart request = new CompanyGroup.Dto.ServiceRequest.GetActiveCart(visitor.LanguageId, visitor.Id);
+
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "GetActiveCart", request);
+
+            return new Models.Response.ShoppingCart(response.Id, response.Items, response.SumTotal);
         }
 
         #endregion

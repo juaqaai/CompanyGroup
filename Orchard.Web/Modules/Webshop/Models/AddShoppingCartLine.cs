@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cms.Webshop.Models
 {
-    public class AddShoppingCartItem 
+    public class AddShoppingCartLine
     {
         /// <summary>
         /// kosár azonosító
