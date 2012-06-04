@@ -179,7 +179,7 @@ CompanyGroupCms.ShoppingCart = function () {
         var dataString = ko.toJSON(CompanyGroupCms.ShoppingCartLineRequest);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getShoppingCartServiceUrl('UpdateItemQuantity'),
+            url: CompanyGroupCms.Constants.Instance().getShoppingCartServiceUrl('UpdateLineQuantity'),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
@@ -210,7 +210,7 @@ CompanyGroupCms.ShoppingCart = function () {
         var dataString = ko.toJSON(CompanyGroupCms.ShoppingCartLineRequest);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getShoppingCartServiceUrl('RemoveItem'),
+            url: CompanyGroupCms.Constants.Instance().getShoppingCartServiceUrl('RemoveLine'),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,

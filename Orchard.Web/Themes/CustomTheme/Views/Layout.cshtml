@@ -191,15 +191,18 @@
 
 			    jQuery('.chosen').unbind('change').bind('change', function () {
 			        if ($(this).attr('id') == 'manufacturerList') {
-			            CompanyGroupCms.CatalogueListRequest.ManufacturerIdList = $('#manufacturerList').val();
+                        var manufacturerIdList = $('#manufacturerList').val();
+			            CompanyGroupCms.CatalogueListRequest.ManufacturerIdList = (manufacturerIdList == null) ? '' : manufacturerIdList;
 			            AppViewModel.productList.loadStructure(false, true, true, true);
 			            AppViewModel.productList.loadCatalogueList();
 			        } else if ($(this).attr('id') == 'category1List') {
-			            CompanyGroupCms.CatalogueListRequest.Category1IdList = $('#category1List').val();
+                        var category1IdList = $('#category1List').val();
+			            CompanyGroupCms.CatalogueListRequest.Category1IdList = (category1IdList == null) ? '' : category1IdList;
 			            AppViewModel.productList.loadStructure(true, false, true, true);
 			            AppViewModel.productList.loadCatalogueList();
 			        } else if ($(this).attr('id') == 'category2List') {
-			            CompanyGroupCms.CatalogueListRequest.Category2IdList = $('#category2List').val();
+                        var category2IdList = $('#category2List').val();
+			            CompanyGroupCms.CatalogueListRequest.Category2IdList = (category2IdList == null) ? '' : category2IdList;
 			            AppViewModel.productList.loadStructure(true, true, false, true);
 			            AppViewModel.productList.loadCatalogueList();
 			        }

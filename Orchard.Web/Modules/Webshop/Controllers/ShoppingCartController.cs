@@ -121,25 +121,25 @@ namespace Cms.Webshop.Controllers
         }
 
         [HttpPost]
-        public JsonResult RemoveItem([Bind(Prefix = "")] Cms.Webshop.Models.DeleteShoppingCartItem request)
+        public JsonResult RemoveLine([Bind(Prefix = "")] Cms.Webshop.Models.DeleteShoppingCartItem request)
         {
             Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
 
             CompanyGroup.Dto.ServiceRequest.DeleteShoppingCartItem deleteShoppingCartItem = new CompanyGroup.Dto.ServiceRequest.DeleteShoppingCartItem(request.CartId, request.ProductId, visitor.LanguageId, ShoppingCartController.DataAreaId, visitor.Id);
 
-            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "RemoveItem", deleteShoppingCartItem);
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "RemoveLine", deleteShoppingCartItem);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
         }
 
         [HttpPost]
-        public JsonResult UpdateItemQuantity([Bind(Prefix = "")] Cms.Webshop.Models.UpdateShoppingCartItem request)
+        public JsonResult UpdateLineQuantity([Bind(Prefix = "")] Cms.Webshop.Models.UpdateShoppingCartItem request)
         {
             Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
 
             CompanyGroup.Dto.ServiceRequest.UpdateShoppingCartItem updateShoppingCartItem = new CompanyGroup.Dto.ServiceRequest.UpdateShoppingCartItem(request.CartId, request.ProductId, visitor.LanguageId, ShoppingCartController.DataAreaId, request.Quantity, visitor.Id);
 
-            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "UpdateItemQuantity", updateShoppingCartItem);
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "UpdateLineQuantity", updateShoppingCartItem);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);        
         }

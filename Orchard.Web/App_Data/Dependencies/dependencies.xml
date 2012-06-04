@@ -38,7 +38,7 @@
       <Reference>
         <Name>CompanyGroup.Helpers</Name>
         <LoaderName>PrecompiledExtensionLoader</LoaderName>
-        <VirtualPath>~/Modules/PartnerInfo/bin/CompanyGroup.Helpers.dll</VirtualPath>
+        <VirtualPath>~/Modules/CommonCore/bin/CompanyGroup.Helpers.dll</VirtualPath>
       </Reference>
     </References>
   </Dependency>
@@ -499,7 +499,7 @@
       <Reference>
         <Name>CompanyGroup.Helpers</Name>
         <LoaderName>PrecompiledExtensionLoader</LoaderName>
-        <VirtualPath>~/Modules/PartnerInfo/bin/CompanyGroup.Helpers.dll</VirtualPath>
+        <VirtualPath>~/Modules/CommonCore/bin/CompanyGroup.Helpers.dll</VirtualPath>
       </Reference>
     </References>
   </Dependency>
@@ -620,7 +620,7 @@
       <Reference>
         <Name>CompanyGroup.Helpers</Name>
         <LoaderName>PrecompiledExtensionLoader</LoaderName>
-        <VirtualPath>~/Modules/PartnerInfo/bin/CompanyGroup.Helpers.dll</VirtualPath>
+        <VirtualPath>~/Modules/CommonCore/bin/CompanyGroup.Helpers.dll</VirtualPath>
       </Reference>
     </References>
   </Dependency>

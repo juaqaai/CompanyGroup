@@ -557,6 +557,8 @@ namespace Cms.CommonCore.Controllers
 
             CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "GetActiveCart", request);
 
+            if (response == null) { response = new CompanyGroup.Dto.WebshopModule.ShoppingCart(); }
+
             return new Models.Response.ShoppingCart(response.Id, response.Items, response.SumTotal);
         }
 
