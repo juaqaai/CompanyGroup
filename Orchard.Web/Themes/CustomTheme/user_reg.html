@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>user_reg</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+	$('#newcontact_link').click(function () {
+    $("#newcontact").slideToggle();
+    });
+</script>
+<style type="text/css">
+.regfields {
+	font-size:12px;
+	color:#666;
+	border:#999 solid 1px;
+	padding:5px;
+}
+#settings01 {
+	position:absolute;
+	width:390px;
+	height:290px;
+	z-index:1;
+	background:#F0F0F0;
+	border: #999 3px solid;
+	
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	padding:5px;
+}
+#settings02 {
+	position:absolute;
+	width:390px;
+	height:auto;
+	z-index:2;
+	background:#F0F0F0;
+	border: #999 3px solid;
+	
+	margin-left: 420px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	padding:5px;
+}
+#settings03 {
+	position:absolute;
+	width:390px;
+	height:auto;
+	z-index:1;
+	background:#F0F0F0;
+	border: #999 3px solid;
+	
+	margin-top: 320px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	padding:5px;
+}
+#settings04 {
+	position:absolute;
+	width:390px;
+	height:290px;
+	z-index:1;
+	background:#F0F0F0;
+	border: #999 3px solid;
+	
+	margin-top: 320px;
+	margin-left: 420px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	padding:5px;
+	display:none;
+}
+#newcontact {
+	position:relative;
+	width:auto;
+	height:auto;
+	z-index:3;
+	background-color: #CCCCCC;
+	margin-right:-5px;
+	display:none;
+}
+
+#newcontact_link {
+	cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div id="settings01">
+  <table width="100%" border="0" cellspacing="2" cellpadding="3">
+    <tr>
+      <td><strong>Ügyintéző (adatlapot kitöltő)</strong></td>
+      <td align="right"><img src="../../Media/images/gear.png" width="20" height="20" /></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Név</td>
+      <td align="right">
+        <input name="textfield" type="text" class="regfields" id="textfield" />
+     </td>
+    </tr>
+    <tr>
+      <td>Telefon</td>
+      <td align="right"><input name="textfield5" type="text" class="regfields" id="textfield5" /></td>
+    </tr>
+    <tr>
+      <td>Ügyintéző email</td>
+      <td align="right"><input name="textfield2" type="text" class="regfields" id="textfield2" /></td>
+    </tr>
+    <tr>
+      <td>Központi email</td>
+      <td align="right"><input name="textfield3" type="text" class="regfields" id="textfield3" /></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="font-size:9px">(Figyelem! A központi e-mail címre küldünk el minden automatikus e-mail visszaigazolást: rendelés, árubeérkezés, kiszállítás)</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Hírlevelek a központi e-mailre</td>
+      <td>
+        <input type="checkbox" name="checkbox" id="checkbox" />
+      </td>
+    </tr>
+  </table>
+</div>
+<div id="settings02">
+  <table width="100%" border="0" cellspacing="2" cellpadding="3">
+    <tr>
+      <td><strong>Cég alap adatai</strong></td>
+      <td align="right"><img src="../../Media/images/gear.png" alt="" width="20" height="20" /></td>
+    </tr>
+    <tr>
+      <td>Ország</td>
+      <td>
+          <select name="select" class="regfields" id="select">
+            <option value="HU" selected="selected">Magyarország</option>
+          </select>
+     </td>
+    </tr>
+    <tr>
+      <td>Cégnév</td>
+      <td><input name="textfield4" type="text" class="regfields" id="textfield6" /></td>
+    </tr>
+    <tr>
+      <td>Cégjegyzékszám</td>
+      <td><input name="textfield4" type="text" class="regfields" id="textfield7" /></td>
+    </tr>
+    <tr>
+      <td>Adószám</td>
+      <td><input name="textfield6" type="text" class="regfields" id="textfield4" size="6" />
+        -
+        <input name="textfield7" type="text" class="regfields" id="textfield9" size="6" />
+        -
+      <input name="textfield8" type="text" class="regfields" id="textfield10" size="6" /></td>
+    </tr>
+    <tr>
+      <td>Uniós adószám</td>
+      <td><input name="textfield4" type="text" class="regfields" id="textfield8" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Bankszámlaszám</td>
+      <td><input name="textfield9" type="text" class="regfields" id="textfield11" /> 
+        [<a href="#">+</a>] További</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Aláírási címpéldány</td>
+      <td>
+        <input name="fileField" type="file" id="fileField" />
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="font-size:9px" >Feltölthető formátumok: .jpg, .jpeg, .pdf, .png, .tiff<br /><br />Egy dokumentum feltöltése lehetséges!
+A fenti dokumentum feltöltése akkor nem kötelező, ha vállalja, hogy más módon (személyesen, faxon, postai úton) juttatja el hozzánk.      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+      <td><strong>Számlázási cím</strong></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Ország</td>
+      <td><select name="select2" class="regfields" id="select2">
+        <option value="HU" selected="selected">Magyarország</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>Irányítószám</td>
+      <td><input name="textfield10" type="text" class="regfields" id="textfield12" size="4" /></td>
+    </tr>
+    <tr>
+      <td>Város</td>
+      <td><input name="textfield11" type="text" class="regfields" id="textfield13" /></td>
+    </tr>
+    <tr>
+      <td>Utca, házszám</td>
+      <td><input name="textfield12" type="text" class="regfields" id="textfield14" /></td>
+    </tr>
+    <tr>
+      <td>Telefon</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield15" /></td>
+    </tr>
+    <tr>
+      <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+      <td><strong>Levelezési cím</strong></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="font-size:9px">(kérjük itt írja át, ha nem egyezik a számlázási címmel)</td>
+    </tr>
+    <tr>
+      <td>Ország</td>
+      <td><select name="select3" class="regfields" id="select3">
+        <option value="HU" selected="selected">Magyarország</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>Irányítószám</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield18" size="4" /></td>
+    </tr>
+    <tr>
+      <td>Város</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield17" /></td>
+    </tr>
+    <tr>
+      <td>Utca, házszám</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield16" /></td>
+    </tr>
+    <tr>
+      <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Szállítási cím/telephely</strong></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="font-size:9px">(kérjük itt írja át, ha nem egyezik a számlázási címmel)</td>
+    </tr>
+    <tr>
+      <td>Ország</td>
+      <td><select name="select3" class="regfields" id="select4">
+        <option value="HU" selected="selected">Magyarország</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>Irányítószám</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield21" size="4" /></td>
+    </tr>
+    <tr>
+      <td>Város</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield20" /></td>
+    </tr>
+    <tr>
+      <td>Utca, házszám</td>
+      <td><input name="textfield13" type="text" class="regfields" id="textfield19" /></td>
+    </tr>
+  </table>
+</div>
+<div id="settings03">
+  <table width="100%" border="0" cellspacing="2" cellpadding="3">
+    <tr>
+      <td><strong>Kapcsolattartók<br />
+      és jogosultságok</strong></td>
+      <td align="right"><img src="../../Media/images/gear.png" alt="" width="20" height="20" /></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td><strong>Cégadminisztrátor </strong></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="font-size:9px">A Cégadminisztrátor az a személy, aki felvehet, törölhet és módosíthat felhasználókat valamint beállíthatja azok jogosultságait. Figyelem, a Cégadminisztrátor személyét a szerződés aláírását követően csak cégszerűen aláírva írásban lehet megváltozatni!</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Belépési név</td>
+      <td align="right"><input name="textfield14" type="text" class="regfields" id="textfield22" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Jelszó</td>
+      <td align="right"><input name="textfield15" type="text" class="regfields" id="textfield23" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Jelszó mégegyszer</td>
+      <td align="right"><input name="textfield16" type="text" class="regfields" id="textfield24" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td align="right">&nbsp;</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Vezetéknév</td>
+      <td align="right"><input name="textfield17" type="text" class="regfields" id="textfield25" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Keresztnév</td>
+      <td align="right"><input name="textfield18" type="text" class="regfields" id="textfield26" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">E-mail</td>
+      <td align="right"><input name="textfield19" type="text" class="regfields" id="textfield27" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">Telefon</td>
+      <td align="right"><input name="textfield20" type="text" class="regfields" id="textfield28" /></td>
+    </tr>
+    <tr>
+      <td colspan="2" nowrap="nowrap"><hr /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap"><div id="newcontact_link">Új kapcsolattartó [+]</div></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2" nowrap="nowrap"><div id="newcontact">
+        <table width="100%" border="0" cellspacing="1" cellpadding="3">
+          <tr>
+            <td width="50%">Belépési név</td>
+            <td width="50%" align="right"><input name="textfield21" type="text" class="regfields" id="textfield29" /></td>
+          </tr>
+          <tr>
+            <td>Jelszó</td>
+            <td align="right"><input name="textfield22" type="text" class="regfields" id="textfield30" /></td>
+          </tr>
+          <tr>
+            <td>Jelszó mégegyszer</td>
+            <td align="right"><input name="textfield23" type="text" class="regfields" id="textfield31" /></td>
+          </tr>
+          <tr>
+            <td>Vezetéknév</td>
+            <td align="right"><input name="textfield24" type="text" class="regfields" id="textfield32" /></td>
+          </tr>
+          <tr>
+            <td>Keresztnév</td>
+            <td align="right"><input name="textfield25" type="text" class="regfields" id="textfield33" /></td>
+          </tr>
+          <tr>
+            <td>E-mail</td>
+            <td align="right"><input name="textfield26" type="text" class="regfields" id="textfield34" /></td>
+          </tr>
+          <tr>
+            <td>Telefon</td>
+            <td align="right"><input name="textfield27" type="text" class="regfields" id="textfield35" /></td>
+          </tr>
+          <tr>
+            <td colspan="2"><hr /></td>
+            </tr>
+          <tr>
+            <td><strong>Jogosultságok</strong></td>
+            <td align="right">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Számlainformációk</td>
+            <td align="right"><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
+          </tr>
+          <tr>
+            <td>Árlista letöltés</td>
+            <td align="right"><input type="checkbox" name="checkbox3" id="checkbox3" /></td>
+          </tr>
+          <tr>
+            <td>Áru rendelés</td>
+            <td align="right"><input type="checkbox" name="checkbox4" id="checkbox4" /></td>
+          </tr>
+          <tr>
+            <td>Áru átvétel</td>
+            <td align="right"><input type="checkbox" name="checkbox5" id="checkbox5" /></td>
+          </tr>
+          <tr>
+            <td><strong>Pozíciók</strong></td>
+            <td align="right">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Igazgató</td>
+            <td align="right"><input type="checkbox" name="checkbox6" id="checkbox6" /></td>
+          </tr>
+          <tr>
+            <td>Pénzügyi vezető</td>
+            <td align="right"><input type="checkbox" name="checkbox7" id="checkbox7" /></td>
+          </tr>
+          <tr>
+            <td>Kereskedelmi vezető</td>
+            <td align="right"><input type="checkbox" name="checkbox8" id="checkbox8" /></td>
+          </tr>
+          <tr>
+            <td>Kapcsolattartó</td>
+            <td align="right"><input type="checkbox" name="checkbox9" id="checkbox9" /></td>
+          </tr>
+          <tr>
+            <td>Kereskedő</td>
+            <td align="right"><input type="checkbox" name="checkbox10" id="checkbox10" /></td>
+          </tr>
+          <tr>
+            <td><strong>Hírlevelek</strong></td>
+            <td align="right"><input type="checkbox" name="checkbox11" id="checkbox11" /></td>
+          </tr>
+          <tr>
+            <td>E-mail értesítések</td>
+            <td align="right">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Megrendelés</td>
+            <td align="right"><input type="checkbox" name="checkbox12" id="checkbox12" /></td>
+          </tr>
+          <tr>
+            <td>Árubeérkezés</td>
+            <td align="right"><input type="checkbox" name="checkbox13" id="checkbox13" /></td>
+          </tr>
+          <tr>
+            <td>Kiszállítás</td>
+            <td align="right"><input type="checkbox" name="checkbox14" id="checkbox14" /></td>
+          </tr>
+        </table>
+      </div></td>
+    </tr>
+  </table>
+</div>
+<div id="settings04"></div>
+</body>
+</html>

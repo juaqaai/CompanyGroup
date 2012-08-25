@@ -3,23 +3,41 @@ using System.Collections.Generic;
 
 namespace Cms.Webshop.Models
 {
+    /// <summary>
+    /// webshop lista view-hoz tartozó típus, webshop catalogue controller index action JSonResult-ban
+    /// </summary>
     public class Catalogue
     {
-        public Catalogue(CompanyGroup.Dto.WebshopModule.Structures structures, CompanyGroup.Dto.WebshopModule.Products products, Cms.CommonCore.Models.Visitor visitor)
+        public Catalogue(CompanyGroup.Dto.WebshopModule.Structures structures, 
+                         CompanyGroup.Dto.WebshopModule.Products products, 
+                         Cms.CommonCore.Models.Visitor visitor, 
+                         List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> storedItems,
+                         List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> openedItems,
+                         CompanyGroup.Dto.WebshopModule.ShoppingCart activeCart, 
+                         bool shoppingCartOpenStatus, 
+                         bool catalogueOpenStatus, 
+                         CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses,
+                         CompanyGroup.Dto.WebshopModule.BannerList bannerList)
         {
             this.Structures = new Structures(structures);
 
-            //structures.FirstLevelCategories.ForEach(x => Structures.FirstLevelCategories.Add(new StructureItem() { Id = x.Id, Name = x.Name }));
-
-            //structures.Manufacturers.ForEach(x => Structures.Manufacturers.Add(new StructureItem() { Id = x.Id, Name = x.Name }));
-
-            //structures.SecondLevelCategories.ForEach(x => Structures.SecondLevelCategories.Add(new StructureItem() { Id = x.Id, Name = x.Name }));
-
-            //structures.ThirdLevelCategories.ForEach(x => Structures.ThirdLevelCategories.Add(new StructureItem() { Id = x.Id, Name = x.Name }));
-
-            this.Products = products;   //new CompanyGroup.Dto.WebshopModule.Products();
+            this.Products = products;   
 
             this.Visitor = visitor;
+
+            this.StoredItems = storedItems;
+
+            this.OpenedItems = openedItems;
+
+            this.ActiveCart = activeCart;
+
+            this.ShoppingCartOpenStatus = shoppingCartOpenStatus;
+
+            this.CatalogueOpenStatus = catalogueOpenStatus;
+
+            this.DeliveryAddresses = deliveryAddresses;
+
+            this.BannerList = bannerList;
         }
 
         public Structures Structures { get; set; }
@@ -27,5 +45,20 @@ namespace Cms.Webshop.Models
         public CompanyGroup.Dto.WebshopModule.Products Products { get; set; }
 
         public Cms.CommonCore.Models.Visitor Visitor { get; set; }
+
+        public List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> StoredItems { get; set; }
+
+        public List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> OpenedItems { get; set; }
+
+        public CompanyGroup.Dto.WebshopModule.ShoppingCart ActiveCart { get; set; } 
+
+        public bool ShoppingCartOpenStatus { get; set; }
+
+        public bool CatalogueOpenStatus { get; set; }
+
+        public CompanyGroup.Dto.PartnerModule.DeliveryAddresses DeliveryAddresses { get; set; }
+
+        public CompanyGroup.Dto.WebshopModule.BannerList BannerList { get; set; }
     }
+
 }

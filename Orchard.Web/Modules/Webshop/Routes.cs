@@ -42,6 +42,20 @@ namespace Cms.Webshop {
                              }, 
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
+                                                         "Webshop/Catalogue/Detail",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Webshop"},
+                                                                                      {"controller", "Catalogue"},
+                                                                                      {"action", "Detail"}
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Webshop"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             }, 
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
                                                          "Webshop/Catalogue/{ProductId}/Details",
                                                          new RouteValueDictionary {
                                                                                       {"area", "Webshop"},
@@ -55,6 +69,20 @@ namespace Cms.Webshop {
                                                          },
                                                          new MvcRouteHandler())
                              }, 
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
+                                                         "Webshop/Catalogue/PictureItem",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Webshop"},
+                                                                                      {"controller", "Catalogue"},
+                                                                                      {"action", "Picture"},
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Webshop"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             },
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
                                                          "Webshop/Catalogue/{productId}/{recId}/{dataAreaId}/{maxWidth}/{maxHeight}/Picture",

@@ -41,7 +41,7 @@ namespace Webshop
 
             manifest.DefineScript("JQuery_MouseWheel").SetUrl("jquery.mousewheel-3.0.4.pack.js", "jquery.mousewheel-3.0.4.pack.js").SetVersion("3.0.4").SetDependencies("jQuery");
 
-            manifest.DefineScript("JQuery_MultiSelect").SetUrl("jquery.multiselect.js", "jquery.multiselect.js").SetVersion("1.12.0").SetDependencies("jQuery");
+            //manifest.DefineScript("JQuery_MultiSelect").SetUrl("jquery.multiselect.js", "jquery.multiselect.js").SetVersion("1.12.0").SetDependencies("jQuery");
 
             manifest.DefineScript("JQuery_Tabify").SetUrl("jquery.tabify.js", "jquery.tabify.js").SetVersion("1.12.0").SetDependencies("jQuery");
 
@@ -74,6 +74,10 @@ namespace Webshop
             manifest.DefineScript("Catalogue").SetUrl("catalogue.model.js", "catalogue.model.js").SetVersion("1.0.0").SetDependencies("Knockout");
 
             manifest.DefineScript("Requests").SetUrl("catalogue.model.js", "application.requests.js").SetVersion("1.0.0");
+
+            manifest.DefineScript("Ember").SetUrl("ember-0.9.8.1.min.js", "ember-0.9.8.1.js").SetVersion("0.9.8");
+
+            manifest.DefineScript("App").SetUrl("app.js", "app.js").SetVersion("1.0.0");
         }
     }
 }

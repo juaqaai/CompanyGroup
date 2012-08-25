@@ -11,7 +11,13 @@ body {
     margin-bottom: 0px;
     margin-top: 10px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
+
+#tooltip { position:absolute; border:1px solid #333; background:#f7f5d1; padding:2px 5px; color:#333; display:none; }   
+#preview { position:absolute; border:1px solid #ccc; background:#333; padding:5px; display:none; color:#fff; }
+#screenshot { position:absolute; border:1px solid #ccc; background:#333; padding:5px; display:none; color:#fff; }
+
 #preloader {
     height: 100%;
     width: 100%;
@@ -20,10 +26,10 @@ body {
     top: 0;
     z-index: 3997;
     background-color: #000;
-    filter: alpha(opacity=50); 
-    -khtml-opacity: 0.50;      
-    -moz-opacity: 0.50;       
-    opacity: 0.50;           
+    /*filter: alpha(opacity=50);*/ 
+    -khtml-opacity: 0.10;      
+    -moz-opacity: 0.10;       
+    opacity: 0.10;           
 }
 #cus_header1 {
     width: 100%;
@@ -42,6 +48,7 @@ body {
     position:absolute;
     margin-left: 215px;
     margin-top: -72px;
+    display:none;
 }
 
 
@@ -63,12 +70,12 @@ body {
 #cus_header2 {
     width: 100%;
     height: 70px;
-    background: #FFF;
+    background: #fff;
     margin-top: 17px;
-    background-image: url('../../../Media/images/filter_panel_bg.png');
-    -moz-opacity: .70;
-    filter: alpha(opacity=70);
-    opacity: .70;
+    /*background-image: url('../../../Media/images/filter_panel_bg.png');*/
+    -moz-opacity: .60;
+    filter: alpha(opacity=60);
+    opacity: .60;
 }
 #cus_logo_and_pages_menu {
     position: absolute;
@@ -146,6 +153,13 @@ body {
     background: #fff;
     /*background:#900;*/
 }
+
+#listscroll {
+	width: 780px;
+	height:600px;
+	overflow: auto;
+}
+
 #cus_catalogue_left {
     position: relative;
     float: left;
@@ -180,7 +194,7 @@ body {
     background: #F0F0F0;
     width: 275px;
     height: auto;
-    border-top:2px #666 solid;
+    border-top:2px #333 solid;
     margin-top: -11px;
     margin-left: -5px;
     padding-right: 3px;
@@ -192,6 +206,9 @@ body {
     font-weight: bold;
     color: #666;
 }
+/*#container{
+	position:fixed;
+}*/
 #cus_banner_table hr {
     color: #f00;
     height: 1px;
@@ -240,7 +257,12 @@ body {
     font-size: 11px;
     color: #666;
 }
-#div_pager a {
+#div_pager_top a {
+    color: #666;
+    text-decoration: none;
+}
+
+#div_pager_bottom a {
     color: #666;
     text-decoration: none;
 }
@@ -369,13 +391,22 @@ body {
 .expand_all {
     margin-top: 4px;
 }
-.expand_heading table tr td {
+.expand_heading_table1 {
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 2px;
     padding-right: 2px;
     background: #F0F0F0;
     border-top: 2px solid #CDCDCD;
+}
+.expand_heading_table2 {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    background: #F0F0F0;
+    border-bottom: 5px solid #fff;
+    border-top: 2px solid #fff;
 }
 .toggle_container {
     margin-top: 5px;
@@ -385,10 +416,10 @@ body {
     width: 100%;
     padding-left: 5px;
     padding-right: 5px;
-    font-size: 10px;
+    font-size: 11px;
 }
 .cus_prod_table_price {
-    font-size: 10px;
+    font-size: 11px;
 }
 .cus_prod_table_price table tr td {
     color: #fff;
@@ -420,6 +451,7 @@ body {
     color: #FFF;
     margin-right: 3px;
     margin-left: 0px;
+    display: none;
 }
 .cus_prod_table_item_name {
     color: #333;
@@ -429,25 +461,26 @@ body {
     color: #333;
 }
 .cus_prod_table_desc {
-    width: 390px;
-    font-size: 10px;
+    width: 380px;
+    font-size: 11px;
     font-family: Verdana, Geneva, sans-serif;
     overflow: hidden;
-    height: 48px;
+    height: 40px;
     text-align: justify;
     margin-top: 0px;
     padding-right: 3px;
     cursor: pointer;
+    margin-bottom:7px;
 }
 
 .cus_teteladatok {
-    font-size: 10px;
+    font-size: 11px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     margin-top: -2px;
 }
 #cus_prod_table_desc_full {
     width: 380px;
-    font-size: 10px;
+    font-size: 11px;
     font-family: Verdana, Geneva, sans-serif;
     text-align: justify;
     margin-top: 0px;
@@ -456,12 +489,13 @@ body {
 .cus_prod_table_desc:active {
     height: auto;
     cursor: pointer;
+    padding-bottom:10px;
 }
 .cus_prod_table_morelink {
     color: #666;
 }
 .cus_prod_table_morelink a {
-    color: #C00;
+    color: #3366FF;
     text-decoration: none;
 }
 .cus_prod_table_add_compare {
@@ -483,6 +517,12 @@ body {
     width: 25px;
     font-size: 11px;
     color: #333;
+}
+
+#basket_open_button {
+    position:absolute;
+    margin-top:-65px;
+    margin-left:450px;
 }
 /************************************************ teljes háttérkép ************************************************/
 
@@ -639,6 +679,32 @@ ul#navmenu li:hover ul ul, ul#navmenu li:hover ul ul ul, ul#navmenu li.iehover u
 ul#navmenu li:hover ul, ul#navmenu ul li:hover ul, ul#navmenu ul ul li:hover ul, ul#navmenu li.iehover ul, ul#navmenu ul li.iehover ul, ul#navmenu ul ul li.iehover ul {
     display: block;
 }
+
+/************************************************ szűrés törlése ******************************************************/
+
+#cus_filterdelete_text {
+    margin-top: 8px;
+    margin-left: 30px;
+    position: absolute;
+    font-size: 11px;
+    color:#666;
+}
+
+/************************************************ lista letöltése ******************************************************/
+
+#cus_listdown_text {
+    margin-top: 8px;
+    margin-left: 10px;
+    position: absolute;
+    font-size: 11px;
+    color:#666;
+}
+
+#cus_listdown_text a {
+    color:#666;
+    text-decoration:none;
+}
+
 /************************************************ rendezés-szűrés menü ************************************************/
 
 #cus_order_text {
@@ -658,10 +724,10 @@ ul#navmenu li:hover ul, ul#navmenu ul li:hover ul, ul#navmenu ul ul li:hover ul,
 }
 .cus_list_order_panel_table input {
     padding: 6px;
-    width: 150px;
+    width: 275px;
     border-radius: 2px;
     border: solid 1px #ccc;
-    font-size: 13px;
+    font-size: 11px;
     color: #666;
 }
 /* Root = Horizontal, Secondary = Vertical */
@@ -1048,6 +1114,8 @@ ul#usermenu li:hover ul ul, ul#usermenu li:hover ul ul ul, ul#usermenu li.iehove
 ul#usermenu li:hover ul, ul#usermenu ul li:hover ul, ul#usermenu ul ul li:hover ul, ul#usermenu li.iehover ul, ul#usermenu ul li.iehover ul, ul#usermenu ul ul li.iehover ul {
     display: block;
 }
+
+
 /************************************************ lábléc copyright ***********************************************/
 
 #cus_copyright {
@@ -1139,13 +1207,15 @@ ul#usermenu li:hover ul, ul#usermenu ul li:hover ul, ul#usermenu ul ul li:hover 
 .active_basket_middle_cell {
     background-image: url('../../../media/images/basketbutton_02.png');
     background-repeat: repeat-x;
-    text-align: center;
+    text-align: right;
     font-size: 10px;
+    
 }
 #basket_panel {
     border-bottom: 3px #000 solid;
     background: #DEDEDE;
     margin-top: 3px;
+    margin-bottom:10px;
     /*background-image:url(../images/filter_panel_bg.png);*/
     /*	-moz-opacity:1;
      filter:alpha(opacity=1);
@@ -1162,7 +1232,8 @@ ul#usermenu li:hover ul, ul#usermenu ul li:hover ul, ul#usermenu ul ul li:hover 
     font-size: 11px;
 }
 .btn_basket_slide {
-    text-align: center;
+    text-align: right;
+    min-width: 280px;
     width: auto;
     height: auto;
     /*max-height:320px;*/
@@ -1261,7 +1332,7 @@ ul.tabs li a {
     float: left;
     padding: 5px;
     font-size: 10px;
-    background: #3399FF;
+    background: #3366FF;
     color: #fff;
     text-decoration: none;
 }
@@ -1483,9 +1554,10 @@ ul.tabs li a:hover {
     font-family: Helvetica;
     font-size: 12px;
     z-index: 2102;
+    
 }
 .fancybox-title-inside {
-    padding-bottom: 10px;
+    padding-bottom: 0px;
     text-align: center;
     color: #333;
     background: #fff;
@@ -1495,17 +1567,17 @@ ul.tabs li a:hover {
     padding-top: 10px;
     color: #fff;
 }
-.fancybox-title-over {
+/*.fancybox-title-over {
     position: absolute;
     bottom: 0;
     left: 0;
     color: #FFF;
     text-align: left;
-}
+}*/
 #fancybox-title-over {
     padding: 10px;
     background-image: url('../../../Media/images/fancy_title_over.png');
-    display: block;
+    display: none;
 }
 .fancybox-title-float {
     position: absolute;
@@ -1557,3 +1629,253 @@ ul.tabs li a:hover {
     font-size:11px;
     padding:10px;
 }
+
+#add_new_site {
+    background-color: #CCC;
+    background-image: url('../../../Media/images/loginpanelbg.jpg');
+    background-repeat: repeat-y;
+    background-position: center 0px;
+    color:#666;
+    font-size:11px;
+    padding:10px;
+}
+
+
+#endpage {
+    position:fixed;
+    width:100%;
+    height: 30px;
+    background: transparent;
+    bottom: 200px;
+}
+
+.html-marquee {
+    height:100px;
+    width:246px;
+    background-color:#FEF6D8;
+    padding:2px;
+    font-family:Verdana;
+    font-size:11px;
+    font-weight:normal;
+    color:#333;
+    border-width:1px;
+    border-style:dotted;
+    border-color:#ccc;
+    margin-left:5px;
+}
+.stContainer {
+    position:relative;
+    margin:0;
+    padding:0;     
+    left:1%;     
+    font: normal 12px Verdana, Arial, Helvetica, sans-serif; 
+    color:              #5A5655;
+    background-color:   #F8F8F8;
+    border:             0px solid #CCC;
+    width:985px;
+    
+}
+.stContainer div {
+  
+    position: relative;    
+    margin-top:             10px;   
+    border:             1px solid #CCC;
+    padding:            10px;   
+    border-left-width: 0 !important;
+    width:740px;
+    height:500px;
+    font: normal 12px Verdana, Arial, Helvetica, sans-serif; 
+    color:              #5A5655;   
+    background-color:   #F8F8F8;
+    text-align:left;
+    overflow:auto;   
+    float: left;
+    
+}
+.stContainer ul {
+    display:block;
+    list-style: none;    
+    float: left;
+    position: relative;    
+    padding: 0px ;
+    padding-top: 0px;   
+    padding-right: 0px; 
+    padding-left: 0;     
+    margin-top: 10px;     
+    width:205px;
+    height:520px; 
+    clear: both;
+    border: 1px solid #CCCCCC;    
+    background: #EEEEEE;
+    
+}
+.stContainer ul li{ 
+    position: relative; 
+    margin: 0;
+    padding: 0;    
+   /* border-bottom: 0px solid #E0E0E0 !important; */ 
+    border-top: 0px solid #E0E0E0;  
+    border-bottom: 1px solid #E0E0E0;      
+    float: left;
+}
+.stContainer ul li a { 
+  display:block;
+  margin:0;
+  padding:3px;
+  text-decoration: none;
+  height:64px;
+  width:200px;
+  color:#0464BB;
+  outline-style:none;
+}
+.stContainer ul li a img { 
+  display:block;
+  margin:0;
+  padding:3px;
+  /*height:50px;
+  width:50px;*/
+  float:left;
+}
+.stContainer ul li a h2 { 
+  display:block;
+  font: bold 18px Verdana, Arial, Helvetica, sans-serif;
+  float:left;
+}
+.stContainer ul li a small { 
+  font: normal 12px Verdana, Arial, Helvetica, sans-serif;
+  float:left;
+}
+.stContainer ul li a:hover {   
+  color:#FFF; 
+  background: #EA8511; 
+}
+.stContainer ul li a.sel { 
+  height:65px;
+  color:#EA8511;  
+  background: #F8F8F8;  
+  cursor:text;   
+}
+.stContainer ul li a.dis {
+  color:#CCCCCC;  
+  background: #F8F8F8;  
+  cursor:text;   
+}
+#newcontact {
+    position:relative;
+    width:auto;
+    height:auto;
+    z-index:3;
+    background-color: #fff;
+    margin-right:-5px;
+    display:none;
+}
+#newcontact_link {
+    cursor:pointer;
+}
+#dashboardtext {
+	position: absolute;
+	margin-left: 15px;
+	margin-top: 0px;
+	font-weight: bold;
+	font-size: 11px;
+	color:#666;
+}
+#dashboardtext a {
+	color:#666;
+	text-decoration:none;
+}
+#dashboardtext a:hover {
+	color:#0066FF;
+	text-decoration:none;
+}
+#dashboardtable {
+	margin-top: 20px;
+}
+
+#elfogad_chx {
+	position: absolute;
+	bottom:0px;
+	left:0px;
+	width:100%;
+	height:auto;
+	background:#666;
+	color:#fff;
+}
+
+#negyes_szuro {
+	width:272px;
+	padding:3px;
+	margin-bottom:15px;
+	margin-top:-8px;
+	margin-left:-5px;
+	background:#333;
+	color:#fff;
+	
+}
+
+#szamlaszuro {
+	background: #333333;
+	color: #fff;
+	padding: 4px;
+}
+
+#szamla_header {
+	background: #3366FF;
+	color: #fff;
+	padding: 2px;
+}
+
+#naptar_kezd {
+    background:#fff url('../../../Media/images/datepick.png');
+    background-repeat: no-repeat;
+    background-position: 85px;
+    padding: 2px;
+    color:#666;
+    width: 100px;
+    height: 22px;
+    font-size:11px;
+    text-align:left;
+    border:0px #ccc solid;
+}
+
+#naptar_zar {
+    background:#fff url('../../../Media/images/datepick.png');
+    background-repeat: no-repeat;
+    background-position: 85px;
+    padding: 2px;
+    color:#666;
+    width: 100px;
+    height: 22px;
+    font-size:11px;
+    text-align:left;
+    border:0px #ccc solid;
+}
+
+#naptar_kezd_rend {
+    background:#fff url('../../../Media/images/datepick.png');
+    background-repeat: no-repeat;
+    background-position: 75px;
+    padding: 2px;
+    color:#666;
+    width: 90px;
+    height: 22px;
+    font-size:11px;
+    text-align:left;
+    border:0px #ccc solid;
+}
+
+#naptar_zar_rend {
+    background:#fff url('../../../Media/images/datepick.png');
+    background-repeat: no-repeat;
+    background-position: 75px;
+    padding: 2px;
+    color:#666;
+    width: 90px;
+    height: 22px;
+    font-size:11px;
+    text-align:left;
+    border:0px #ccc solid;
+}
+
+#top-link	{ display:none; position:fixed; right:10px; bottom:50px; color:#fff; font-weight:bold; text-decoration:none; border:0px solid #900; background:#900; padding:10px; }
+

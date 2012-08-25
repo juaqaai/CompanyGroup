@@ -28,6 +28,20 @@ namespace Cms.PartnerInfo {
                              }, 
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
+                                                         "Registration",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"},
+                                                                                      {"controller", "Registration"},
+                                                                                      {"action", "Index"}
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             }, 
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
                                                          "Invoice",
                                                          new RouteValueDictionary {
                                                                                       {"area", "PartnerInfo"},

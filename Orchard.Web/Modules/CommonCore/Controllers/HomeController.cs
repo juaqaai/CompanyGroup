@@ -24,11 +24,16 @@ namespace Cms.CommonCore.Controllers
 
         protected readonly static string DataAreaId = CompanyGroup.Helpers.ConfigSettingsParser.GetString("DataAreaId", "hrp");
 
-        protected readonly static string CookieName = CompanyGroup.Helpers.ConfigSettingsParser.GetString("CookieName", "companygroup");
+        protected readonly static string CookieName = CompanyGroup.Helpers.ConfigSettingsParser.GetString("CookieName", "companygroup_hrpbsc");
 
         protected readonly static string LanguageEnglish = CompanyGroup.Helpers.ConfigSettingsParser.GetString("LanguageEnglish", "en");
 
         protected readonly static string LanguageHungarian = CompanyGroup.Helpers.ConfigSettingsParser.GetString("LanguageHungarian", "hu");
+
+        /// <summary>
+        /// alapértelmezett valutanem, ha nincs beállítva semmi, akkor ebben a valutanemben lesznek értelmezve az árak
+        /// </summary>
+        protected readonly static string DefaultCurrency = CompanyGroup.Helpers.ConfigSettingsParser.GetString("DefaultCurrency", "HUF");
 
         private static string BaseUrl(string serviceName)
         {
@@ -150,7 +155,7 @@ namespace Cms.CommonCore.Controllers
         #region "JsonResult SignIn([Bind(Prefix = "")] Cms.CommonCore.Models.SignIn request), JsonResult SignOut([Bind(Prefix = "")] Cms.CommonCore.Models.SignOut request), JsonResult VisitorInfo(), Cms.CommonCore.Models.Visitor GetVisitorInfo()"
 
         /// <summary>
-        /// Enter into the system
+        /// bejelentkezés
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -168,7 +173,8 @@ namespace Cms.CommonCore.Controllers
                 CompanyGroup.Dto.ServiceRequest.SignIn signIn = new CompanyGroup.Dto.ServiceRequest.SignIn() { DataAreaId = HomeController.DataAreaId, 
                                                                                                                IPAddress = this.Request.UserHostAddress, 
                                                                                                                Password = request.Password, 
-                                                                                                               UserName = request.UserName  };
+                                                                                                               UserName = request.UserName, 
+                                                                                                               ObjectId =  this.ReadObjectIdFromCookie() };
 
                 Cms.CommonCore.Models.Visitor visitor = this.PostJSonData<Cms.CommonCore.Models.Visitor>("CustomerService", "SignIn", signIn);
 
@@ -183,35 +189,50 @@ namespace Cms.CommonCore.Controllers
 
                     CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(visitor.CompanyId), "A bejelentkezés nem sikerült! (üres cégazonosító)");
 
-                    this.WriteObjectIdToCookie(visitor.Id);
+                    //visitor adatok http sütibe írása     
+                    this.WriteCookie(new Cms.CommonCore.Models.VisitorData(visitor.Id, visitor.LanguageId, false, false, visitor.Currency, visitor.Id));
 
                     visitor.ErrorMessage = String.Empty;
+
                 }
-                return Json(visitor);
+                return Json(new { Visitor = visitor }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
             }
             catch (CompanyGroup.Helpers.DesignByContractException ex)
             {
-                return Json(new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message });
+                return Json(new { Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message } }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
             }
-            catch { return Json(new Cms.CommonCore.Models.Visitor() { ErrorMessage = "A bejelentkezés nem sikerült! (hiba)" }); }
+            catch 
+            {
+                return Json(new { Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = "A bejelentkezés nem sikerült! (hiba)" } }, "application/json; charset=utf-8", System.Text.Encoding.UTF8); 
+            }
         }
 
-        /// Sign out from the system
+        /// <summary>
+        /// kijelentkezés
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
         public JsonResult SignOut([Bind(Prefix = "")] Cms.CommonCore.Models.SignOut request)
         {
-            Cms.CommonCore.Models.Empty empty = this.PostJSonData<Cms.CommonCore.Models.Empty>("CustomerService", "SignOut", new CompanyGroup.Dto.ServiceRequest.SignOut() { DataAreaId = HomeController.DataAreaId, ObjectId = request.ObjectId });
+            try
+            {
+                Cms.CommonCore.Models.Empty empty = this.PostJSonData<Cms.CommonCore.Models.Empty>("CustomerService", "SignOut", new CompanyGroup.Dto.ServiceRequest.SignOut() { DataAreaId = HomeController.DataAreaId, ObjectId = this.ReadObjectIdFromCookie() });
 
-            this.RemoveObjectIdFromCookie();
+                this.RemoveObjectIdFromCookie();
 
-            return Json(empty, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
+                //this.RemoveCurrencyFromCookie();
+
+                return Json(new { Visitor = new Cms.CommonCore.Models.Visitor() }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message } }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
+            }            
         }
 
         /// <summary>
-        /// retrieve visitor information
+        /// látogató adatainak kiolvasása
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -223,7 +244,7 @@ namespace Cms.CommonCore.Controllers
         }
 
         /// <summary>
-        /// retrieve visitor information from the application layer
+        /// látogató adatainak kiolvasása szerviz hívással  
         /// </summary>
         /// <returns></returns>
         protected Cms.CommonCore.Models.Visitor GetVisitorInfo()
@@ -246,6 +267,47 @@ namespace Cms.CommonCore.Controllers
             catch (Exception ex) { return new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message }; }
         }
 
+        /// <summary>
+        /// beállítja a http süti Currency mező értékét.
+        /// /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult ChangeCurrency(string currency)
+        {
+            try
+            {
+                currency = String.IsNullOrEmpty(currency) ? HomeController.DefaultCurrency : currency;
+
+                this.WriteCurrencyToCookie(currency);
+
+                Cms.CommonCore.Models.Empty empty = new Models.Empty();
+
+                return Json(empty, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
+            }
+            catch { return Json(new Cms.CommonCore.Models.Empty(), "application/json; charset=utf-8", System.Text.Encoding.UTF8); }
+        }
+
+        /// <summary>
+        /// beállítja a http süti Language mező értékét.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult ChangeLanguage(string language)
+        {
+            try
+            {
+                language = String.IsNullOrEmpty(language) ? HomeController.LanguageHungarian : language;
+
+                this.WriteLanguageToCookie(language);
+
+                Cms.CommonCore.Models.Empty empty = new Models.Empty();
+
+                return Json(empty, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
+            }
+            catch { return Json(new Cms.CommonCore.Models.Empty(), "application/json; charset=utf-8", System.Text.Encoding.UTF8); }
+        }
+
         #endregion
 
         #region "private cookie funkciók - ReadCookie, WriteCookie"
@@ -254,7 +316,7 @@ namespace Cms.CommonCore.Controllers
         /// visitor adatok kiolvasása http cookie-ból (string -> Json conversion)
         /// </summary>
         /// <returns></returns>
-        private Cms.CommonCore.Models.VisitorData ReadCookie()
+        protected Cms.CommonCore.Models.VisitorData ReadCookie()
         {
             try
             {
@@ -271,7 +333,7 @@ namespace Cms.CommonCore.Controllers
         /// visitor adatok mentése http cookie-ba
         /// </summary>
         /// <param name="visitorData"></param>
-        private void WriteCookie(Cms.CommonCore.Models.VisitorData visitorData)
+        protected void WriteCookie(Cms.CommonCore.Models.VisitorData visitorData)
         {
             try
             {
@@ -282,20 +344,13 @@ namespace Cms.CommonCore.Controllers
 
                 System.Web.HttpCookie cookie = this.Request.Cookies.Get(HomeController.CookieName);
 
-                //ha nincs cookie, akkor létrehozásra kerül
-                if (cookie == null)
+                if (cookie != null)
                 {
-                    this.Response.Cookies.Add(new System.Web.HttpCookie(HomeController.CookieName, json) { Expires = DateTime.Now.AddDays(30d) });
+                    this.Response.Cookies.Remove(HomeController.CookieName);
                 }
-                else
-                {
-                    //van cookie, értékadás, lejárati dátum beállítás történik
-                    cookie.Value = json;
 
-                    cookie.Expires = DateTime.Now.AddDays(30d);
+                this.Response.Cookies.Add(new System.Web.HttpCookie(HomeController.CookieName, json) { Expires = DateTime.Now.AddDays(30d) });
 
-                    this.Response.Cookies.Set(cookie);
-                }
             }
             catch { }
         }
@@ -358,6 +413,43 @@ namespace Cms.CommonCore.Controllers
 
         #endregion
 
+        #region "PermanentId cookie functions"
+
+        /// <summary>
+        /// read PermanentId value from http cookie
+        /// </summary>
+        /// <returns></returns>
+        protected string ReadPermanentIdFromCookie()
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                return visitorData.PermanentId;
+            }
+            catch { return String.Empty; }
+        }
+
+        /// <summary>
+        /// write the PermanentId value to http cookie (if the named cookie exists than existing cookie will be used, otherwise new cookie will be created)
+        /// The cookie expiring date is: current date + 30 day 
+        /// </summary>
+        /// <param name="objectId"></param>
+        protected void WritePermanentIdToCookie(string permanentId)
+        {
+            try
+            {
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                visitorData.PermanentId = permanentId;
+
+                this.WriteCookie(visitorData);
+            }
+            catch { }
+        }
+
+        #endregion
+
         #region "Language cookie functions (string ReadLanguageFromCookie(), void WriteLanguageToCookie(string language), void RemoveLanguageFromCookie())"
 
         /// <summary>
@@ -399,18 +491,74 @@ namespace Cms.CommonCore.Controllers
         /// delete language value from the http cookie
         /// </summary>
         /// <param name="objectId"></param>
-        protected void RemoveLanguageFromCookie()
+        //protected void RemoveLanguageFromCookie()
+        //{
+        //    try
+        //    {
+        //        Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+        //        visitorData.Language = String.Empty;
+
+        //        this.WriteCookie(visitorData);
+        //    }
+        //    catch { }
+        //}
+
+        #endregion
+
+        #region "Currency cookie functions (string ReadCurrencyFromCookie(), void WriteCurrencyToCookie(string language), void RemoveCurrencyFromCookie())"
+
+        /// <summary>
+        /// read Currency string from http cookie
+        /// </summary>
+        /// <returns></returns>
+        protected string ReadCurrencyFromCookie()
         {
             try
             {
                 Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
 
-                visitorData.Language = String.Empty;
+                return visitorData.Currency;
+            }
+            catch { return String.Empty; }
+        }
+
+        /// <summary>
+        /// write the Currency string to http cookie (if the named cookie exists than existing cookie will be used, otherwise new cookie will be created)
+        /// The cookie expiring date is: current date + 30 day 
+        /// </summary>
+        /// <param name="objectId"></param>
+        protected void WriteCurrencyToCookie(string currency)
+        {
+            try
+            {
+                CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(currency), "Currency can not be null or empty!");
+
+                Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+                visitorData.Currency = currency;
 
                 this.WriteCookie(visitorData);
             }
             catch { }
         }
+
+        /// <summary>
+        /// delete currency value from the http cookie
+        /// </summary>
+        /// <param name="objectId"></param>
+        //protected void RemoveCurrencyFromCookie()
+        //{
+        //    try
+        //    {
+        //        Cms.CommonCore.Models.VisitorData visitorData = this.ReadCookie();
+
+        //        visitorData.Currency = String.Empty;
+
+        //        this.WriteCookie(visitorData);
+        //    }
+        //    catch { }
+        //}
 
         #endregion
 
@@ -528,16 +676,11 @@ namespace Cms.CommonCore.Controllers
         /// CompanyGroup.Dto.WebshopModule.StoredShoppingCartCollection GetStoredShoppingCartCollectionByVisitor(CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor request)
         /// </summary>
         /// <returns></returns>
-        public Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection GetStoredOpenedShoppingCartCollectionByVisitor(Cms.CommonCore.Models.Visitor visitor)
+        public Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection GetStoredOpenedShoppingCartCollectionByVisitor()
         {
             try
             {
-                if (visitor == null)
-                {
-                    return new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
-                }
-
-                CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor request = new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(visitor.LanguageId, visitor.CompanyId, visitor.PersonId);
+                CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor request = new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie());
 
                 CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection>("ShoppingCartService", "GetStoredOpenedShoppingCartCollectionByVisitor", request);
 
@@ -551,9 +694,9 @@ namespace Cms.CommonCore.Controllers
         /// </summary>
         /// <param name="visitor"></param>
         /// <returns></returns>
-        public Cms.CommonCore.Models.Response.ShoppingCart GetActiveCart(Cms.CommonCore.Models.Visitor visitor)
+        public Cms.CommonCore.Models.Response.ShoppingCart GetActiveCart()
         {
-            CompanyGroup.Dto.ServiceRequest.GetActiveCart request = new CompanyGroup.Dto.ServiceRequest.GetActiveCart(visitor.LanguageId, visitor.Id);
+            CompanyGroup.Dto.ServiceRequest.GetActiveCart request = new CompanyGroup.Dto.ServiceRequest.GetActiveCart(this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie());
 
             CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "GetActiveCart", request);
 

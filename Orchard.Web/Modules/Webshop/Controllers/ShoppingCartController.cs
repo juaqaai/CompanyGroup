@@ -21,9 +21,7 @@ namespace Cms.Webshop.Controllers
         [HttpPost]
         public JsonResult GetCartByKey([Bind(Prefix = "")] Cms.Webshop.Models.GetCartByKey request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
-
-            CompanyGroup.Dto.ServiceRequest.GetCartByKey requestBody = new CompanyGroup.Dto.ServiceRequest.GetCartByKey(this.ReadLanguageFromCookie(), request.CartId, visitor.Id);
+            CompanyGroup.Dto.ServiceRequest.GetCartByKey requestBody = new CompanyGroup.Dto.ServiceRequest.GetCartByKey(this.ReadLanguageFromCookie(), request.CartId, this.ReadObjectIdFromCookie());
 
             CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "GetCartByKey", requestBody);
 
@@ -38,9 +36,7 @@ namespace Cms.Webshop.Controllers
         [HttpPost]
         public JsonResult GetCartCollectionByVisitorId([Bind(Prefix = "")] Cms.Webshop.Models.GetCartCollectionByVisitorId request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
-
-            CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor requestBody = new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(this.ReadLanguageFromCookie(), visitor.CompanyId, visitor.PersonId);
+            CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor requestBody = new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie());
 
             CompanyGroup.Dto.WebshopModule.ShoppingCartCollection response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCartCollection>("ShoppingCartService", "GetCartCollectionByVisitorId", requestBody);
 
@@ -48,37 +44,25 @@ namespace Cms.Webshop.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddCart([Bind(Prefix = "")] Cms.Webshop.Models.NewShoppingCart request)
+        public JsonResult AddCart([Bind(Prefix = "")] Cms.Webshop.Models.AddCart request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+            CompanyGroup.Dto.ServiceRequest.AddCart addCart = new CompanyGroup.Dto.ServiceRequest.AddCart(this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie(), request.Name ?? String.Empty);
 
-            CompanyGroup.Dto.ServiceRequest.NewShoppingCart newShoppingCart = new CompanyGroup.Dto.ServiceRequest.NewShoppingCart(visitor.LanguageId, visitor.Id);
+            CompanyGroup.Dto.ServiceResponse.AddCart response = this.PostJSonData<CompanyGroup.Dto.ServiceResponse.AddCart>("ShoppingCartService", "AddCart", addCart);
 
-            CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection>("ShoppingCartService", "AddCart", newShoppingCart);
+            bool shoppingCartOpenStatus = this.ReadShoppingCartOpenedFromCookie();
 
-            CompanyGroup.Dto.WebshopModule.OpenedShoppingCart openedCart = response.OpenedItems.Find(x => x.Active);
+            bool catalogueOpenStatus = this.ReadCatalogueOpenedFromCookie();
 
-            CompanyGroup.Dto.WebshopModule.StoredShoppingCart storedCart = response.StoredItems.Find(x => x.Active);
-
-            string cartId = openedCart != null ? openedCart.Id : "";
-
-            if (String.IsNullOrEmpty(cartId))
-            {
-                cartId = storedCart != null ? storedCart.Id : "";
-            }
-
-            return Json(new { Id = cartId, OpenedItems = response.OpenedItems, StoredItems = response.StoredItems }, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
+            return Json(new { ActiveCart = response.ActiveCart, OpenedCarts = response.OpenedItems, StoredCarts = response.StoredItems, ShoppingCartOpenStatus = shoppingCartOpenStatus, CatalogueOpenStatus = catalogueOpenStatus }, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
         }
 
         [HttpPost]
         public JsonResult ActivateCart([Bind(Prefix = "")] Cms.CommonCore.Models.Request.ActivateCart request)
-        { 
-             
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+        {
+            CompanyGroup.Dto.ServiceRequest.ActivateCart activateCart = new CompanyGroup.Dto.ServiceRequest.ActivateCart(request.CartId, this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie());
 
-            CompanyGroup.Dto.ServiceRequest.ActivateCart requestBody = new CompanyGroup.Dto.ServiceRequest.ActivateCart(request.CartId, visitor.LanguageId, visitor.Id);
-
-            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "ActivateCart", requestBody);
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "ActivateCart", activateCart);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
         }
@@ -86,60 +70,50 @@ namespace Cms.Webshop.Controllers
         [HttpPost]
         public JsonResult RemoveCart()
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+            CompanyGroup.Dto.ServiceRequest.RemoveCart request = new CompanyGroup.Dto.ServiceRequest.RemoveCart(this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie());
 
-            CompanyGroup.Dto.ServiceRequest.RemoveShoppingCart request = new CompanyGroup.Dto.ServiceRequest.RemoveShoppingCart(visitor.LanguageId, visitor.Id);
+            CompanyGroup.Dto.ServiceResponse.RemoveCart response = this.PostJSonData<CompanyGroup.Dto.ServiceResponse.RemoveCart>("ShoppingCartService", "RemoveCart", request);
 
-            CompanyGroup.Dto.WebshopModule.ShoppingCart shoppingCart = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "RemoveCart", request);
+            //CompanyGroup.Dto.ServiceResponse.RemoveCart response = this.PostJSonData<CompanyGroup.Dto.ServiceResponse.RemoveCart>("ShoppingCartService", "GetStoredOpenedShoppingCartCollectionByVisitor", new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(request.Language, request.VisitorId));
 
-            CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection storedOpenedShoppingCartCollection = this.PostJSonData<CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection>("ShoppingCartService", "GetStoredOpenedShoppingCartCollectionByVisitor", new CompanyGroup.Dto.ServiceRequest.GetCartCollectionByVisitor(visitor.LanguageId, visitor.CompanyId, visitor.PersonId));
-
-            return Json(new { ShoppingCart = shoppingCart, OpenedItems = storedOpenedShoppingCartCollection.OpenedItems, StoredItems = storedOpenedShoppingCartCollection.StoredItems }, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
+            return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
         }
 
-        public JsonResult SaveCart([Bind(Prefix = "")] Cms.Webshop.Models.SaveShoppingCart request)
+        public JsonResult SaveCart([Bind(Prefix = "")] Cms.Webshop.Models.SaveCart request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+            CompanyGroup.Dto.ServiceRequest.SaveCart saveCart = new CompanyGroup.Dto.ServiceRequest.SaveCart(this.ReadLanguageFromCookie(), this.ReadObjectIdFromCookie(), request.CartId, request.Name);
 
-            CompanyGroup.Dto.ServiceRequest.SaveShoppingCart saveShoppingCart = new CompanyGroup.Dto.ServiceRequest.SaveShoppingCart(visitor.LanguageId, visitor.Id, request.CartId, request.Name);
-
-            CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.StoredOpenedShoppingCartCollection>("ShoppingCartService", "SaveCart", saveShoppingCart);
+            CompanyGroup.Dto.ServiceResponse.SaveCart response = this.PostJSonData<CompanyGroup.Dto.ServiceResponse.SaveCart>("ShoppingCartService", "SaveCart", saveCart);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);        
         }
 
         [HttpPost]
-        public JsonResult AddLine([Bind(Prefix = "")] Cms.Webshop.Models.AddShoppingCartLine request)
+        public JsonResult AddLine([Bind(Prefix = "")] Cms.Webshop.Models.AddLine request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+            CompanyGroup.Dto.ServiceRequest.AddLine addLine = new CompanyGroup.Dto.ServiceRequest.AddLine(request.CartId, request.ProductId, this.ReadLanguageFromCookie(), ShoppingCartController.DataAreaId, request.Quantity, this.ReadObjectIdFromCookie());
 
-            CompanyGroup.Dto.ServiceRequest.NewShoppingCartItem newShoppingCartItem = new CompanyGroup.Dto.ServiceRequest.NewShoppingCartItem(request.CartId, request.ProductId, this.ReadLanguageFromCookie(), ShoppingCartController.DataAreaId, request.Quantity, visitor.Id);
-
-            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "AddLine", newShoppingCartItem);
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "AddLine", addLine);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
         }
 
         [HttpPost]
-        public JsonResult RemoveLine([Bind(Prefix = "")] Cms.Webshop.Models.DeleteShoppingCartItem request)
+        public JsonResult RemoveLine([Bind(Prefix = "")] Cms.Webshop.Models.RemoveLine request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+            CompanyGroup.Dto.ServiceRequest.RemoveLine removeLine = new CompanyGroup.Dto.ServiceRequest.RemoveLine(request.ProductId, this.ReadLanguageFromCookie(), ShoppingCartController.DataAreaId, this.ReadObjectIdFromCookie());
 
-            CompanyGroup.Dto.ServiceRequest.DeleteShoppingCartItem deleteShoppingCartItem = new CompanyGroup.Dto.ServiceRequest.DeleteShoppingCartItem(request.CartId, request.ProductId, visitor.LanguageId, ShoppingCartController.DataAreaId, visitor.Id);
-
-            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "RemoveLine", deleteShoppingCartItem);
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "RemoveLine", removeLine);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);
         }
 
         [HttpPost]
-        public JsonResult UpdateLineQuantity([Bind(Prefix = "")] Cms.Webshop.Models.UpdateShoppingCartItem request)
+        public JsonResult UpdateLineQuantity([Bind(Prefix = "")] Cms.Webshop.Models.UpdateLineQuantity request)
         {
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+            CompanyGroup.Dto.ServiceRequest.UpdateLineQuantity updateLineQuantity = new CompanyGroup.Dto.ServiceRequest.UpdateLineQuantity(request.CartId, request.ProductId, this.ReadLanguageFromCookie(), ShoppingCartController.DataAreaId, request.Quantity, this.ReadObjectIdFromCookie());
 
-            CompanyGroup.Dto.ServiceRequest.UpdateShoppingCartItem updateShoppingCartItem = new CompanyGroup.Dto.ServiceRequest.UpdateShoppingCartItem(request.CartId, request.ProductId, visitor.LanguageId, ShoppingCartController.DataAreaId, request.Quantity, visitor.Id);
-
-            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "UpdateLineQuantity", updateShoppingCartItem);
+            CompanyGroup.Dto.WebshopModule.ShoppingCart response = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCart>("ShoppingCartService", "UpdateLineQuantity", updateLineQuantity);
 
             return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.DenyGet);        
         }

@@ -19,6 +19,22 @@ namespace Cms.CommonCore.Models.Response
         public string ErrorMessage { get; set; }
     }
 
+    public class StoredShoppingCartCollection : List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart>
+    {
+        public StoredShoppingCartCollection(List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> storedShoppingCarts)
+        {
+            this.AddRange(storedShoppingCarts);
+        }
+    }
+
+    public class OpenedShoppingCartCollection : List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart>
+    {
+        public OpenedShoppingCartCollection(List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> openedShoppingCarts)
+        {
+            this.AddRange(openedShoppingCarts);
+        }
+    }
+
     public class ShoppingCart : CompanyGroup.Dto.WebshopModule.ShoppingCart
     {
         public ShoppingCart(string id, List<CompanyGroup.Dto.WebshopModule.ShoppingCartItem> items, double sumTotal)

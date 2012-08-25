@@ -1,66 +1,262 @@
-﻿//var CompanyGroupCms = CompanyGroupCms || {};
+﻿var CompanyGroupCms = CompanyGroupCms || {};
 
-//CompanyGroupCms.Models = CompanyGroupCms.Models || {};
+CompanyGroupCms.Visitor = (function () {
 
-//CompanyGroupCms.Models.SignInRequest = (function (userName, password, serviceUrl, token) {
-//    var _userName = userName;
-//    var _password = password;
-//    var _serviceUrl = serviceUrl;
-//    var _token = token;
+    /*
+    this.Id = String.Empty;
+    this.Permission = new Permission();
+    this.Roles = new List<string>();
+    this.History = new List<string>();
+    */
+    var companyId = '';
+    var companyName = '';
+    var currency = '';
+    var inventLocation = '';
+    var languageId = '';
+    var paymTermId = '';
+    var personId = '';
+    var personName = '';
+    var isValidLogin = false;
+    var isWebAdministrator = false;
+    var invoiceInfoEnabled = false;
+    var priceListDownloadEnabled = false;
+    var canOrder = false;
+    var recieveGoods = false;
+    var representativeId = '';
+    var representativeName = '';
+    var representativeEmail = '';
+    var representativePhone = '';
+    var representativeMobile = '';
+    var bscAuthorized = false;
+    var hrpAuthorized = false;
+    var loaded = false;
 
-//    return {
-//        getUserName: function () {
-//            return _userName;
-//        },
-//        setUserName: function (value) {
-//            _userName = value;
-//        },
-//        getPassword: function () {
-//            return _password;
-//        },
-//        setPassword: function (value) {
-//            _password = value;
-//        },
-//        getServiceUrl: function () {
-//            return _serviceUrl;
-//        },
-//        setServiceUrl: function (value) {
-//            _serviceUrl = value;
-//        },
-//        getToken: function () {
-//            return _token;
-//        },
-//        setToken: function (value) {
-//            _token = value;
-//        }
-//    };
-//} ());
+    var instance;
 
-//CompanyGroupCms.Models.SignInRequest.getPassword();
+    function create() {
+        return {
+            CompanyId: function () {
+                return companyId;
+            },
+            CompanyName: function () {
+                return companyName;
+            },
+            Currency: function () {
+                return currency;
+            },
+            setCurrency: function (value) {
+                currency = value;
+            }, 
+            InventLocation: function () {
+                return inventLocation;
+            },
+            LanguageId: function () {
+                return languageId;
+            },
+            setLanguageId: function (value) {
+                languageId = value;
+            },
+            InverseLanguageId: function () {
+                return (languageId === 'HU') ? 'EN' : 'HU';
+            },
+            PaymTermId: function () {
+                return paymTermId;
+            },
+            PersonId: function () {
+                return personId;
+            },
+            PersonName: function () {
+                return personName;
+            },
+            IsValidLogin: function () {
+                return isValidLogin;
+            },
+            IsWebAdministrator: function () {
+                return isWebAdministrator;
+            },
+            InvoiceInfoEnabled: function () {
+                return invoiceInfoEnabled;
+            },
+            PriceListDownloadEnabled: function () {
+                return priceListDownloadEnabled;
+            },
+            CanOrder: function () {
+                return canOrder;
+            },
+            RecieveGoods: function () {
+                return recieveGoods;
+            },
+            IsLoaded: function () {
+                return loaded;
+            },
+            SeLoaded: function (loaded) {
+                this.loaded = loaded;
+            },
+            RepresentativeId: function () {
+                return representativeId;
+            },
+            RepresentativeName: function () {
+                return representativeName;
+            },
+            RepresentativeEmail: function () {
+                return representativeEmail;
+            },
+            RepresentativePhone: function () {
+                return representativePhone;
+            },
+            RepresentativeMobile: function () {
+                return representativeMobile;
+            },
+            BscAuthorized: function () {
+                return bscAuthorized;
+            },
+            HrpAuthorized: function () {
+                return hrpAuthorized;
+            },
+            Clear: function () {
+                companyId = '';
+                companyName = '';
+                currency = '';
+                inventLocation = '';
+                languageId = '';
+                paymTermId = '';
+                personId = '';
+                personName = '';
+                isValidLogin = false;
+                isWebAdministrator = false;
+                invoiceInfoEnabled = false;
+                priceListDownloadEnabled = false;
+                canOrder = false;
+                recieveGoods = false;
+                loaded = false;
+                representativeId = '';
+                representativeName = '';
+                representativeEmail = '';
+                representativePhone = '';
+                representativeMobile = '';
+                bscAuthorized = false;
+                hrpAuthorized = false;
+            },
+            Set: function (data) {
+                companyId = data.CompanyId;
+                companyName = data.CompanyName;
+                currency = data.Currency;
+                inventLocation = data.InventLocation;
+                languageId = data.LanguageId;
+                paymTermId = data.PaymTermId;
+                personId = data.PersonId;
+                personName = data.PersonName;
+                isValidLogin = data.IsValidLogin;
+                isWebAdministrator = data.IsWebAdministrator;
+                invoiceInfoEnabled = data.InvoiceInfoEnabled;
+                priceListDownloadEnabled = data.PriceListDownloadEnabled;
+                canOrder = data.CanOrder;
+                recieveGoods = data.RecieveGoods;
+                loaded = true;
+                representativeId = data.Representative.Id;
+                representativeName = data.Representative.Name;
+                representativeEmail = data.Representative.Email;
+                representativePhone = data.Representative.Phone;
+                representativeMobile = data.Representative.Mobile;
+                bscAuthorized = data.BscAuthorized;
+                hrpAuthorized = data.HrpAuthorized;
+            }
+        }
+    };
+    return {
+        Instance: function () {
+            if (!instance) {
+                instance = create();
+            }
+            return instance;
+        }
+    }
+})();
 
-var CompanyGroupCms = CompanyGroupCms || {};
-
-CompanyGroupCms.VisitorInfo = function () {
-
-    var self = this;
-
-    self.companyName = ko.observable('');
-
-    self.personName = ko.observable('');
-
-    self.isValidLogin = ko.observable(false);
-
-    self.isWebAdministrator = ko.observable(false);
-
-    self.invoiceInfoEnabled = ko.observable(false);
-
-    self.priceListDownloadEnabled = ko.observable(false);
-
-    self.canOrder = ko.observable(false);
-
-    self.recieveGoods = ko.observable(false);
-
-    self.authorizationData = function () {
+CompanyGroupCms.VisitorInfo = (function () {
+    var changeLanguage = function () {
+        var language = CompanyGroupCms.Visitor.Instance().LanguageId();
+        var data = new Object();
+        data.Language = (language === '' || language === 'HU') ? 'EN' : 'HU';
+        var dataString = $.toJSON(data);
+        $.ajax({
+            type: "POST",
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'ChangeLanguage',
+            data: dataString,
+            contentType: "application/json; charset=utf-8",
+            timeout: 10000,
+            dataType: "json",
+            processData: true,
+            success: function (result) {
+                console.log('ChangeLanguage');
+                CompanyGroupCms.Visitor.Instance().setLanguageId(data.Language);
+                $("#inverse_language_id").html(CompanyGroupCms.Visitor.Instance().InverseLanguageId());
+            },
+            error: function () {
+                alert('ChangeLanguage call failed');
+            }
+        });
+    };
+    var changeCurrency = function (value) {
+        var data = new Object();
+        data.Currency = value;
+        var dataString = $.toJSON(data);
+        $.ajax({
+            type: "POST",
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'ChangeCurrency',
+            data: dataString,
+            contentType: "application/json; charset=utf-8",
+            timeout: 10000,
+            dataType: "json",
+            processData: true,
+            success: function (result) {
+                console.log('ChangeCurrency');
+                CompanyGroupCms.Visitor.Instance().setCurrency(data.Currency);
+                if (data.Currency === 'HUF') {
+                    $("#currency_huf").css('background-color', '#900');
+                    $("#currency_eur").css('background-color', '#666');
+                    $("#currency_usd").css('background-color', '#666');
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                }
+                else if (data.Currency === 'EUR') {
+                    $("#currency_huf").css('background-color', '#666');
+                    $("#currency_eur").css('background-color', '#900');
+                    $("#currency_usd").css('background-color', '#666');
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                }
+                else {
+                    $("#currency_huf").css('background-color', '#666');
+                    $("#currency_eur").css('background-color', '#666');
+                    $("#currency_usd").css('background-color', '#900');
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                }
+            },
+            error: function () {
+                alert('ChangeCurrency call failed');
+            }
+        });
+    };
+    var initView = function () {
+        if (CompanyGroupCms.Visitor.Instance().Currency === 'HUF') {
+            $("#currency_huf").css('background-color', '#900');
+            $("#currency_eur").css('background-color', '#666');
+            $("#currency_usd").css('background-color', '#666');
+            //CompanyGroupCms.Catalogue.LoadCatalogue();
+        }
+        else if (CompanyGroupCms.Visitor.Instance().Currency === 'EUR') {
+            $("#currency_huf").css('background-color', '#666');
+            $("#currency_eur").css('background-color', '#900');
+            $("#currency_usd").css('background-color', '#666');
+            //CompanyGroupCms.Catalogue.LoadCatalogue();
+        }
+        else {
+            $("#currency_huf").css('background-color', '#666');
+            $("#currency_eur").css('background-color', '#666');
+            $("#currency_usd").css('background-color', '#900');
+            //CompanyGroupCms.Catalogue.LoadCatalogue();
+        }
+    };
+    var authorize = function () {
         var data = new Object();
         var dataString = $.toJSON(data);
         $.ajax({
@@ -73,45 +269,67 @@ CompanyGroupCms.VisitorInfo = function () {
             processData: true,
             success: function (result) {
                 if (result) {
-                    self.isValidLogin(result.IsValidLogin);
-                    self.companyName(result.CompanyName);
-                    self.personName(result.PersonName);
-                    self.isWebAdministrator(result.Permission.IsWebAdministrator);
-                    self.invoiceInfoEnabled(result.Permission.InvoiceInfoEnabled);
-                    self.priceListDownloadEnabled(result.Permission.PriceListDownloadEnabled);
-                    self.canOrder(result.Permission.CanOrder);
-                    self.recieveGoods(result.Permission.RecieveGoods);
+                    CompanyGroupCms.Visitor.Instance().Set(result);
+                    $("#visitorInfoTemplate").tmpl(CompanyGroupCms.Visitor.Instance()).appendTo("#cus_header1");
+                    $("#usermenuTemplate").tmpl(CompanyGroupCms.Visitor.Instance()).appendTo("#usermenuContainer");
+                    $("#quickmenuTemplate").tmpl(CompanyGroupCms.Visitor.Instance()).appendTo("#quickmenuContainer");
                 }
                 else {
-                    alert('authorizationData result failed');
+                    alert('authorize result failed');
                 }
             },
             error: function () {
-                alert('authorizationData call failed');
+                alert('authorize call failed');
             }
         });
     };
-    this.signOut = function () {
+    var signOut = function () {
         var data = new Object();
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'SignOut',
+            url: CompanyGroupCms.Constants.Instance().getSignOutServiceUrl(),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
             dataType: "json",
             processData: true,
             success: function (result) {
-                if (result) {
-                    self.isValidLogin(false);
-                    self.companyName('');
-                    self.personName('');
-                    self.isWebAdministrator(false);
-                    self.invoiceInfoEnabled(false);
-                    self.priceListDownloadEnabled(false);
-                    self.canOrder(false);
-                    self.recieveGoods(false);
+                if (!result.Visitor.IsValidLogin) {
+                    CompanyGroupCms.Visitor.Instance().Clear();
+                    $("#cus_header1").empty();
+                    $("#visitorInfoTemplate").tmpl(result.Visitor).appendTo("#cus_header1");
+                    $("#quickmenuContainer").empty();
+                    $("#quickmenuTemplate").tmpl(result.Visitor).appendTo("#quickmenuContainer");
+                    $("#usermenuContainer").empty();
+                    $("#usermenuTemplate").tmpl(result.Visitor).appendTo("#usermenuContainer");
+                    //webshop oldal
+                    if (CompanyGroupCms.Constants.Instance().isEqualModule('webshop')) {
+                        $("#div_pager_top").empty();
+                        $("#pagerTemplateTop").tmpl(result.Products).appendTo("#div_pager_top");
+                        $("#div_pager_bottom").empty();
+                        $("#pagerTemplateBottom").tmpl(result.Products).appendTo("#div_pager_bottom");
+                        $("#div_catalogue").empty();
+                        $("#productTemplate").tmpl(result).appendTo("#div_catalogue");
+                        $("#catalogueSequenceContainer").empty();
+                        $("#catalogueSequenceTemplate").tmpl(result.Visitor).appendTo("#catalogueSequenceContainer");
+                        $("#catalogueDownloadContainer").empty();
+                        $("#catalogueDownloadTemplate").tmpl(result.Visitor).appendTo("#catalogueDownloadContainer");
+                        $("#basket_open_button").empty();
+                        $("#shoppingCartSummaryTemplate").tmpl(result).appendTo("#basket_open_button");
+                        $("#cus_filter_price").empty();
+                        $("#priceFilterTemplate").tmpl(result.Visitor).appendTo("#cus_filter_price");
+
+                        CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId('');
+                        CompanyGroupCms.ShoppingCartSummary.Instance().Init(result.Visitor.IsValidLogin, 0);
+                        $("#shoppingCartSummaryTemplate").tmpl(CompanyGroupCms.ShoppingCartSummary.Instance()).appendTo("#basket_open_button");
+                        $("#cus_basket_menu").empty();
+                        $("#shoppingCartHeaderTemplate").tmpl(result).appendTo("#cus_basket_menu");
+                        $("#cus_basket").empty();
+                        $("#shoppingCartLineTemplate").tmpl(result.ActiveCart).appendTo("#cus_basket");
+
+                        $("#deliveryAddressTemplate").tmpl(result.DeliveryAddresses).appendTo("#deliveryAddressContainer");
+                    }
                 }
                 else {
                     alert('SignOut result failed');
@@ -122,8 +340,16 @@ CompanyGroupCms.VisitorInfo = function () {
             }
         });
     };
-
-    this.signIn = function (userName, password, token) {
+    var showSignInPanel = function () {
+        $.fancybox({
+                    href : '#div_login',
+                    autoDimensions: true,
+                    autoScale: false,
+                    transitionIn: 'fade',
+                    transitionOut: 'fade'
+                });  
+    };
+    var signIn = function (userName, password, token) {
         var data = new Object();
         data.UserName = userName;
         data.Password = password;
@@ -131,27 +357,53 @@ CompanyGroupCms.VisitorInfo = function () {
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'SignIn',
+            url: CompanyGroupCms.Constants.Instance().getSignInServiceUrl(),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
             dataType: "json",
             processData: true,
             success: function (result) {
-                if (result.IsValidLogin) {
+                if (result.Visitor.IsValidLogin) {
                     $.fancybox.close();
-                    self.isValidLogin(result.IsValidLogin);
-                    self.companyName(result.CompanyName);
-                    self.personName(result.PersonName);
-                    self.isWebAdministrator(result.Permission.IsWebAdministrator);
-                    self.invoiceInfoEnabled(result.Permission.InvoiceInfoEnabled);
-                    self.priceListDownloadEnabled(result.Permission.PriceListDownloadEnabled);
-                    self.canOrder(result.Permission.CanOrder);
-                    self.recieveGoods(result.Permission.RecieveGoods);
+                    CompanyGroupCms.Visitor.Instance().Set(result.Visitor);
+                    $("#cus_header1").empty();
+                    $("#visitorInfoTemplate").tmpl(result.Visitor).appendTo("#cus_header1");
+                    $("#quickmenuContainer").empty();
+                    $("#quickmenuTemplate").tmpl(result.Visitor).appendTo("#quickmenuContainer");
+                    $("#usermenuContainer").empty();
+                    $("#usermenuTemplate").tmpl(result.Visitor).appendTo("#usermenuContainer");
+                    //webshop oldal
+                    if (CompanyGroupCms.Constants.Instance().isEqualModule('webshop')) {
+                        $("#div_pager_top").empty();
+                        $("#pagerTemplateTop").tmpl(result.Products).appendTo("#div_pager_top");
+                        $("#div_pager_bottom").empty();
+                        $("#pagerTemplateBottom").tmpl(result.Products).appendTo("#div_pager_bottom");
+                        $("#div_catalogue").empty();
+                        $("#productTemplate").tmpl(result).appendTo("#div_catalogue");
+                        $("#catalogueSequenceContainer").empty();
+                        $("#catalogueSequenceTemplate").tmpl(result.Visitor).appendTo("#catalogueSequenceContainer");
+                        $("#catalogueDownloadContainer").empty();
+                        $("#catalogueDownloadTemplate").tmpl(result.Visitor).appendTo("#catalogueDownloadContainer");
+                        $("#basket_open_button").empty();
+                        $("#shoppingCartSummaryTemplate").tmpl(result).appendTo("#basket_open_button");
+                        $("#cus_filter_price").empty();
+                        $("#priceFilterTemplate").tmpl(result.Visitor).appendTo("#cus_filter_price");
+
+                        CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(result.ActiveCart.Id);
+                        CompanyGroupCms.ShoppingCartSummary.Instance().Init(result.Visitor.IsValidLogin, result.ActiveCart.SumTotal);
+                        $("#shoppingCartSummaryTemplate").tmpl(CompanyGroupCms.ShoppingCartSummary.Instance()).appendTo("#basket_open_button");
+                        $("#cus_basket_menu").empty();
+                        $("#shoppingCartHeaderTemplate").tmpl(result).appendTo("#cus_basket_menu");
+                        $("#cus_basket").empty();
+                        $("#shoppingCartLineTemplate").tmpl(result.ActiveCart).appendTo("#cus_basket");
+
+                        $("#deliveryAddressTemplate").tmpl(result.DeliveryAddresses).appendTo("#deliveryAddressContainer");
+                    }
                 }
                 else {
-                    $("#login_errors").html(result.ErrorMessage);
-                    $("#login_errors").show(); ;
+                    $("#login_errors").html(result.Visitor.ErrorMessage);
+                    $("#login_errors").show();
                 }
             },
             error: function () {
@@ -159,37 +411,34 @@ CompanyGroupCms.VisitorInfo = function () {
             }
         });
     };
-
-    //			    return {
-    //			        isValidLogin: ko.computed({
-    //			            read: function () {
-    //			                return _isValidLogin;
-    //			            },
-    //			            write: function (value) {
-    //			                _isValidLogin(value);
-    //			            },
-    //			            owner: this
-    //			        }),
-    //			    };
-};    //());
-
-
-CompanyGroupCms.VisitorInfoFactory = (function () {
-    var createVisitorInfo = function (initialData) {
-        var visitor = new CompanyGroupCms.VisitorInfo();
-        visitor.companyName(initialData.CompanyName);
-        visitor.personName(initialData.PersonName);
-        visitor.isValidLogin(initialData.IsValidLogin);
-        visitor.isWebAdministrator(initialData.IsWebAdministrator);
-        visitor.invoiceInfoEnabled(initialData.InvoiceInfoEnabled);
-        visitor.priceListDownloadEnabled(initialData.PriceListDownloadEnabled);
-        visitor.canOrder(initialData.CanOrder);
-        visitor.recieveGoods(initialData.RecieveGoods);
-        return visitor;
-    }
     return {
-        Create: createVisitorInfo
+        Authorize: authorize,
+        SignOut: signOut,
+        SignIn: signIn,
+        ShowSignInPanel: showSignInPanel,
+        ChangeLanguage: changeLanguage,
+        ChangeCurrency: changeCurrency,
+        InitView: initView
     };
 })();
+
+//CompanyGroupCms.VisitorInfo.ChangeCurrency('HU');
+//CompanyGroupCms.VisitorInfoFactory = (function () {
+//    var createVisitorInfo = function (initialData) {
+//        var visitor = new CompanyGroupCms.VisitorInfo();
+//        visitor.companyName(initialData.CompanyName);
+//        visitor.personName(initialData.PersonName);
+//        visitor.isValidLogin(initialData.IsValidLogin);
+//        visitor.isWebAdministrator(initialData.IsWebAdministrator);
+//        visitor.invoiceInfoEnabled(initialData.InvoiceInfoEnabled);
+//        visitor.priceListDownloadEnabled(initialData.PriceListDownloadEnabled);
+//        visitor.canOrder(initialData.CanOrder);
+//        visitor.recieveGoods(initialData.RecieveGoods);
+//        return visitor;
+//    }
+//    return {
+//        Create: createVisitorInfo
+//    };
+//})();
 
 //CompanyGroupCms.VisitorInfoFactory.create(companyName, personName, isValidLogin, isWebAdministrator, invoiceInfoEnabled, priceListDownloadEnabled, canOrder, recieveGoods);

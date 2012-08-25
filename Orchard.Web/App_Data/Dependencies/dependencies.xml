@@ -34,13 +34,7 @@
     <ModuleName>CommonCore</ModuleName>
     <VirtualPath>~/Modules/CommonCore/bin/CommonCore.dll</VirtualPath>
     <LoaderName>PrecompiledExtensionLoader</LoaderName>
-    <References>
-      <Reference>
-        <Name>CompanyGroup.Helpers</Name>
-        <LoaderName>PrecompiledExtensionLoader</LoaderName>
-        <VirtualPath>~/Modules/CommonCore/bin/CompanyGroup.Helpers.dll</VirtualPath>
-      </Reference>
-    </References>
+    <References />
   </Dependency>
   <Dependency>
     <ModuleName>Company</ModuleName>
@@ -488,18 +482,13 @@
   </Dependency>
   <Dependency>
     <ModuleName>PartnerInfo</ModuleName>
-    <VirtualPath>~/Modules/PartnerInfo/PartnerInfo.csproj</VirtualPath>
-    <LoaderName>DynamicExtensionLoader</LoaderName>
+    <VirtualPath>~/Modules/PartnerInfo/bin/PartnerInfo.dll</VirtualPath>
+    <LoaderName>PrecompiledExtensionLoader</LoaderName>
     <References>
       <Reference>
         <Name>CommonCore</Name>
         <LoaderName>PrecompiledExtensionLoader</LoaderName>
         <VirtualPath>~/Modules/CommonCore/bin/CommonCore.dll</VirtualPath>
-      </Reference>
-      <Reference>
-        <Name>CompanyGroup.Helpers</Name>
-        <LoaderName>PrecompiledExtensionLoader</LoaderName>
-        <VirtualPath>~/Modules/CommonCore/bin/CompanyGroup.Helpers.dll</VirtualPath>
       </Reference>
     </References>
   </Dependency>
@@ -609,8 +598,8 @@
   </Dependency>
   <Dependency>
     <ModuleName>Webshop</ModuleName>
-    <VirtualPath>~/Modules/Webshop/bin/Webshop.dll</VirtualPath>
-    <LoaderName>PrecompiledExtensionLoader</LoaderName>
+    <VirtualPath>~/Modules/Webshop/Webshop.csproj</VirtualPath>
+    <LoaderName>DynamicExtensionLoader</LoaderName>
     <References>
       <Reference>
         <Name>CommonCore</Name>
@@ -618,9 +607,9 @@
         <VirtualPath>~/Modules/CommonCore/bin/CommonCore.dll</VirtualPath>
       </Reference>
       <Reference>
-        <Name>CompanyGroup.Helpers</Name>
+        <Name>ExcelLibrary</Name>
         <LoaderName>PrecompiledExtensionLoader</LoaderName>
-        <VirtualPath>~/Modules/CommonCore/bin/CompanyGroup.Helpers.dll</VirtualPath>
+        <VirtualPath>~/Modules/Webshop/bin/ExcelLibrary.dll</VirtualPath>
       </Reference>
     </References>
   </Dependency>

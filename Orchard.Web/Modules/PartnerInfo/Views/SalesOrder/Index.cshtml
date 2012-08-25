@@ -1,1 +1,110 @@
-﻿<h2>@T("This is a placeholder for SalesOrder view.")</h2>
+﻿<h2>Megrendelések</h2>
+
+<style>
+    .aside-first {
+        display: none;
+    }
+    .zone-content {
+        margin-left: -297px;
+    }
+    
+    #cus_copyright {
+        margin-left: -295px;
+    }
+</style>
+
+<div id="szamlainfo">
+  <table border="0" cellspacing="5" cellpadding="2" style="width:100%; background:#333; color:#fff; padding:3px;">
+    <tr>
+      <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/checkok.png")" alt=""/></td>
+      <td nowrap="nowrap"><input type="checkbox" name="checkbox" id="checkbox" /></td>
+      <td nowrap="nowrap">Azonnal elvihető&nbsp;&nbsp;</td>
+      <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/warning.png")" alt=""/></td>
+      <td nowrap="nowrap"><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
+      <td nowrap="nowrap">Raktárközi mozgás után teljesíthető&nbsp;&nbsp;</td>
+      <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/redx.png")" alt=""/></td>
+      <td nowrap="nowrap"><input type="checkbox" name="checkbox3" id="checkbox3" /></td>
+      <td width="100%" nowrap="nowrap">Beszerzés után elérhető</td>
+      <td nowrap="nowrap">Kezdő dátum:&nbsp;</td>
+      <td nowrap="nowrap"><input name="naptar_kezd_rend" id="naptar_kezd_rend" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
+      
+      <td nowrap="nowrap">Záró dátum:&nbsp;</td>
+      <td nowrap="nowrap"><input name="naptar_zar_rend" id="naptar_zar_rend" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
+    </tr>
+  </table>
+  <br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+      <td colspan="7" nowrap="nowrap">
+      <div id="szamla_header">
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td><strong>Megrendelés száma:</strong> HI-123456789</td>
+          <td><strong>Megrendelés kelte:</strong> 2012.08.17.</td>
+          </tr>
+      </table>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="7"><hr size="1" noshade="noshade" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap"><strong>Azonosító</strong></td>
+      <td nowrap="nowrap"><strong>Megnevezés</strong></td>
+      <td width="100%">&nbsp;</td>
+      <td nowrap="nowrap"><strong>Mennyiség [ db ]</strong></td>
+      <td align="right" nowrap="nowrap"><strong>Egységár</strong></td>
+      <td align="right" nowrap="nowrap"><strong>Raktárkód</strong></td>
+      <td align="right" nowrap="nowrap"><strong>Státusz</strong></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">TS2GXDPCM</td>
+      <td nowrap="nowrap">Transcend XD Card 2 GB M type</td>
+      <td width="100%">&nbsp;</td>
+      <td align="center" nowrap="nowrap">1</td>
+      <td style="text-align: right;" nowrap="nowrap">4 220 Ft</td>
+      <td style="text-align: right;" nowrap="nowrap">Belső</td>
+      <td style="text-align: center;" nowrap="nowrap"><img src="@Url.Content("~/Media/images/checkok.png")" alt=""/></td>
+    </tr>
+    <tr>
+      <td colspan="7"><hr size="1" noshade="noshade" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td width="100%">&nbsp;</td>
+      <td colspan="2" nowrap="nowrap">Netto összesen:</td>
+      <td align="right" nowrap="nowrap">&nbsp;</td>
+      <td style="text-align: right;" nowrap="nowrap">4 220 Ft</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td width="100%">&nbsp;</td>
+      <td colspan="2" nowrap="nowrap">Brutto összesen:</td>
+      <td align="right" nowrap="nowrap">&nbsp;</td>
+      <td style="text-align: right;" nowrap="nowrap">5 275 Ft</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td colspan="4" nowrap="nowrap"><hr size="1" noshade="noshade" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td colspan="3" nowrap="nowrap"><strong>Összes megrendelés netto összesen</strong></td>
+      <td style="text-align: right;" nowrap="nowrap"><strong>4 220 Ft</strong></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td width="100%">&nbsp;</td>
+      <td colspan="3" style="color: #900;" nowrap="nowrap"><strong>Összes megrendelés brutto összesen</strong></td>
+      <td style="text-align: right; color: #900;" nowrap="nowrap"><strong>5 275 Ft</strong></td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,487 @@
+﻿@model Cms.Webshop.Models.Catalogue
+
+@*gyártó, jelleg1, jelleg2 struktúrák*@
+@*@Html.Partial("CatalogueFilter", Model.Structures)*@
+
+@*@foreach (var product in @Model.Products.Items)
+{
+    <span>Használt:</span> @product.Bargain.ToString(); <br/>
+
+    <span>Pénznem:</span> @product.Currency; <br/>
+    <span>Leírás:</span> @product.Description; <br/>    
+
+    <span>Leértékelt:</span> @product.Discount.ToString(); <br/>
+    <span>Jelleg1:</span> @product.FirstLevelCategory.Name; <br/>
+    <span>Garancia módja:</span><br/> @product.GarantyMode; <br/>
+    <span>Garancia ideje:</span> @product.GarantyTime; <br/>
+    <span>Belső készlet:</span> @product.InnerStock.ToString(); <br/>
+    <span>Kosárban:</span> @product.IsInCart.ToString(); <br/>
+    
+    <span>Készleten van-e:</span> @product.IsInStock.ToString(); <br/>
+    <span>Terméknév:</span> @product.ItemName; <br/>
+    <span>Aktív / kifutó:</span> @product.ItemState.ToString(); <br/>
+    <span>Gyártó:</span> @product.Manufacturer.Name; <br/>
+    <span>Új termék:</span> @product.New.ToString(); <br/>
+    <span>Külső raktár készlete:</span> @product.OuterStock.ToString(); <br/>
+    <span>Cikkszám:</span> @product.PartNumber.ToString(); <br/>
+    <span>Képek száma:</span> @product.Pictures.Items.Count.ToString(); <br/>
+    <span>Ár:</span> @product.Price.ToString(); <br/>
+    <span>Termékkód:</span> @product.ProductId.ToString(); <br/>
+    
+    <span>Termékmanager email:</span> @product.ProductManager.Email; <br/>
+    <span>Termékmanager telefon:</span> @product.ProductManager.Extension; <br/>
+    <span>Termékmanager mobile:</span> @product.ProductManager.Mobile; <br/>
+    <span>Termékmanager név:</span> @product.ProductManager.Name; <br/>
+   
+    
+    <span>Jelleg2:</span> @product.SecondLevelCategory.Name; <br/>
+    <span>VÁrható beérkezés dátuma:</span> @product.ShippingDate.ToString(); <br/>
+    <span>Speciális akció? (hírlevél):</span> @product.Special.ToString(); <br/>
+    <span>Jelleg3:</span> @product.ThirdLevelCategory.Name; <br/>
+    <hr/>
+}*@
+
+    @*<div id="cus_catalogue_container">*@
+		<div id="cus_catalogue_left">
+		<div id="cus_banner_table">
+			<form method="post" action="" id="frm_structure">
+				<div id="container">
+                    <!-- ko if: visitorInfo.isValidLogin() -->
+					<div id="cus_filter_price">
+						<!-- ide kell befaragni valahogy az ASIDEFIRST gyári modult -->
+						Ár szerinti keresés
+						<br />
+						<select name="select" id="select" style="margin-top:4px; padding:4px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666; width: 50px;">
+							<option>&gt;=</option>
+							<option>&lt;=</option>
+						</select>
+						<input name="textfield" type="text" id="textfield" size="9" style="margin-top:4px; padding:5px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666; width: 75px;"/>
+						<!-- <input type="submit" name="button" id="button" value="Keres" /> -->
+						<div id="cus_refresh_icon">
+							Frissítés<!-- <img src="@Url.Content("~/Media/images/refresh.png")" /> -->
+						</div>
+					</div><!-- /ko -->
+					<div id="cus_filter_1">
+						Gyártók kiválasztása
+						<br />
+						<select id="manufacturerList" data-placeholder="Gyártók..." class="chosen" multiple style="width:270px;">
+							<option value=""></option>
+							@foreach (var manufacturer in @Model.Structures.Manufacturers)
+							{ <option value="@manufacturer.Id">@manufacturer.Name </option>
+							}
+						</select>
+					</div>
+					<div id="cus_filter_2">
+						Jelleg 1 kiválasztása
+						<br />
+						<select id="category1List" data-placeholder="Jelleg - 1..." class="chosen" multiple style="width:270px;">
+							<option value=""></option>
+							@foreach (var category1 in @Model.Structures.FirstLevelCategories)
+							{ <option value="@category1.Id">@category1.Name</option>
+							}
+						</select>
+					</div>
+					<div id="cus_filter_3">
+						Jelleg 2 kiválasztása
+						<br />
+						<select id="category2List" data-placeholder="Jelleg - 2..." class="chosen" multiple style="width:270px;">
+							<option value=""></option>
+							@foreach (var category2 in @Model.Structures.SecondLevelCategories)
+							{ <option value="@category2.Id">@category2.Name</option>
+							}
+						</select>
+					</div>
+					<div id="cus_filter_4">
+						Paraméterek szűrése 1 (többszöröződik)
+						<br />
+						<select id="category3List" data-placeholder="Paraméter 1..." class="chosen" multiple style="width:270px;">
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+			</form>
+			@*<div id="cus_parameter_panel"></div>
+			*@
+			
+			<p align="center"><marquee data-bind="visible: visitorInfo.isValidLogin()" class="html-marquee" direction="up" behavior="scroll" scrollamount="1" >Felhasználónak küldött értesítő üzenetek szövege, <a href="#">linkekkel</a>, a kapcsolódó hivatkozáshoz...<br /><br />Felhasználónak küldött értesítő üzenetek szövege, linkekkel, a kapcsolódó hivatkozáshoz...</marquee>
+			</p>
+			
+			<p id="bannerpelda" align="center">
+			
+				<script>
+					$(document).ready(function(){
+  					$('#bannerpelda').flash(
+   					 {
+     					 src: '@Url.Content("~/Media/banners/samsung.swf")',
+     					 wmode: 'transparent',
+     					 width: 250,
+      					height: 400
+   					 },
+  					  { version: 8 }
+ 					 );
+					});	
+				</script>
+			</p>
+		</div>
+	</div>
+	<div id="cus_catalogue_right">
+		@* listarendezési panel *@
+		<div id="cus_list_order_panel">
+			<table width="695" border="0" cellspacing="3" cellpadding="0">
+				<tr>
+					
+					<td>
+					<div class="expand_all">
+						<img style="cursor: pointer;" src="@Url.Content("~/Media/images/plusicon_2.png")" title="Összes kinyitása / bezárása" alt="" />
+					</div></td>
+					<td>
+					<div id="cus_delbutton">
+						<a href="@Url.Content("~/webshop/catalogue")"><div id="cus_filterdelete_text">Szűrés törlése</div><img src="@Url.Content("~/Media/images/filterdelete.png")" border="0" usemap="list_clear_vert_hor" alt="" /></a>
+					</div></td>
+					<td>
+					<ul id="navmenu_order">
+						<li>
+							<div id="cus_order_text">
+								Rendezés
+							</div>
+							<ul>
+								<!-- ko if: visitorInfo.isValidLogin() -->
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href=""><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
+											<td width="100%"><a href="javascript:void(0)" data-bind="click: function() { productList.sequenceByPriceUp($data); }">ÁR szerint</a></td>
+										</tr>
+									</table>
+								</li>
+								<!-- /ko -->
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href=""><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt=""  /> </a></td>
+											<td width="100%"><a href="javascript:void(0)" data-bind="click: function() { productList.sequenceByPartNumberUp($data); }">CIKKSZÁM szerint </a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href=""><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt=""  /> </a></td>
+											<td width="100%"><a href="javascript:void(0)" data-bind="click: function() { productList.sequenceByNameUp($data); }">NÉV szerint </a></td>
+										</tr>
+									</table>
+								</li>
+								<!-- ko if: visitorInfo.isValidLogin() -->
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href=""><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt=""  /> </a></td>
+											<td width="100%"><a href="javascript:void(0)" data-bind="click: function() { productList.sequenceByStockUp($data); }">MENNYISÉG szerint </a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href=""><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt=""  /></a></td>
+											<td width="100%"><a href="javascript:void(0)" data-bind="click: function() { productList.sequenceByGarantyUp($data); }">GARANCIA IDŐ szerint</a></td>
+										</tr>
+									</table>
+								</li>
+                                <!-- /ko -->
+							</ul>
+						</li>
+					</ul></td>
+					
+					<td align="center" width="100%" class="cus_list_order_panel_table">
+					<input onfocus="if(this.value=='név vagy cikkszám')this.value=''" onblur="if(this.value=='')this.value='név vagy cikkszám'" type="text" value="név vagy cikkszám"/>
+					</td>
+					<td class="cus_list_order_panel_table">
+                    <!-- ko if: visitorInfo.isValidLogin() -->
+                    <a href="javascript:void(0)" data-bind="click: function() { productList.downloadCatalogue($data); }"><div id="cus_listdown_text">Lista letöltése</div><img src="@Url.Content("~/Media/images/list_download.png")" border="0" hspace="1" title="Szűrt lista lementése fájlba" alt="Szűrt lista lementése fájlba" /></a>
+                    <!-- /ko -->
+                    </td>
+				</tr>
+			</table>
+			<div id="div_pager_top">
+				<table align="center" border="0" cellpadding="3" cellspacing="1">
+					<tr>
+						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
+						<td>
+                        <!-- ko if: productList.firstPageEnabled() -->
+                            <a href="javascript:void(0)" data-bind="click: function() { productList.firstPage($data); }">&lt;&lt;</a> 
+						<!-- /ko -->
+						<!-- ko if: !productList.firstPageEnabled() --> 
+                            <span style="color: #999;">&lt;&lt;</span> 
+                        <!-- /ko -->
+                        </td>
+						<td>
+                        <!-- ko if: productList.previousPageEnabled() -->
+                            <a href="javascript:void(0)" data-bind="click: function() { productList.previousPage($data); }">&lt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.previousPageEnabled() -->
+                            <span style="color: #999;">&lt;</span>
+                        <!-- /ko -->
+                        </td>
+						<td align="center">
+                            <select id="select_pager_top" data-bind="options: productList.pageItemList, optionsText: 'value', value: 'selectedPageIndex'"> </select>
+                        </td>
+						<td align="center">/</td>
+						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.lastPageIndex"></span></td>
+						<td align="right">
+                        <!-- ko if: productList.nextPageEnabled() -->
+                        <a href="javascript:void(0)" data-bind="click: function() { productList.nextPage($data); }">&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.nextPageEnabled() -->
+                        <span>&gt;</span> 
+                        <!-- /ko -->
+                        </td>
+						<td align="right"> 
+                        <!-- ko if: productList.lastPageEnabled() -->
+                        <a href="javascript:void(0)" data-bind="click: function() { productList.lastPage($data); }">&gt;&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.lastPageEnabled() -->
+                        <span>&gt;&gt;</span> 
+                        <!-- /ko -->
+                        </td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div id="cus_product_table">
+			@* listaelemek lenyíló/bezáródó *@
+			<div id="div_catalogue" class="wrapper">
+            @*termekelem eleje*@
+                <!-- ko foreach: productList.items -->
+				<span class="expand_heading">
+				    <table width="695" border="0" cellspacing="0" cellpadding="0" class="expand_heading_table1">
+				        <tr>
+				            <td valign="top"><img src="@Url.Content("~/Media/images/plusicon.png")" alt="" /></td>
+				            <td width="100%" valign="top" class="cus_prod_header_middle_cell">
+				            <span class="cus_prod_table_item_number" data-bind="text: sequenceNumber"></span><span class="cus_product_data" data-bind="text: productId"></span><br /><span class="cus_prod_table_item_name" data-bind="text: itemName"></span>
+                            <br /><span class="cus_prod_table_item_code" data-bind="text: partNumber"></span>
+				            </td>
+				            <td align="right" valign="top" nowrap="nowrap">
+                                <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+				                <table width="200" border="0" cellspacing="1" cellpadding="2">
+				                    <tr>
+				                        <td nowrap="nowrap" style="background:#3399FF; color:#fff; border:0px; text-align:right; font-size: 11px;">Ár: <strong data-bind="text: price"></strong></td>
+				                    </tr>
+				                </table>
+                                <!-- /ko -->
+				            </td>
+				        </tr>
+				    </table>
+				    </span>
+				     <table width="100%" border="0" cellspacing="1" cellpadding="0" class="expand_heading_table2">
+				                    <tr>
+				                        <td nowrap="nowrap">
+				                            <div class="cus_prod_table_morelink">
+				                                <a data-bind="attr: { href: productDetailsUrl(), title: itemName }" href="" title="Részletes termékadatlap" target="_blank">[+] Részletes adatlap</a>
+				                            </div>
+                                        </td>
+				                        <td nowrap="nowrap">
+				                            <div class="cus_prod_table_add_compare" data-bind="visible: $parent.visitorInfo.isValidLogin()"><input type="checkbox" name="checkbox" id="checkbox" /></div>
+                                        </td>
+				                        <td width="100%">
+                                        <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+                                        Összehasonlító listához ad 
+                                        <!-- /ko -->
+                                        </td>
+				                        <td nowrap="nowrap">
+				                            <div class="cus_prod_table_quantity">
+				                            <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+				                            <span>Kosárba</span>
+				                            <input type="text" data-bind="value: quantity,  valueUpdate: 'afterkeydown'" size="2" />
+				                            <span>db</span>
+				                            <!-- /ko -->
+				                            </div>
+                                        </td>
+				                        <td align="right" nowrap="nowrap">
+				                            <div class="cus_prod_table_basket">
+				                            <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+				                            <a href="javascript:void(0)"  data-bind="click: function() { $parent.shoppingCart.addLine($data); }"><img class="basketicon" src="@Url.Content("~/Media/images/basket.png")" alt="kosár" width="16" height="20" border="0" align="absmiddle" /></a>
+				                            <!-- /ko -->
+				                            </div>
+                                        </td>
+				                    </tr>
+				                </table>
+				    
+				
+				<div class="toggle_container">
+				    <div class="box">
+				        <table width="695" border="0" cellspacing="0" cellpadding="0">
+				            <tr>
+				                <td valign="top">
+				                    <div class="cus_termekkep">
+				                    <!-- ko if: pictureExist -->	
+				                    <a class="popupimg" data-bind="click: function() { $parent.productList.showPicture($data); }, attr: { href: pictureUrl(), title: itemName }"><img data-bind="attr: { src: pictureUrl(), title: itemName }" src="" width="94" height="69" alt="" /></a>
+				                    <!-- /ko -->
+                                    <!-- ko if: !pictureExist -->
+				                    <img src="@Url.Content("~/Media/images/demopic.jpg")" width="180" height="134" alt="" />
+                                    <!-- /ko -->
+				                    </div>
+                                </td>
+				                <td valign="top" class="cus_prod_table_middle_cell">
+				                    <div class="cus_prod_table_desc" data-bind="text: description"></div>
+                                </td>
+				                <td align="right" valign="top" >
+				                    <table width="200" border="0" cellspacing="1" cellpadding="2">
+				                    <tr>
+				                        <td valign="top">
+                                        <!-- ko if: $parent.visitorInfo.isValidLogin() -->
+                                        <div class="cus_teteladatok">
+                                            <!-- ko if: isInStock() -->
+				                            Belső raktár: <span data-bind="text: stock.inner()"></span><br/> 
+				                            Külső raktár: <span data-bind="text: stock.outer()"></span> 
+                                            <!-- /ko -->
+                                            <!-- ko if: !isInStock() -->
+				                            <span data-bind="visible: purchaseInProgress()">Várható érkezés: </span><span data-bind="visible: purchaseInProgress(), text: shippingDate"></span>
+				                            <span data-bind="visible: !purchaseInProgress()">Rendelhető</span>
+                                            <!-- /ko -->
+				                            <br /><span data-bind="visible: flags.bargain()">Használt: 4 600 Ft-tól </span>
+				                            <br />Garancia módja:<br/><span data-bind="text: garanty.mode()"></span>
+				                            <br />Garancia ideje:<span data-bind="text: garanty.time()"></span>
+				                            <br/><span data-bind="visible: flags.special()">hírlevél akció</span>
+				                            <br/><span data-bind="visible: flags.newItem()">új termék</span>
+				                            <br/><span data-bind="visible: flags.discount()">leértékelt</span>
+				                            <br/><span data-bind="visible: itemState == 1">kifutó</span>
+				                        </div>
+                                        <!-- /ko -->
+				                        </td>
+				                    </tr>
+				                    </table>
+
+                                </td>
+				            </tr>
+				           <!--  <tr>
+				            <td colspan="3" valign="top" class="cus_prod_table_more">
+				               
+
+                            </td>
+				        </tr> -->
+				    </table>
+				    </div>
+				</div>
+				<!-- /ko -->
+                @*termekelem vege*@
+            </div>
+			<br />@*alsó lapozó eleje*@
+			<div id="div_pager_bottom">
+				<table align="center" border="0" cellpadding="3" cellspacing="1">
+					<tr>
+						<td>Eredmény: <span data-bind="text: productList.listCount"></span></td>
+						<td>
+                        <!-- ko if: productList.firstPageEnabled() -->
+                            <a href="javascript:void(0)" data-bind="click: function() { productList.firstPage($data); }">&lt;&lt;</a> 
+						<!-- /ko -->
+						<!-- ko if: !productList.firstPageEnabled() --> 
+                            <span style="color: #999;">&lt;&lt;</span> 
+                        <!-- /ko -->
+                        </td>
+						<td>
+                        <!-- ko if: productList.previousPageEnabled() -->
+                            <a href="javascript:void(0)"  data-bind="click: function() { productList.previousPage($data); }">&lt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.previousPageEnabled() -->
+                            <span style="color: #999;">&lt;</span>
+                        <!-- /ko -->
+                        </td>
+						<td align="center">
+                            <select id="select_pager_bottom" data-bind="options: productList.pageItemList, optionsText: 'value', value: 'selectedPageIndex'"> </select>
+                        </td>
+						<td align="center">/</td>
+						<td align="center"><span id="spanTopLastPageIndex" data-bind="text: productList.lastPageIndex"></span></td>
+						<td align="right">
+                        <!-- ko if: productList.nextPageEnabled() -->
+                        <a href="javascript:void(0)" data-bind="click: function() { productList.nextPage($data); }">&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.nextPageEnabled() -->
+                        <span>&gt;</span> 
+                        <!-- /ko -->
+                        </td>
+						<td align="right"> 
+                        <!-- ko if: productList.lastPageEnabled() -->
+                        <a href="javascript:void(0)"data-bind="click: function() { productList.lastPage($data); }">&gt;&gt;</a> 
+                        <!-- /ko -->
+                        <!-- ko if: !productList.lastPageEnabled() -->
+                        <span>&gt;&gt;</span> 
+                        <!-- /ko -->
+                        </td>
+					</tr>
+				</table>
+			</div>@*alsó lapozó vége*@
+			@* ajánlott termékek blokk div *@
+			<div id="cus_recommended_prod_container">
+				<h4>Ajánlott termékeink</h4>
+				<ul id="cus_recommended_prod_content">
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/1.jpg")" width="120" height="78"  alt="" /></a><span>Első</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/2.jpg")" width="120" height="78"  alt="" /></a><span>Második</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/3.jpg")" width="120" height="78"  alt="" /></a><span>Harmadik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/4.jpg")" width="120" height="78"  alt="" /></a><span>Negyedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/5.jpg")" width="120" height="78"  alt="" /></a><span>Ötödik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/6.jpg")" width="120" height="78"  alt="" /></a><span>Hatodik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/7.jpg")" width="120" height="78"  alt="" /></a><span>Hetedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/1.jpg")" width="120" height="78"  alt="" /></a><span>Nyolcadik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/2.jpg")" width="120" height="78"  alt="" /></a><span>Kilencedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/1.jpg")" width="120" height="78"  alt="" /></a><span>Tizedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/2.jpg")" width="120" height="78"  alt="" /></a><span>Tizenegyedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/3.jpg")" width="120" height="78"  alt="" /></a><span>Tizenkettedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/4.jpg")" width="120" height="78"  alt="" /></a><span>Tizenharmadik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/5.jpg")" width="120" height="78"  alt="" /></a><span>Tizennegyedik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/6.jpg")" width="120" height="78"  alt="" /></a><span>Tizenötödik</span>
+					</li>
+					<li>
+						<a href="#"><img src="@Url.Content("~/Media/images/7.jpg")" width="120" height="78"  alt="" /></a><span>Tizenhatodik</span>
+					</li>
+				</ul>
+			</div>
+			@* ajánlott termékek blokk div vége *@
+		</div>
+	</div>
+	</div> <!-- itt záródik be a layout.cshtml-ben kinyitott "cus_catalogue_container" div -->
+	<table id="cus_copyright" border="0" cellpadding="0" cellspacing="0" width="990" align="center">
+		<tbody>
+			<tr>
+				<td class="cus_copyright_table_small_text" colspan="2" align="center"><a href="#">felhaszn&aacute;l&aacute;si felt&eacute;telek</a> &bull; <a href="#">adatv&eacute;delmi nyilatkozat</a> &bull; <a href="#">sz&aacute;ll&iacute;t&aacute;si &eacute;s fizet&eacute;si felt&eacute;telek</a> &bull; <a href="#">vissz&aacute;ru felt&eacute;telek</a> &bull; <a href="#">garancia &eacute;rv&eacute;nyes&iacute;t&eacute;se</a> &bull; <a href="#">v&aacute;s&aacute;rl&aacute;s a web&aacute;ruh&aacute;zban</a>
+				<hr />
+				</td>
+			</tr>
+			<tr>
+				<td><img src="@Url.Content("~/Media/images/iso.jpg")" /></td>
+				<td class="cus_copyright_table_small_text" align="center">Az &aacute;rak az &Aacute;F&Aacute;-t nem tartalmazz&aacute;k &eacute;s a mindenkori doll&aacute;r, illetve euro &aacute;rfolyam f&uuml;ggv&eacute;ny&eacute;ben v&aacute;ltozhatnak. Az akci&oacute;k a felt&uuml;ntetett időpontig, illetve visszavon&aacute;sig &eacute;rv&eacute;nyesek. Az &aacute;rv&aacute;ltoztat&aacute;s jog&aacute;t fenntartjuk. Az oldal tartalm&aacute;nak felhaszn&aacute;l&aacute;s&aacute;hoz, m&aacute;sol&aacute;s&aacute;hoz az oldal tulajdonos&aacute;nak enged&eacute;lye sz&uuml;ks&eacute;ges. &copy;2002-2011 HRP Hungary Kft. Minden jog fenntartva.</td>
+			</tr>
+		</tbody>
+	</table>
+
+

@@ -17,9 +17,13 @@ namespace Cms.CommonCore.Models
             this.IsShoppingCartOpened = false;
 
             this.IsCatalogueOpened = false;
+
+            this.Currency =String.Empty;
+
+            this.PermanentId = String.Empty;
         }
 
-        public VisitorData(string objectId, string language, bool isShoppingCartOpened, bool isCatalogueOpened)
+        public VisitorData(string objectId, string language, bool isShoppingCartOpened, bool isCatalogueOpened, string currency, string permanentId)
         {
             this.ObjectId = objectId;
 
@@ -28,6 +32,10 @@ namespace Cms.CommonCore.Models
             this.IsShoppingCartOpened = isShoppingCartOpened;
 
             this.IsCatalogueOpened = isCatalogueOpened;
+
+            this.Currency = currency;
+
+            this.PermanentId = permanentId;
         }
 
         /// <summary>
@@ -49,5 +57,15 @@ namespace Cms.CommonCore.Models
         /// katalógus nyitva van-e?
         /// </summary>
         public bool IsCatalogueOpened { set; get; }
+
+        /// <summary>
+        /// beállított valutanem
+        /// </summary>
+        public string Currency { set; get; }
+
+        /// <summary>
+        /// megmarado objectId
+        /// </summary>
+        public string PermanentId { set; get; }
     }
 }

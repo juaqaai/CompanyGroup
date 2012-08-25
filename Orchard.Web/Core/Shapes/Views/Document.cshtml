@@ -12,10 +12,10 @@
 <head> 
     <meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9">
-	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
     <title>@Html.Title(title, siteName)</title> 
     @Display(Model.Head)
-    <script>(function(d){d.className="dyn"+d.className.substring(6,d.className.length);})(document.documentElement);</script> 
+    <script type="text/javascript">(function(d){d.className="dyn"+d.className.substring(6,d.className.length);})(document.documentElement);</script>
 </head> 
 <body>
 @* Layout (template) is in the Body zone @ the default position (nothing, zero, zilch) *@

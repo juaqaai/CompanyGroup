@@ -1,23 +1,99 @@
 ﻿    @model Cms.Webshop.Models.CatalogueItem
+
+@using (Script.Head())
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+
+            CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+            CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+            CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+            CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
+            CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
+            //CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
+
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/PartnerInfo/Home/SignIn")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/PartnerInfo/Home/SignOut")')
+            CompanyGroupCms.Constants.Instance().setModule('webshop');
+
+            CompanyGroupCms.Visitor.Instance().Set(@(Html.Raw(Json.Encode(Model.Visitor))));
+
+            var model = @(Html.Raw(Json.Encode(Model)));
+
+            jQuery('.chosen').chosen();
+
+            jQuery('.chosen').unbind('change').bind('change', function () {
+                if ($(this).attr('id') === 'manufacturerList') {
+                    var manufacturerIdList = $('#manufacturerList').val();
+                    CompanyGroupCms.CatalogueListRequest.ManufacturerIdList = (manufacturerIdList === null || manufacturerIdList === '') ? [] : manufacturerIdList;
+                    CompanyGroupCms.Catalogue.LoadStructure(false, true, true, true);
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                } else if ($(this).attr('id') === 'category1List') {
+                    var category1IdList = $('#category1List').val();
+                    CompanyGroupCms.CatalogueListRequest.Category1IdList = (category1IdList === null || category1IdList === '') ? [] : category1IdList;
+                    CompanyGroupCms.Catalogue.LoadStructure(true, false, true, true);
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                } else if ($(this).attr('id') === 'category2List') {
+                    var category2IdList = $('#category2List').val();
+                    CompanyGroupCms.CatalogueListRequest.Category2IdList = (category2IdList === null || category2IdList === '') ? [] : category2IdList;
+                    CompanyGroupCms.Catalogue.LoadStructure(true, true, false, true);
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                } else if ($(this).attr('id') === 'category3List') {
+                    var category3IdList = $('#category3List').val();
+                    CompanyGroupCms.CatalogueListRequest.Category3IdList = (category3IdList === null || category3IdList === '') ? [] : category3IdList;
+                    CompanyGroupCms.Catalogue.LoadStructure(true, true, true, false);
+                    CompanyGroupCms.Catalogue.LoadCatalogue();
+                }
+            });
+
+ 			// $('#bannerpelda').flash(
+   				// {
+     				// src: '@Url.Content("~/Media/banners/samsung.swf")',
+     				// wmode: 'transparent',
+     				// width: 250,
+      			// height: 400
+   				// }, { version: 8 });
+        });
+    </script>
+}
+<style>
+    .aside-first {
+        display: none;
+    }
+    .zone-content {
+        margin-left: -297px;
+    }
     
+    #cus_copyright {
+        margin-left: -295px;
+    }
+</style>
 		<div id="cus_catalogue_left">
 			<div id="cus_banner_table">
 			<form method="post" action="" id="frm_structure">
 				<div id="container">
-					<div id="cus_filter_price">
-						<!-- ide kell befaragni valahogy az ASIDEFIRST gyári modult -->
-						Ár szerinti keresés
-						<br />
-						<select name="selectPriceFilter" id="selectPriceFilter" style="margin-top:4px; padding:4px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666;">
-							<option value="1">&gt;=</option>
-							<option value="2">&lt;=</option>
-						</select>
-						<input name="txtPriceFilter" type="text" id="txtPriceFilter" size="9" style="margin-top:4px; padding:5px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666;"/>
-						<!-- <input type="submit" name="button" id="button" value="Keres" /> -->
-						<div id="cus_refresh_icon">
-							Frissítés<!-- <img src="@Url.Content("~/Media/images/refresh.png")" /> -->
-						</div>
-					</div>
+                    <!-- VisitorInfo.IsValidLogin -->
+                    <div id="cus_filter_price"></div>
+                    <script id="priceFilterTemplate" type="text/x-jquery-tmpl">
+                    {{if IsValidLogin}}
+                        @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Webshop/Catalogue")), System.Web.Mvc.FormMethod.Post, new { id = "form_filterbyprice" }))
+                        {
+                        <span>Ár szerinti keresés</span>
+                        <label class="error" for="txt_filterbyprice" generated="true" style="display:none; color:#900;">A mező kitöltése kötelező</label><br />
+                        <select name="select_filterbyprice" id="select_filterbyprice" style="margin-top:4px; padding:4px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666; width: 50px;">
+                            <option value="1">&gt;=</option>
+                            <option value="2">&lt;=</option>
+                        </select>
+                        <input name="txt_filterbyprice" type="text" id="txt_filterbyprice" size="9" style="margin-top:4px; padding:5px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666; width: 75px;"/>
+                        <!-- <input type="submit" name="button" id="button" value="Keres" /> -->
+                        <div id="cus_refresh_icon" onclick="$('#form_filterbyprice').submit()">
+                            Frissítés<!-- <img src="@Url.Content("~/Media/images/refresh.png")" /> -->
+                        </div>
+                        }
+                    {{/if}}
+                    </script>
+                    <!-- /VisitorInfo.IsValidLogin -->
 					<div id="cus_filter_1">
 						Gyártók kiválasztása
 						<br />
@@ -52,10 +128,14 @@
 						</select>
 					</div>
 					<div id="cus_filter_4">
-						Paraméterek szűrése 1 (többszöröződik)
+                        Jelleg 3 kiválasztása
 						<br />
-						<select id="category3List" data-placeholder="Paraméter 1..." class="chosen" multiple style="width:270px;">
-							<option value=""></option>
+                        <select id="category3List" data-placeholder="Jelleg - 3..." class="chosen" multiple style="width:270px;">
+                            <option value=""></option>
+                            @foreach (var category3 in @Model.Structures.ThirdLevelCategories)
+                            { 
+                                <option value="@category3.Id">@category3.Name</option>
+                            }
 						</select>
 					</div>
 				</div>
@@ -64,19 +144,6 @@
 			*@
 				
 				<p id="bannerpelda" align="center">
-				<script>
-					$(document).ready(function(){
-  					$('#bannerpelda').flash(
-   					 {
-     					 src: '@Url.Content("~/Media/banners/samsung.swf")',
-     					 wmode: 'transparent',
-     					 width: 250,
-      					height: 400
-   					 },
-  					  { version: 8 }
- 					 );
-					});	
-				</script>
 				</p>
 			</div>
 		</div>
@@ -87,34 +154,20 @@
 							<tr>
 								<td valign="top">
 								<div id="cus_termekkep">
-                                    @if (Model.Product.Pictures.Items.Count > 0)
+                                    @if (Model.Product.PrimaryPicture.RecId > 0)
                                     {
-                                        <a class="popupimg" href="@String.Format("http://localhost/CompanyGroup.ServicesHost/PictureService.svc/GetItem/{0}/{1}/{2}/{3}/{4}", Model.Product.PrimaryPicture.RecId,  Model.Product.ProductId, "hrp", "94", "69")" width="94" height="69"><img src="@String.Format("http://localhost/CompanyGroup.ServicesHost/PictureService.svc/GetItem/{0}/{1}/{2}/{3}/{4}", Model.Product.PrimaryPicture.RecId,  Model.Product.ProductId, "hrp", "94", "69")" width="94" height="69" alt="" /></a>
+                                        <a class="popupimg" href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.ShowPicture('@Model.Product.ProductId', '@Model.Product.DataAreaId', '@Model.Product.ItemName');" title="@Model.Product.ItemName">
+                                        <img src="@Url.Content("~/Webshop/Catalogue/PictureItem")@String.Format("/?ProductId={0}&RecId={1}&DataAreaId={2}&MaxWidth=120&MaxHeight=120", Model.Product.ProductId, Model.Product.PrimaryPicture.RecId, Model.Product.DataAreaId)" width="94" height="69" alt="CompanyGroupCms.Constants.Instance().getPictureUrl('@Model.Product.ProductId', '@Model.Product.PrimaryPicture.RecId', '@Model.Product.DataAreaId')" /></a>
                                     }
                                     else
                                     { 
                                         <img src="@Url.Content("~/Media/images/nopic.jpg")" width="94" height="69" alt="" />
-                                    }                                     
+                                    }
 								</div></td>
 								<td valign="top" id="cus_prod_table_middle_cell"><span id="cus_prod_table_item_name">@Model.Product.ItemName</span><span id="cus_prod_table_item_code">| @Model.Product.ProductId</span>
 								<br />
 								<div id="cus_prod_table_desc_full">
-                                    @if (Model.Visitor.IsValidLogin)
-                                    {
-									    if (Model.Product.Bargain) { <span>használt</span>} <br/>  <!-- ha a cikk leertekelt, akkor megjelenik a hasznalt felirat -->  
-                                        if (Model.Product.Discount) { <span>leértékelt</span>} <br/>   <!-- ha a cikk leertekelt, akkor megjelenik a hasznalt felirat -->
-                                        <span>Garancia módja:</span><br/> @Model.Product.GarantyMode <br/>
-                                        <span>Garancia ideje:</span> @Model.Product.GarantyTime <br/>
- 
-                                         if (Model.Product.ItemState.Equals(1)) { <span>kifutó</span><br/>}     <!-- ha a cikk kifuto, akkor megjelenik a kifuto felirat -->
-                                         if (Model.Product.New) { <span>Új</span><br/>}    <!-- ha a cikk uj, akkor megjelenik az uj felirat -->
-                                         if (!Model.Product.IsInStock)
-                                         {
-                                            <span>Várható beérkezés dátuma:</span>  @String.Format("{0} db ", Model.Product.ShippingDate) <br/>
-                                         }
-                                         if (Model.Product.Special)
-                                         { <span>Speciális akció</span>} <br/>                                                                                                                                                                                                                            
-                                    }   
+   
                                     <span>Gyártó:</span> @Model.Product.Manufacturer.Name <br/>                                       
                                     <span>Jelleg1:</span> @Model.Product.FirstLevelCategory.Name <br/>
                                     <span>Jelleg2:</span> @Model.Product.SecondLevelCategory.Name <br/>
@@ -126,6 +179,21 @@
                                     <span>Termékmanager telefon:</span> @Model.Product.ProductManager.Extension <br/>
                                     <span>Termékmanager mobile:</span> @Model.Product.ProductManager.Mobile <br/>
                                     <span>Termékmanager név:</span> @Model.Product.ProductManager.Name <br/>
+                                    <hr />
+                                    @if (Model.Visitor.IsValidLogin)
+                                    {
+                                        if (Model.Product.SecondHandList.Items.Count > 0) { <span>használt</span> <br/>  } <!-- ha a cikk van a hasznalt, borze... listaban -->  
+                                        if (Model.Product.IsInNewsletter) { <span>hírlevél akciós</span> <br/>  }    <!-- ha a cikk hírlevél akciós -->
+                                        <span>Garancia módja:</span> @Model.Product.GarantyMode <br/>
+                                        <span>Garancia ideje:</span> @Model.Product.GarantyTime <br/><br/>
+ 
+                                         if (Model.Product.EndOfSales) { <span>kifutó</span><br/>}     <!-- ha a cikk kifuto -->
+                                         if (Model.Product.New) { <span>Új</span><br/>}    <!-- ha a cikk uj -->
+                                         if (!Model.Product.IsInStock)
+                                         {
+                                            <span>Várható beérkezés dátuma:</span>  @String.Format("{0} ", Model.Product.ShippingDate) <br/>
+                                         }
+                                    } 
    								</div></td>
 								<td valign="top" nowrap="nowrap">
                                 @if (Model.Visitor.IsValidLogin)
@@ -133,7 +201,7 @@
 								<table width="130" border="0" cellspacing="1" cellpadding="2">
 									<tr>
 										<td nowrap="nowrap" id="cus_prod_table_price">
-                                            <span>Ár:</span> <strong>@String.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0 : C}", Model.Product.Price) @Model.Product.Currency</strong> }</td>
+                                            <span>Ár:</span> <strong>@String.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0 : C}", Model.Product.Price) @Model.Product.Currency</strong></td>
 									</tr>
 									<tr>
 										<td nowrap="nowrap">
@@ -153,59 +221,67 @@
                                 {
 								<table width="100%" border="0" cellspacing="1" cellpadding="5">
 									<tr>
-										<td nowrap="nowrap">
+										<!-- <td nowrap="nowrap">
 										<div id="cus_prod_table_add_compare">
 											<input type="checkbox" name="checkbox2" id="checkbox2" />
 											Összehasonlító listához ad
-										</div></td>
-										<td nowrap="nowrap">
-										<div id="cus_prod_table_quantity">
-											<input name="textfield" type="text" id="textfield" value="0" size="2" />
-											db
-										</div></td>
-										<td nowrap="nowrap">@String.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0 : C}", Model.Product.Price); Ft</td>
-										<td nowrap="nowrap"><strong>Ft</strong> / &#8364;</td>
-										<td width="100%" align="right">
-										<div class="cus_prod_table_basket" @Model.Product.IsInCart ? style="background-color:Lime" : style="background-color:White">
-                                            
-											<a id="basketicon" href="javascript:void(0);">Kosárba <img class="basketicon" src="@Url.Content("~/Media/images/basket.png")" alt="kosár" width="16" height="20" border="0" align="absmiddle" /></a>
-										</div></td>
+										</div></td> -->
+									<td nowrap="nowrap">
+                                    <div class="cus_prod_table_quantity">
+                                        <input type="text" name="txt_quantity" class="number" size="2" value="1" /><span> db</span>
+                                    </div>
+                                    </td>
+                                    <td align="right" nowrap="nowrap">
+                                        <div class="cus_prod_table_basket">
+                                        <a href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.AddLine('@Model.Product.ProductId', $('input[name=txt_quantity]').val())">
+                                        <img class="basketicon" src="@Url.Content("~/Media/images/basket.png")" alt="kosár" width="16" height="20" border="0" align="absmiddle" /></a>
+                                        </div>
+                                    </td>
 									</tr>
-								</table>}</td>
+								</table>
+                                }</td>
 							</tr>
 						</table>
 						<!-- ************************************************************** tab panel ************************************************************* -->
 						<div id="wrapper">
 							<ul class="tabs">
 								<li>
-									<a href="#" class="defaulttab" rel="tabs1">Hasonló termékek</a>
+									<a href="#" class="defaulttab" rel="tabs1">Kellékanyagok</a>
 								</li>
 								<li>
-									<a href="#" rel="tabs2">Kapcsolódó termékek</a>
+									<a href="#" rel="tabs2">Technikai adatok</a>
 								</li>
 								<li>
 									<a href="#" rel="tabs3">Legnépszerűbb párosítások</a>
 								</li>
 							</ul>
 							<div class="tab-content" id="tabs1">
-								<a href="#">- Toshiba c660-13 notebook</a>
+                                @foreach (CompanyGroup.Dto.WebshopModule.CompatibleProduct product in Model.CompatibleProducts)
+                                {
+								<a href="@Url.Content(String.Format("~/Webshop/Catalogue/{0}/Details", product.ProductId))">- @product.ProductId @product.PartNumber @product.ItemName </a>
 								<br />
-								<a href="#">- Toshiba c660-14 notebook</a>
-								<br />
-								<a href="#">- Toshiba c660-15 notebook</a>
-								<br />
-								<a href="#">- ACER TM-13 notebook</a>
-								<br />
-								<a href="#">- FUJITSU Lifebook-15 notebook</a>
-								<br />
-								<a href="#">- SONY vaio 14" notebook</a>
+                                    if (Model.Visitor.IsValidLogin)
+                                    {
+                                        <span>Ár</span>@product.Price <br /><br />
+                                        <span>Belső készlet:</span>@product.InnerStock<br />
+                                        <span>Külső készlet:</span>@product.OuterStock<br />
+                                    }
+                                }
+                                <br />
 							</div>
 							<div class="tab-content" id="tabs2">
-								<a href="#">- Toshiba c660 hálózati töltő</a>
+                                @foreach (CompanyGroup.Dto.WebshopModule.CompatibleProduct product in Model.ReverseCompatibleProducts)
+                                {
+								<a href="@Url.Content(String.Format("~/Webshop/Catalogue/{0}/Details", product.ProductId))">- @product.ProductId @product.PartNumber @product.ItemName </a>
 								<br />
-								<a href="#">- Toshibac660 akkumulátor</a>
-								<br />
-								<a href="#">- Toshiba c660 dokkoló</a>
+                                    if (Model.Visitor.IsValidLogin)
+                                    {
+                                        <span>Ár</span>@product.Price <br /><br />
+                                        <span>Belső készlet:</span>@product.InnerStock<br />
+                                        <span>Külső készlet:</span>@product.OuterStock<br />
+                                    }
+                                }
+                                <br />
 							</div>
 							<div class="tab-content" id="tabs3">
 								<a href="#">- LG 2340 Monitor</a>
@@ -217,54 +293,12 @@
 						<div id="cus_recommended_prod_container">
 				<h4>Ajánlott termékeink</h4>
 				<ul id="cus_recommended_prod_content">
+                    @foreach (CompanyGroup.Dto.WebshopModule.BannerProduct banner in @Model.BannerList.Items)
+                    {
 					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/1.jpg")" width="120" height="78"  alt="" /></a><span>Első</span>
+						<a href="@Url.Content(String.Format("~/Webshop/Catalogue/Detail/?ProductId={0}", Url.Encode(banner.ProductId)))" target="_blank"><img src="@Url.Content("~/Webshop/Catalogue/PictureItem/?")@String.Format("ProductId={0}&RecId={1}&DataAreaId={2}&MaxWidth=120&MaxHeight=80", Url.Encode(banner.ProductId), banner.PrimaryPicture.RecId, banner.DataAreaId)" alt="@banner.ItemName" title="@banner.ItemName" /></a><span>@banner.ProductId</span>
 					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/2.jpg")" width="120" height="78"  alt="" /></a><span>Második</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/3.jpg")" width="120" height="78"  alt="" /></a><span>Harmadik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/4.jpg")" width="120" height="78"  alt="" /></a><span>Negyedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/5.jpg")" width="120" height="78"  alt="" /></a><span>Ötödik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/6.jpg")" width="120" height="78"  alt="" /></a><span>Hatodik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/7.jpg")" width="120" height="78"  alt="" /></a><span>Hetedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/1.jpg")" width="120" height="78"  alt="" /></a><span>Nyolcadik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/2.jpg")" width="120" height="78"  alt="" /></a><span>Kilencedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/1.jpg")" width="120" height="78"  alt="" /></a><span>Tizedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/2.jpg")" width="120" height="78"  alt="" /></a><span>Tizenegyedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/3.jpg")" width="120" height="78"  alt="" /></a><span>Tizenkettedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/4.jpg")" width="120" height="78"  alt="" /></a><span>Tizenharmadik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/5.jpg")" width="120" height="78"  alt="" /></a><span>Tizennegyedik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/6.jpg")" width="120" height="78"  alt="" /></a><span>Tizenötödik</span>
-					</li>
-					<li>
-						<a href="#"><img src="@Url.Content("~/Media/images/7.jpg")" width="120" height="78"  alt="" /></a><span>Tizenhatodik</span>
-					</li>
+                    }
 				</ul>
 			</div>
 						
@@ -285,4 +319,10 @@
 			</tr>
 		</tbody>
 	</table>
+    <div id="div_pager_top"></div>
+    <script id="pagerTemplateTop" type="text/x-jquery-tmpl"></script>
+    <div id="div_catalogue" class="wrapper"></div>
+    <script id="productTemplate" type="text/x-jquery-tmpl"></script>
+    <div id="div_pager_bottom"></div>
+    <script id="pagerTemplateBottom" type="text/x-jquery-tmpl"></script>
 			

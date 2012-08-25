@@ -57,6 +57,9 @@
     <Reference Include="CompanyGroup.Dto">
       <HintPath>..\..\..\..\2012\CompanyGroup.Dto\bin\Debug\CompanyGroup.Dto.dll</HintPath>
     </Reference>
+    <Reference Include="CompanyGroup.Helpers">
+      <HintPath>..\..\..\..\2012\Helpers\bin\Debug\CompanyGroup.Helpers.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\aspnetmvc\Microsoft.Web.Infrastructure.dll</HintPath>

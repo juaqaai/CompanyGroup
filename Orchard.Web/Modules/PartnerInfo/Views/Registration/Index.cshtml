@@ -1,0 +1,774 @@
+﻿@model Cms.PartnerInfo.Models.CustomerRegistration
+           
+@using (Script.Head())
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            
+            var model = @(Html.Raw(Json.Encode(Model)));
+            console.log(model);
+
+            $("#bankAccountTemplate").tmpl(model.BankAccounts).appendTo("#bankAccountContainer");
+            $("#contactPersonTemplate").tmpl(model.BankAccounts).appendTo("#contactPersonContainer");
+            $("#deliveryAddressTemplate").tmpl(model.DeliveryAddresses).appendTo("#deliveryAddressContainer");
+
+            $("#form_step2").validate({
+                submitHandler: function () {
+                    return false;
+                },
+                invalidHandler: function (e, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                    } else {
+
+                    }
+                },
+                //errorLabelContainer: $("#login_errors"),
+                rules: {
+                    txtDataRecordingName: {
+                        required: true
+                    }, 
+                    txtDataRecordingPhone: {
+                        required: true
+                    },
+                    txtDataRecordingEmail: {
+                        required: true
+                    }, 
+                    txtCustomerEmail: {
+                        required: true
+                    }
+                },
+                messages: {
+                    txtDataRecordingName: "A név kitöltése kötelező!", 
+                    txtDataRecordingPhone:"A telefonszám kitöltése kötelező!",
+                    txtDataRecordingEmail:"Az email cím kitöltése kötelező!",
+                    txtCustomerEmail:"A központi email cím megadása kötelező"
+                }
+            });
+        });
+
+    </script>
+}
+<style>
+    .aside-first {
+        display: none;
+    }
+    .zone-content {
+        margin-left: -297px;
+    }
+    
+    #cus_copyright {
+        margin-left: -295px;
+    }
+</style>
+<table align="center" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <td valign="top">
+<!-- Tabs -->
+  		<div id="tabs" class="stContainer">
+        	<ul>
+  				<li><a href="#tabs-1">
+               <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
+                <h2>Tab 1<br />
+                <small>tab's description</small></h2></a>
+                <div id="elfogad_chx"><input type="checkbox" name="nextstep1" id="nextstep1" />A szabályzatot elfogadom</div>
+                </li>
+                
+  				<li id="regstep2" style="display: none;"><a href="#tabs-2">
+               <!--  <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
+                <h2>Tab 2<br />
+                <small>tab's description</small></h2>
+                </a></li>
+  			    <li id="regstep3" style="display: none;"><a href="#tabs-3">
+                <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
+                <h2>Tab 3<br />
+                <small>tab's description</small></h2>
+                </a></li>
+  			    <li id="regstep4" style="display: none;"><a href="#tabs-4">
+                <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
+                <h2>Tab 4<br />
+                <small>tab's description</small></h2>
+                </a></li>
+  			    <li id="regstep5" style="display: none;"><a href="#tabs-5">
+                <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
+                <h2>Tab 5<br />
+                <small>tab's description</small></h2>
+                </a></li>
+  			</ul>
+            
+  			<div id="tabs-1">
+            <h2>Tab 1 Content</h2>	
+            <p><strong>Tisztelt leendő Partnerünk!</strong> <br />
+  <br />
+  Köszönjük, hogy viszonteladónkká kíván válni.<br />
+Ahhoz, hogy a regisztrációja megtörténjen, a következő lépéseket kell megtennie: </p>
+<p>1. Olvassa el figyelmesen az alábbi   Viszonteladói és elektronikus kereskedelmi szerződést, majd ennek   elfogadása után tovább tud lépni. <br />
+  2. A következő oldalon adja meg a kért   adatokat, valamint töltse fel a szerződéskötéshez szükséges hivatalos   iratokat, amennyiben azok beszkennelve a rendelkezésére állnak. <br />
+  3. Ezt követően felviheti kapcsolattartóinak adatait. <br />
+  4. Ezután, a nyomtatásra kattintva   nyomtassa ki két példányban a szerződést (ez már az Ön által megadott   adatokat fogja tartalmazni) és cégszerűen írja alá. <br />
+  5. Az aláírt szerződés két eredeti   példányát juttassa el postai úton vagy személyesen a 1133 Budapest, Véső   u. 7. alatti címünkre. <br />
+  6. A szerződéskötéshez szükséges hivatalos dokumentumok a következők: <br />
+  - Aláírási címpéldány, egyéni vállalkozó   esetén a vállalkozói igazolvány (mindkét esetben a szerződésen szereplő   aláírással megegyező) <br />
+  Ezeket a dokumentumokat a következőképpen juttathatja el hozzánk: <br />
+  - A fenti 2. pontban jelzett módon a regisztrációs formanyomtatványon keresztül feltöltve,                               vagy<br />
+  - Személyesen leadva vagy postai úton megküldve a 1133 Budapest, Véső u. 7. alatti címünkre,                               vagy<br />
+  - Faxon a (06 1) 350-1351-es faxszámra megküldve
+</p>  <hr />
+<p><strong>Viszonteladói és elektronikus kereskedelmi szerződés</strong><br /><br />
+
+<strong>1. Definíciók</strong>
+<br />1.1. Honlap a Disztribútorok honlapjai: www.hrp.hu és www.bsc.hu.
+<br />1.2. Webáruház a Disztribútorok Honlapján belül a terméklistát, termékinformációkat, árakat, készletinformációt és rendelési lehetőséget tartalmazó rész. A Webáruház adatai tájékoztató jellegűek.
+<br />1.3. Cégadminisztrátor a Viszonteladónál kijelölt személy, aki felvehet, törölhet és módosíthat felhasználókat a Honlap felhasználónévvel és jelszóval történt bejelentkezés után elérhető részén.
+<br />1.4. Felhasználó a Viszonteladó munkatársa, akit a Cégadminisztrátor beregisztrál a Honlapon.
+<br />1.5. Online regisztráció a Disztribútor Honlapján található online formanyomtatvány kitöltése, amelyen keresztül a Viszonteladó megadja a szerződéskötéskor érvényes hivatalos adatait, általános üzleti kapcsolattartásra, logisztikai célokra illetve a Honlap felhasználónévvel és jelszóval történt bejelentkezés után elérhető részének használatára jogosult személyek személyi adatait és elérhetőségeit.
+<br /><br />
+<strong>2. Szerződés tárgya</strong>
+<br />2.1. Disztribútor az általa forgalmazott termékeket regisztrált Viszonteladói részére értékesíti. Viszonteladó kizárólag számítástechnikai termékek kereskedelmével (üzletszerűen) foglalkozó gazdasági társaság vagy egyéni vállalkozó lehet.
+<br />2.2. A szerződés aláírásával a Felek között jelen szerződés tárgyában, korábban létrejött szóbeli és írásbeli szerződések érvényüket vesztik, a továbbiakban e tárgykörben kizárólag jelen szerződés rendelkezései az irányadóak.
+<br />2.3. A Disztribútor feljogosítja a Viszonteladót a Honlap felhasználónévvel és jelszóval történt bejelentkezés után elérhető részének használatára, melyen a bejelentkezés után az alábbi funkciókat biztosítja (az adott Felhasználónak a Cégadminisztrátor által beállított jogosultságaitól függően):
+<br />· terméklista termékleírásokkal és árakkal
+<br />· készletinformáció
+<br />· raktáron lévő termék megrendelése, raktáron nem lévő termék előrendelése
+<br />· árlista letöltés megrendelések követése
+<br />· számlainformációk követése.
+<br />2.4. Disztribútor a raktárában lévő termékeire a Webáruházon keresztül valamint szóban és írásban egyaránt elfogad megrendelést. Raktáron nem lévő, kizárólag a Viszonteladó részére beszerzendő termékekre megrendelés csak a Webáruházon keresztül vagy e-mail útján történhet.
+<br /><br />
+<strong>3. Disztribútor jogai és kötelezettségei</strong>
+<br />3.1. Disztribútor nyilatkozik, hogy az összes általa forgalmazott termékhez kapcsolódó hatósági kötelezettségének eleget tett (vám, környezetvédelmi adó stb.).
+<br />3.2. Disztribútor által forgalomba hozott termékek szervizelése és garanciális ügyintézése az adott termék garancialevelén feltüntetettek szerint vagy a Disztribútor saját szervizében vagy szerződött szerviz partnereinél történik.
+<br />3.3. Disztribútor az áruk Viszonteladó által végzett, tételes átvételt követően észlelt hibákért, hiányosságokért és az ezekből eredő károkért nem vállal felelősséget.
+<br />3.4. Az egyes termékek cseréjét a Disztribútor a mindenkor hatályos magyar jogszabályok, illetve a gyártó által előírt garancia időtartamon belül elvégzi.
+<br />3.5. Disztribútor nem cserél ki olyan árut, illetve nem ad kártérítést olyan áru után, amelynek hibája bizonyíthatóan rajta kívülálló okból merült fel.
+<br />3.6. Disztribútor elutasíthatja a rendelést, ha az olyan termékre vonatkozik, amelyet a gyártó nem tud szállítani.
+<br />3.7. A Viszonteladó által megrendelt és a Disztribútor által visszaigazolt, de készleten nem lévő termékekre vonatkozó megrendelés utólagos lemondásakor a Disztribútor jogosult az áru nettó értékének 10%-át bánatpénz jogcímén kiszámlázni Viszonteladó számára. A jelen pont alól kivételt képez a jelen szerződés 4.11 pontjában leírt eset.
+<br />3.8. Disztribútor a megrendelt árukat az áru beérkezéséről való értesítéstől számított 5 (öt) munkanapig tartja Viszonteladó rendelkezésére. Az ezen határidőn belül át nem vett termékekre vonatkozó megrendelés automatikusan lemondottnak minősül és a Disztribútor semmissé nyilváníthatja. Ilyen esetben Disztribútor jogosult az áru nettó értékének 10%-át bánatpénz jogcímén kiszámlázni Viszonteladó számára. A jelen pont alól kivételt képez a jelen szerződés 4.11 pontjában leírt eset.
+<br />3.9. Disztribútor a kereskedelmi kapcsolathoz szükséges információátadást a Viszonteladó által megadott e-mail címre küldött levelekkel biztosítja. A Viszonteladó a regisztrációval egyben hozzájárul a kommunikáció eme formájának gyakorlásához. A kereskedelmi hírlevelek küldési beállításait a Viszonteladó a Honlap Partnerinfo menüpontja alatt megváltoztathatja.
+3.10. Disztribútor kijelenti, hogy a mindenkor érvényes terméklistában szereplő árak és termékleírások tájékoztató jellegűek. Az árak nettó árak, az ÁFA-t nem tartalmazzák. A Disztribútor az árakban és termékleírásokban található esetleges tévedésekért felelősséget nem vállal (ld. 5.12 pont).
+<br /><br />
+<strong>4. Viszonteladó jogai és kötelezettségei</strong>
+<br />4.1. Viszonteladó kijelenti, hogy a jelen szerződésben és mellékleteiben közölt adatok a valóságnak megfelelnek. 4.2. Viszonteladó kijelenti, hogy sem csődeljárás, sem felszámolás, illetőleg végelszámolás alatt nem áll és nem kezdődött ellene sem bírósági, sem cégbírósági, sem más fórum előtt semmiféle olyan eljárás, amely gazdasági tevékenységét korlátozná, és jelen megállapodás teljesítését akadályozná.
+<br />4.3. Viszonteladó kijelenti, hogy számítástechnikai termékek kereskedelmével foglalkozó gazdasági társaság vagy egyéni vállalkozó (ld. 2.1 pont).
+<br />4.4. Viszonteladó tudomásul veszi és elismeri, hogy az általa vásárolt termékek a vételár teljes kifizetéséig Disztribútor tulajdonát képezik és azokért az ellenérték megfizetéséig a felelős őrzés szabályai szerint felel. A teljes egészében ki nem fizetett áru nem terhelhető meg, felszámolás illetve csődeljárás során harmadik személyek kielégítésére nem szolgálhat.
+<br />4.5. Viszonteladó köteles tűrni a Disztribútor fenntartott tulajdonjoga érvényesítése érdekében tett, szükséges, törvényes intézkedéseit.
+<br />4.6. A számlával kapcsolatos kifogás nem jogosítja Viszonteladót a számla kiegyenlítésének visszatartására. A kifogás kizárólag írásban, a számla átvételét követő 8 napon belül tehető, melynek elbírálását követően az Disztribútor a szükséges mértékben helyesbítő számlát állít ki.
+<br />4.7. A tesztelés és bemutató céljából szállított eszközök a Disztribútor tulajdonában maradnak, ezeket Viszonteladó csak a Disztribútor által meghatározott célra használhatja. Ezen eszközök értékcsökkenését a Viszonteladó köteles megtéríteni a Disztribútor részére.
+<br />4.8. Viszonteladó a megrendelt árukat saját költségén szállítja vagy szállíttatja el a rendelés visszaigazolásban visszaigazolt átadási határidőben. Igény és megrendelés esetén, a visszaigazolásban megjelölt szállítási feltételek szerint Viszonteladó címére az árut Disztribútor is leszállíttathatja.
+<br />4.9. Kiszállítás esetén, amennyiben a Disztribútor által szállított áruk és az azokat kísérő dokumentumok között eltérés van, ha a termékek nincsenek vonalkóddal ellátva, ha külsérelmi nyomok fedezhetők fel a csomagoláson, vagy mennyiségbeli eltérés van, a Viszonteladó jogosult saját mérlegelése alapján az adott szállítmány visszautasítására.
+<br />4.10. Disztribútor a Viszonteladó külön kérésére vállalja, hogy a 100 000 Forint (nettó) érték feletti megrendeléseknél az áru beérkezését követő munkanapon díjmentesen kiszállítja a Viszonteladó által megjelölt belföldi telephelyre. A jelen pontban jelzett értékhatárt Disztribútor jogosult megváltoztatni. Az ilyen változásról a Disztribútor a Viszonteladót az Online regisztráció folyamán megadott központi email címére küldött üzenetben tájékoztatja. Disztribútor kiszállítása esetén Viszonteladó telephelyén az áru kirakodásakor, Viszonteladó szállítása vagy szállítmányoztatása esetén a Disztribútor telephelyén az áru berakodásának megkezdésekor száll át a kárveszély a Viszonteladóra.
+<br />4.11. A Viszonteladó az egyedi megrendelésre érkező vagy névre szóló szoftverlicenszeket a megrendelésüket követően nem mondhatja le, hanem azokat a Disztribútor mindenkor jogosult kiszámlázni a Viszonteladó pedig az átvételtől függetlenül köteles a vételárat kiegyenlíteni.
+<br /><br />
+<strong>5. Honlap és Webáruház használata</strong>
+<br />5.1. Disztribútor minden tőle ésszerűen elvárhatót megtesz azért, hogy Honlapja és Webáruháza folyamatosan elérhető legyen a Viszonteladó számára.
+<br />5.2. Viszonteladó kijelenti, hogy ismeri az Internet lehetőségit és korlátait és elfogadja, hogy Disztribútor az Internet technikai teljesítményéért és felmerülő hibáiért nem vállal felelősséget. A Webáruházhoz való hozzáférés technikai feltételeit (Internet kapcsolat és Böngésző) a Viszonteladó biztosítja saját maga számára.
+<br />5.3. A kereskedelem védelme érdekében a Honlap egyes részei nem nyilvánosak, kizárólag a Viszonteladók számára érhetőek el felhasználónévvel és jelszóval védett legalább 128 bites SSL protokoll szerint titkosított csatornán.
+<br />5.4. Viszonteladó kijelenti, hogy a Webáruházat csak üzemszerűen használja olyan módon, hogy az nem sérül és nem változik a Felhasználó szándékos károkozása miatt. A használati jog nem terjed ki a Webáruház tartalmának módosítására és másolására.
+<br />5.5. Jelen szerződés aláírását követően a Disztribútor a megjelölt Cégadminisztrátor felhasználónevét és jelszavát aktiválja a Webáruházban, és adminisztrátori jogosítvánnyal látja el. Cégadminisztrátor újabb Felhasználókat hozhat létre, és azoknak egyedi jogosultságokat adhat. A Felhasználók felvétele, adatainak, jogosultságainak kezelése és a Felhasználók törlése a Cégadminisztrátor feladata, és így a Webáruházban történő tevékenységük a Viszonteladó felelőssége. Amennyiben a Cégadminisztrátor személyét a Viszonteladó meg akarja változtatni, erről azonnal cégszerűen, írásban értesítenie kell Disztribútort.
+<br />5.6. Viszonteladó köteles a tőle elvárható módon és szinten a Webáruházhoz való hozzáférési adatainak megőrzéséről gondoskodni. Amennyiben ezen adatok a Felektől kívülálló okból harmadik, illetéktelen személyhez kerülnek, az erről a tényről tudomást szerző Fél köteles haladéktalanul tájékoztatni a másik Felet. A tájékoztatás késedelméből eredő károkért ezen Fél kártérítési felelősséggel tartozik.
+<br />5.7. Disztribútor nem vállal felelősséget a felhasználónévvel és jelszóval történő visszaélésért, a Viszonteladónak és/vagy a Viszonteladó ügyfeleinek vagy bármely harmadik személynek okozott olyan károkért, amelyek a Cégadminisztrátor és/vagy a Felhasználók bejelentkezési nevének és jelszavának jogos vagy jogtalan használata miatt keletkeznek. Ezekért a Viszonteladó korlátlanul és egyetemlegesen felel minden károsult felé, beleértve a Disztribútort is (akár a Viszonteladó alkalmazásában álló személy, akár harmadik fél követi el a visszaélést).
+<br />5.8. A Disztribútor vállalja, hogy a Viszonteladó Webáruházban lévő adatairól és tranzakcióiról semmilyen harmadik fél számára információt nem szolgáltat ki. Kivételt képeznek ez alól a gyártók számára kötelezően megadandó licenc végfelhasználói adatok, illetve az összesített adatok és gyártói riportok.
+<br />5.9. A terméklista feltöltését Disztribútor a gyártóktól kapott információkkal végzi. Ennek ellenére előfordulhatnak a Disztribútor hatáskörén kívül eső téves információk, amelyekért a Disztribútor nem vállal felelősséget.
+<br />5.10. A Webáruházban szereplő árak nem tartalmazzák az Áfa-t és a Disztribútor telephelyén történő átvételre vonatkoznak – hacsak bármilyen más megegyezés nem történt a Viszonteladóval. Az árak módosításának jogát a Disztribútor fenntartja magának.
+<br />5.11. Viszonteladó tudomásul veszi, hogy a Webáruházon keresztül feladott rendelései nem különböznek az egyéb módon (telefonon, e-mailben, faxon stb.) leadott rendeléseitől és azokat a Webáruházon keresztül egyoldalúan nem vonhatja vissza és nem is módosíthatja. A megrendelés módosítása a Disztribútor kereskedője részére küldött e-mail útján lehetséges. A megrendelés módosítása a Disztribútor visszaigazolásával válik érvényessé, ennek megtörténtéig az eredeti megrendelés marad érvényben.
+<br />5.12. Disztribútor a rendelésről a Viszonteladót visszaigazoló e-mailben tájékoztatja. Visszaigazoló e-mail tartalmazza a vevői rendelés számát, ez jelenti az érvényes megrendelés létrejöttét. Disztribútor a 3.10-es pontban leírt esetleges tévedésekért nem vállal felelősséget.
+<br />5.13. Viszonteladó a használattal kapcsolatos kérdéssel vagy esetleges problémával a Honlapon található webadmin@hrp.hu e-mail címhez fordulhat.
+<br /><br />
+<strong>6. Személyes adatok kezelése</strong>
+A személyes adatok védelméről szóló 1992. évi LXIII. törvény szerint (továbbiakban Tv.) alapján:
+<br /><br />
+6.1. Disztribútor kijelenti, hogy az Online regisztráció folyamán megadott illetve a jelen szerződésben feltüntetett nyilvános adatok, valamint az azokon túli személyes adatok megadása önkéntes jellegű (Tv 3. § szerint).
+<br />6.2. A nyilvános és a személyes adatokra a Disztribútornál történő Viszonteladói regisztráció, valamint a Felek közötti kereskedelmi együttműködés fenntartása miatt van szükség. Az adatok kezelésére és feldolgozására a Disztribútor jogosult (Tv. 6 § szerint).
+<br />6.3. Az adatokat a Disztribútor mindaddig nyilvántartja, amíg a két Fél közötti kereskedelmi viszony fennáll, illetve annak megszűnése után annyi ideig, amíg a rávonatkozó törvényi kötelezettségek szükségessé teszik. Ezen időszak leteltét követően a Viszonteladó adatait Disztribútor kereskedelmi nyilvántartásából törli (Tv. 6 § szerint).
+<br />6.4. Az adatokat a Disztribútor ismerheti meg, illetve rajta kívül azon alvállalkozói, akiket a kereskedelmi folyamatának biztosítása céljából részfeladatok ellátásával megbíz (Tv. 6 § szerint). Miután a Disztribútor kereskedelmi felépítése olyan, hogy ez esetenként adattovábbítással, vagy adatkezelések összekapcsolásával jár, ezért az ezzel való egyetértést és az ehhez való hozzájárulást a jelen szerződés aláírásával Viszonteladó igazolja, vagyis a szerződés egyben hozzájáruló nyilatkozat funkciót is ellát (Tv. 6 § szerint).
+<br />6.5. A Disztribútor kijelenti, hogy az adatokat bizalmasan kezeli, azokat harmadik fél részére jogosulatlanul nem adja ki. Minden tőle ésszerűen elvárható intézkedést megtesz annak érdekében, hogy ezeket az adatokat biztonságosan tárolja, és megvédje azokat az illetéktelen hozzáféréstől és nyilvánosságra hozataltól.
+<br />6.6. A fenti pontokat figyelembe véve az adatszolgáltató (Viszonteladó) a jelen szerződés aláírásával egyértelműen hozzájárul a fenti pontok tudomásul vételéhez, és azokkal egyetért. Ezzel a két Fél megegyezik abban, hogy a szerződés aláírása egyben a Tv. 3 § szerinti írásbeli nyilatkozatnak is megfelel az adatszolgáltató részéről.
+<br /><br />
+<strong>7. A szerződés létrejötte és felmondása</strong>
+<br />7.1. Jelen szerződés a Felek cégszerű aláírásával lép hatályba. A szerződés határozatlan időtartamra szól.
+<br />7.2. A szerződés megkötéséhez a Viszonteladónak a két példányban cégszerűen aláírt szerződés mellé csatolnia kell az aláírási címpéldány (egyéni vállalkozó esetén a vállalkozói igazolvány) és a cégkivonat másolatát.
+<br />7.3. Az eredeti szerződést a Viszonteladó Disztribútor részére a következő módokon juttathatja el: Személyesen leadva vagy postai úton megküldve a Disztribútor 1133 Budapest, Véső u. 7. szám alatti székhelyére
+A jelzett csatolandó dokumentumokat Disztribútor részére a következő módokon juttathatja el: Az Online regisztráció során a regisztrációs formanyomtatványon keresztül feltöltve Személyesen leadva vagy postai úton megküldve a Disztribútor 1133 Budapest, Véső u. 7. szám alatti székhelyére Faxon a (06 1) 350-1351-es faxszámra megküldve
+A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szerződés két eredeti példányát legkésőbb az első vásárlást megelőzően Disztribútorhoz eljuttassa.
+<br />7.4. Felek jogosultak a másik félhez intézett írásos nyilatkozattal egyoldalúan, indokolás nélkül, 15 napos felmondási idővel felmondani a szerződést. A felmondási idő alatt Felek kötelesek elszámolni egymással.
+<br />7.5. Disztribútor jogosult a szerződés rendkívüli, azonnali hatállyal történő felmondására, amennyiben a Viszonteladó a szerződésben vállalt bármely kötelezettségét megszegi.
+<br />7.6. Felek között megkötött szerződés a szerződés lejártát követően is hatályban marad valamennyi olyan, bármelyik Fél részéről a másik Fél részére fennálló, eredetileg a szerződésből eredő kötelezettség vonatkozásában, amely kötelezettség a szerződés megszűnéséig nem került rendezésre. Ilyen vonatkozásban a szerződés az adott kötelezettség végleges rendezésekor szűnik meg.
+<br />7.7. A szerződés megszűnésekor, érvényességének lejártakor Disztribútor letiltja Viszonteladó Cégadminisztrátorának és összes Felhasználóinak jogosultságát úgy, hogy azok nem férnek hozzá a Webáruházhoz és Honlap felhasználónévvel és jelszóval történt bejelentkezés után elérhető részéhez. A szerződés megszűnésekor a Disztribútor Viszonteladóval szembeni követelései azonnal esedékessé válnak, és a Disztribútor a Viszonteladó függő rendeléseit jogosult kizárólag előre fizetéssel teljesíteni vagy törölni. Törlés esetén a megrendelés a Viszonteladó részéről lemondottnak minősül és Disztribútor jogosult a jelen szerződés 3.8. pontjában rögzített igényét érvényesíteni.
+<br />7.8. A szerződés megszűnése esetén Viszonteladó a birtokában lévő, de a Disztribútor tulajdonát képező, még el nem adott termékeket 24 órán belül köteles Disztribútor telephelyére díjmentesen visszaszállítani, vagy az árut kifizetni. Erről Felek közösen jegyzőkönyvet vesznek fel, mely a felmondást követő elszámolás alapját képezi.
+<br />7.9. Az elszámolás során a szerződés azonnali hatályú felmondására okot adó Fél viseli a másik Félnek a megállapodás idő előtti megszűnésével kapcsolatosan felmerült, igazolt költségeit és kárait.
+<br />7.10. Jelen szerződés megszűnése automatikusan maga után vonja a Felek között esetlegesen fennálló Kereskedelmi szerződés megszűnését.
+<br /><br />
+<strong>8. Vegyes rendelkezések</strong>
+<br />8.1. Jelen megállapodást a szerződő Felek elolvasás és értelmezést követően, mint akaratukkal mindenben megegyezőt jóváhagyólag cégszerűen írják alá.
+<br />8.2. Disztribútor jogosult a jelen szerződés bármely pontját megváltoztatni. Az ilyen változásról a Disztribútor a Viszonteladót az Online regisztráció folyamán megadott központi email címére küldött üzenetben tájékoztatja. Amennyiben Viszonteladó az adott változtatást nem fogadja el, úgy köteles erről a Disztribútort az email üzenet megérkezését követő 8 napon belül írásban tájékoztatni. A változás el nem fogadása a szerződés 7.4. pont szerinti Viszonteladó általi felmondásának minősül.
+<br />8.3. Felek kölcsönösen kötelesek egymást haladéktalanul értesíteni minden olyan adatváltozásról, mely a kettőjük között megkötött szerződést, vagy annak lebonyolítását érinti (bankszámlaszám változás, cím, ill. elérhetőség változása, kapcsolattartó személyek változása stb.). Viszonteladó továbbá kijelenti, hogy amennyiben a személyi adatok, illetve jogosultságok megváltoznak, arról Disztribútort haladéktalanul értesíti írásban és egyben tudomásul veszi, hogy az értesítés elmulasztásából adódó minden felelősség és anyagi következmény őt terheli.
+<br />8.4. Felek jelen megállapodásban nem szabályozott kérdésekre a Ptk. és a személyes adatok védelméről szóló 1992. évi LXIII. törvény vonatkozó rendelkezéseit tartják magukra nézve kötelezőnek.
+<br />8.5. Felek a jelen szerződéssel kapcsolatban felmerült vitás kérdéseiket elsősorban kölcsönös egyeztetés útján rendezik, ennek sikertelensége esetén a közöttük keletkező jogviták elbírálására a hatásköri szabályok fegyelembevételével kikötik a Pesti Központi Kerületi Bíróság vagy hatáskörtől függően a Fővárosi Bíróság kizárólagos illetékességét, alkalmazandó jogként pedig a magyar jogot.</p> 			
+        </div>
+  			<div id="tabs-2">
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/PartnerInfo/DataRecording")), System.Web.Mvc.FormMethod.Post, new { id = "form_step2" }))
+            { 
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td><strong>Ügyintéző (adatlapot kitöltő)</strong></td>
+              <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" width="20" height="20" /></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>* Név</td>
+              <td align="right">
+                <label class="error" for="txtDataRecordingName" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                @Html.TextBox("txtDataRecordingName", Model.DataRecording.Name, new { id = "txtDataRecordingName", @class = "regfields" })
+             </td>
+            </tr>
+            <tr>
+              <td>* Telefon</td>
+              <td align="right">
+                <label class="error" for="txtDataRecordingPhone" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                @Html.TextBox("txtDataRecordingPhone", Model.DataRecording.Phone, new { id = "txtDataRecordingPhone", @class = "regfields" })
+              </td>
+            </tr>
+            <tr>
+              <td>* Ügyintéző email</td>
+              <td align="right">
+                <label class="error" for="txtDataRecordingEmail" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                @Html.TextBox("txtDataRecordingEmail", Model.DataRecording.Email, new { id = "txtDataRecordingEmail", @class = "regfields" })  
+              </td>
+            </tr>
+            <tr>
+              <td>* Központi email</td>
+              <td align="right">
+                <label class="error" for="txtCustomerEmail" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                @Html.TextBox("txtCustomerEmail", Model.Customer.Email, new { id = "txtCustomerEmail", @class = "regfields" }) 
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="font-size:9px">(Figyelem! A központi e-mail címre küldünk el minden automatikus e-mail visszaigazolást: rendelés, árubeérkezés, kiszállítás)</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Hírlevelek a központi e-mailre</td>
+              <td>
+                @Html.CheckBox("chkNewsletter", Model.Customer.Newsletter, new { id = "chkNewsletter" }) 
+              </td>
+            </tr>
+            <tr><td colspan="2"><input type="submit" name="nextstep2" id="nextstep2" value="Tovább" /></td></tr>
+          </table> 
+            }                
+        </div>                      
+  		    <div id="tabs-3">
+            <h2>Tab 3 Content</h2>	
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_step3" }))
+            { 
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td><strong>Cég alap adatai</strong></td>
+              <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" alt="" width="20" height="20" /></td>
+            </tr>
+            <tr>
+              <td>Ország</td>
+              <td>
+                  <select name="selectCountry" id="selectCountry" class="regfields">
+                    <option value="HU" selected="selected">Magyarország</option>
+                    <option value="AE" >Egyesült Arab Emirátus</option>
+                    <option value="AL" >Albánia</option>
+                    <option value="AT" >AUSZTRIA</option>
+                    <option value="AU" >AUSZTRÁLIA</option>
+                    <option value="AZ" >Azerbajdzsán</option>
+                    <option value="BE" >BELGIUM</option>
+                    <option value="BG" >BULGÁRIA</option>
+                    <option value="BR" >BRAZILIA</option>
+                    <option value="CA" >KANADA</option>
+                    <option value="CH" >SVÁJC</option>
+                    <option value="CN" >KINA</option>
+                    <option value="CY" >CIPRUS</option>
+                    <option value="CZ" >CSEH-KÖZTÁRSASÁG</option>
+                    <option value="DE" >NÉMETORSZÁG</option>
+                    <option value="DK" >DÁNIA</option>
+                    <option value="EE" >ÉSZTORSZÁG</option>
+                    <option value="ES" >SPANYOLORSZÁG</option>
+                    <option value="EU" >EURÓPAI UNIÓ</option>
+                    <option value="FI" >FINNORSZÁG</option>
+                    <option value="FR" >FRANCIAORSZÁG</option>
+                    <option value="GB" >NAGY-BRITANNIA</option>
+                    <option value="GR" >GÖRÖGORSZÁG</option>
+                    <option value="HK" >HONG KONG</option>
+                    <option value="HR" >HORVÁTORSZÁG</option>
+                    <option value="ID" >INDONÉZIA</option>
+                    <option value="IE" >IRORSZÁG</option>
+                    <option value="IL" >IZRAEL</option>
+                    <option value="IN" >INDIA</option>
+                    <option value="IS" >IZLAND</option>
+                    <option value="IT" >OLASZORSZÁG</option>
+                    <option value="JP" >JAPÁN</option>
+                    <option value="KR" >KOREAI KÖZTÁRSASÁG</option>
+                    <option value="LI" >LICHTENSTEIN</option>
+                    <option value="LT" >LITVÁNIA</option>
+                    <option value="LU" >LUXEMBURG</option>
+                    <option value="LV" >LETTORSZÁG</option>
+                    <option value="MD" >MOLDOVA</option>
+                    <option value="MN" >MONGOLIA</option>
+                    <option value="MT" >MÁLTA</option>
+                    <option value="MX" >MEXIKO</option>
+                    <option value="MY" >MALAYSIA</option>
+                    <option value="MZ" >MOZAMBIK</option>
+                    <option value="NL" >HOLLANDIA</option>
+                    <option value="NO" >NORVÉGIA</option>
+                    <option value="NZ" >Új-Zéland</option>
+                    <option value="PH" >FÜLÖPSZIGETEK</option>
+                    <option value="PL" >LENGYELORSZÁG</option>
+                    <option value="PT" >PORTUGÁLIA</option>
+                    <option value="RO" >ROMÁNIA</option>
+                    <option value="RS" >Szerbia</option>
+                    <option value="RU" >Oroszország</option>
+                    <option value="SE" >SVÉDORSZÁG</option>
+                    <option value="SG" >SZINGAPUR</option>
+                    <option value="SI" >SZLOVÉNIA</option>
+                    <option value="SK" >SZLOVÁK KÖZTÁRSASÁG</option>
+                    <option value="TH" >THAIFÖLD</option>
+                    <option value="TN" >TUNÉZIA</option>
+                    <option value="TR" >TÖRÖKORSZÁG</option>
+                    <option value="TW" >TAIWAN</option>
+                    <option value="UA" >UKRAJNA</option>
+                    <option value="US" >AMERIKAI EGYESÜLT ÁLLAMOK</option>
+                    <option value="VN" >VIETNAM</option>
+                    <option value="XS" >SZERBIA</option>
+                  </select>
+             </td>
+            </tr>
+            <tr>
+              <td>Cégnév</td>
+              <td>@Html.TextBox("txtCustomerName", Model.Customer.CustomerName, new { id = "txtCustomerName", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td>Cégjegyzékszám</td>
+              <td>@Html.TextBox("txtCompanyRegisterNumber", Model.Customer.CompanyRegisterNumber, new { id = "txtCompanyRegisterNumber", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td>Adószám</td>
+              <td>@Html.TextBox("txtVatNumber1", Model.Customer.VatNumber1, new { id = "txtVatNumber1", @class = "regfields", size = "6" })
+                -
+                @Html.TextBox("txtVatNumber2", Model.Customer.VatNumber2, new { id = "txtVatNumber2", @class = "regfields", size = "6" })
+                -
+                @Html.TextBox("txtVatNumber3", Model.Customer.VatNumber3, new { id = "txtVatNumber3", @class = "regfields", size = "6" })</td>
+            </tr>
+            <tr>
+              <td>Uniós adószám</td>
+              <td>@Html.TextBox("txtEUVatNumber", Model.Customer.EUVatNumber, new { id = "txtEUVatNumber", @class = "regfields" })</td>
+            </tr>
+            </table>
+            <table id="bankAccountContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
+            </table>
+            <script id="bankAccountTemplate" type="text/x-jquery-tmpl"> 
+            <tr>
+              <td nowrap="nowrap">Bankszámlaszám</td>
+              <td><input name="txtBankAccountNumber" type="text" class="regfields" /> 
+                [<a href="#">+</a>] További</td>
+            </tr>
+            </script>   
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td nowrap="nowrap">Aláírási címpéldány [ <a href="@Url.Content("~/upload/index.asp")">klikk</a> ]</td>
+              <td>
+              @Html.Label("spanSignatureEntityFile", Model.Customer.SignatureEntityFile)
+                <input name="uploadSignatureEntityFile" type="file" id="uploadSignatureEntityFile" />
+                
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="font-size:9px">Feltölthető formátumok: .jpg, .jpeg, .pdf, .png, .tiff<br /><br />Egy dokumentum feltöltése lehetséges!
+                A fenti dokumentum feltöltése akkor nem kötelező, ha vállalja, hogy más módon (személyesen, faxon, postai úton) juttatja el hozzánk. </td>
+            </tr>
+            <tr>
+              <td colspan="2"><hr /></td>
+            </tr>
+            <tr>
+              <td><strong>Számlázási cím</strong></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>Ország</td>
+              <td><select name="selectInvoiceCountry" class="regfields" id="selectInvoiceCountry">
+                    <option value="HU" selected="selected">Magyarország</option>
+                    <option value="AE" >Egyesült Arab Emirátus</option>
+                    <option value="AL" >Albánia</option>
+                    <option value="AT" >AUSZTRIA</option>
+                    <option value="AU" >AUSZTRÁLIA</option>
+                    <option value="AZ" >Azerbajdzsán</option>
+                    <option value="BE" >BELGIUM</option>
+                    <option value="BG" >BULGÁRIA</option>
+                    <option value="BR" >BRAZILIA</option>
+                    <option value="CA" >KANADA</option>
+                    <option value="CH" >SVÁJC</option>
+                    <option value="CN" >KINA</option>
+                    <option value="CY" >CIPRUS</option>
+                    <option value="CZ" >CSEH-KÖZTÁRSASÁG</option>
+                    <option value="DE" >NÉMETORSZÁG</option>
+                    <option value="DK" >DÁNIA</option>
+                    <option value="EE" >ÉSZTORSZÁG</option>
+                    <option value="ES" >SPANYOLORSZÁG</option>
+                    <option value="EU" >EURÓPAI UNIÓ</option>
+                    <option value="FI" >FINNORSZÁG</option>
+                    <option value="FR" >FRANCIAORSZÁG</option>
+                    <option value="GB" >NAGY-BRITANNIA</option>
+                    <option value="GR" >GÖRÖGORSZÁG</option>
+                    <option value="HK" >HONG KONG</option>
+                    <option value="HR" >HORVÁTORSZÁG</option>
+                    <option value="ID" >INDONÉZIA</option>
+                    <option value="IE" >IRORSZÁG</option>
+                    <option value="IL" >IZRAEL</option>
+                    <option value="IN" >INDIA</option>
+                    <option value="IS" >IZLAND</option>
+                    <option value="IT" >OLASZORSZÁG</option>
+                    <option value="JP" >JAPÁN</option>
+                    <option value="KR" >KOREAI KÖZTÁRSASÁG</option>
+                    <option value="LI" >LICHTENSTEIN</option>
+                    <option value="LT" >LITVÁNIA</option>
+                    <option value="LU" >LUXEMBURG</option>
+                    <option value="LV" >LETTORSZÁG</option>
+                    <option value="MD" >MOLDOVA</option>
+                    <option value="MN" >MONGOLIA</option>
+                    <option value="MT" >MÁLTA</option>
+                    <option value="MX" >MEXIKO</option>
+                    <option value="MY" >MALAYSIA</option>
+                    <option value="MZ" >MOZAMBIK</option>
+                    <option value="NL" >HOLLANDIA</option>
+                    <option value="NO" >NORVÉGIA</option>
+                    <option value="NZ" >Új-Zéland</option>
+                    <option value="PH" >FÜLÖPSZIGETEK</option>
+                    <option value="PL" >LENGYELORSZÁG</option>
+                    <option value="PT" >PORTUGÁLIA</option>
+                    <option value="RO" >ROMÁNIA</option>
+                    <option value="RS" >Szerbia</option>
+                    <option value="RU" >Oroszország</option>
+                    <option value="SE" >SVÉDORSZÁG</option>
+                    <option value="SG" >SZINGAPUR</option>
+                    <option value="SI" >SZLOVÉNIA</option>
+                    <option value="SK" >SZLOVÁK KÖZTÁRSASÁG</option>
+                    <option value="TH" >THAIFÖLD</option>
+                    <option value="TN" >TUNÉZIA</option>
+                    <option value="TR" >TÖRÖKORSZÁG</option>
+                    <option value="TW" >TAIWAN</option>
+                    <option value="UA" >UKRAJNA</option>
+                    <option value="US" >AMERIKAI EGYESÜLT ÁLLAMOK</option>
+                    <option value="VN" >VIETNAM</option>
+                    <option value="XS" >SZERBIA</option>
+              </select></td>
+            </tr>
+            <tr>
+              <td>Irányítószám</td>
+              <td>
+              @Html.TextBox("txtInvoiceZipCode", Model.InvoiceAddress.ZipCode, new { id = "txtInvoiceZipCode", @class = "regfields", size = "4" })
+              </td>
+            </tr>
+            <tr>
+              <td>Város</td>
+              <td>
+              @Html.TextBox("txtInvoiceCity", Model.InvoiceAddress.City, new { id = "txtInvoiceCity", @class = "regfields" })
+              </td>
+            </tr>
+            <tr>
+              <td>Utca, házszám</td>
+              <td>@Html.TextBox("txtInvoiceStreet", Model.InvoiceAddress.Street, new { id = "txtInvoiceStreet", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td>Telefon</td>
+              <td>@Html.TextBox("txtInvoicePhone", Model.InvoiceAddress.Phone, new { id = "txtInvoicePhone", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td colspan="2"><hr /></td>
+            </tr>
+            <tr>
+              <td><strong>Levelezési cím</strong></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="font-size:9px">(kérjük itt írja át, ha nem egyezik a számlázási címmel)</td>
+            </tr>
+            <tr>
+              <td>Ország</td>
+              <td><select name="selectMailCountry" class="regfields" id="selectMailCountry">
+                    <option value="HU" selected="selected">Magyarország</option>
+                    <option value="AE" >Egyesült Arab Emirátus</option>
+                    <option value="AL" >Albánia</option>
+                    <option value="AT" >AUSZTRIA</option>
+                    <option value="AU" >AUSZTRÁLIA</option>
+                    <option value="AZ" >Azerbajdzsán</option>
+                    <option value="BE" >BELGIUM</option>
+                    <option value="BG" >BULGÁRIA</option>
+                    <option value="BR" >BRAZILIA</option>
+                    <option value="CA" >KANADA</option>
+                    <option value="CH" >SVÁJC</option>
+                    <option value="CN" >KINA</option>
+                    <option value="CY" >CIPRUS</option>
+                    <option value="CZ" >CSEH-KÖZTÁRSASÁG</option>
+                    <option value="DE" >NÉMETORSZÁG</option>
+                    <option value="DK" >DÁNIA</option>
+                    <option value="EE" >ÉSZTORSZÁG</option>
+                    <option value="ES" >SPANYOLORSZÁG</option>
+                    <option value="EU" >EURÓPAI UNIÓ</option>
+                    <option value="FI" >FINNORSZÁG</option>
+                    <option value="FR" >FRANCIAORSZÁG</option>
+                    <option value="GB" >NAGY-BRITANNIA</option>
+                    <option value="GR" >GÖRÖGORSZÁG</option>
+                    <option value="HK" >HONG KONG</option>
+                    <option value="HR" >HORVÁTORSZÁG</option>
+                    <option value="ID" >INDONÉZIA</option>
+                    <option value="IE" >IRORSZÁG</option>
+                    <option value="IL" >IZRAEL</option>
+                    <option value="IN" >INDIA</option>
+                    <option value="IS" >IZLAND</option>
+                    <option value="IT" >OLASZORSZÁG</option>
+                    <option value="JP" >JAPÁN</option>
+                    <option value="KR" >KOREAI KÖZTÁRSASÁG</option>
+                    <option value="LI" >LICHTENSTEIN</option>
+                    <option value="LT" >LITVÁNIA</option>
+                    <option value="LU" >LUXEMBURG</option>
+                    <option value="LV" >LETTORSZÁG</option>
+                    <option value="MD" >MOLDOVA</option>
+                    <option value="MN" >MONGOLIA</option>
+                    <option value="MT" >MÁLTA</option>
+                    <option value="MX" >MEXIKO</option>
+                    <option value="MY" >MALAYSIA</option>
+                    <option value="MZ" >MOZAMBIK</option>
+                    <option value="NL" >HOLLANDIA</option>
+                    <option value="NO" >NORVÉGIA</option>
+                    <option value="NZ" >Új-Zéland</option>
+                    <option value="PH" >FÜLÖPSZIGETEK</option>
+                    <option value="PL" >LENGYELORSZÁG</option>
+                    <option value="PT" >PORTUGÁLIA</option>
+                    <option value="RO" >ROMÁNIA</option>
+                    <option value="RS" >Szerbia</option>
+                    <option value="RU" >Oroszország</option>
+                    <option value="SE" >SVÉDORSZÁG</option>
+                    <option value="SG" >SZINGAPUR</option>
+                    <option value="SI" >SZLOVÉNIA</option>
+                    <option value="SK" >SZLOVÁK KÖZTÁRSASÁG</option>
+                    <option value="TH" >THAIFÖLD</option>
+                    <option value="TN" >TUNÉZIA</option>
+                    <option value="TR" >TÖRÖKORSZÁG</option>
+                    <option value="TW" >TAIWAN</option>
+                    <option value="UA" >UKRAJNA</option>
+                    <option value="US" >AMERIKAI EGYESÜLT ÁLLAMOK</option>
+                    <option value="VN" >VIETNAM</option>
+                    <option value="XS" >SZERBIA</option>
+              </select></td>
+            </tr>
+            <tr>
+              <td>Irányítószám</td>
+              <td>@Html.TextBox("txtMailAddressZipCode", Model.MailAddress.ZipCode, new { id = "txtMailAddressZipCode", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td>Város</td>
+              <td>@Html.TextBox("txtMailAddressCity", Model.MailAddress.City, new { id = "txtMailAddressCity", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td>Utca, házszám</td>
+              <td>@Html.TextBox("txtMailAddressStreet", Model.MailAddress.Street, new { id = "txtMailAddressStreet", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td colspan="2"><hr /></td>
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Szállítási cím/telephely</strong></td>
+            </tr>
+            <tr>
+              <td colspan="2" style="font-size:9px">(kérjük itt írja át, ha nem egyezik a számlázási címmel)</td>
+            </tr>
+            </table>
+                
+            <table id="deliveryAddressContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
+            </table>
+            <script id="deliveryAddressTemplate" type="text/x-jquery-tmpl">
+            <tr>
+              <td>Ország</td>
+              <td><select name="selectDeliveryAddressCity" class="regfields">
+                    <option value="HU" selected="selected">Magyarország</option>
+                    <option value="AE" >Egyesült Arab Emirátus</option>
+                    <option value="AL" >Albánia</option>
+                    <option value="AT" >AUSZTRIA</option>
+                    <option value="AU" >AUSZTRÁLIA</option>
+                    <option value="AZ" >Azerbajdzsán</option>
+                    <option value="BE" >BELGIUM</option>
+                    <option value="BG" >BULGÁRIA</option>
+                    <option value="BR" >BRAZILIA</option>
+                    <option value="CA" >KANADA</option>
+                    <option value="CH" >SVÁJC</option>
+                    <option value="CN" >KINA</option>
+                    <option value="CY" >CIPRUS</option>
+                    <option value="CZ" >CSEH-KÖZTÁRSASÁG</option>
+                    <option value="DE" >NÉMETORSZÁG</option>
+                    <option value="DK" >DÁNIA</option>
+                    <option value="EE" >ÉSZTORSZÁG</option>
+                    <option value="ES" >SPANYOLORSZÁG</option>
+                    <option value="EU" >EURÓPAI UNIÓ</option>
+                    <option value="FI" >FINNORSZÁG</option>
+                    <option value="FR" >FRANCIAORSZÁG</option>
+                    <option value="GB" >NAGY-BRITANNIA</option>
+                    <option value="GR" >GÖRÖGORSZÁG</option>
+                    <option value="HK" >HONG KONG</option>
+                    <option value="HR" >HORVÁTORSZÁG</option>
+                    <option value="ID" >INDONÉZIA</option>
+                    <option value="IE" >IRORSZÁG</option>
+                    <option value="IL" >IZRAEL</option>
+                    <option value="IN" >INDIA</option>
+                    <option value="IS" >IZLAND</option>
+                    <option value="IT" >OLASZORSZÁG</option>
+                    <option value="JP" >JAPÁN</option>
+                    <option value="KR" >KOREAI KÖZTÁRSASÁG</option>
+                    <option value="LI" >LICHTENSTEIN</option>
+                    <option value="LT" >LITVÁNIA</option>
+                    <option value="LU" >LUXEMBURG</option>
+                    <option value="LV" >LETTORSZÁG</option>
+                    <option value="MD" >MOLDOVA</option>
+                    <option value="MN" >MONGOLIA</option>
+                    <option value="MT" >MÁLTA</option>
+                    <option value="MX" >MEXIKO</option>
+                    <option value="MY" >MALAYSIA</option>
+                    <option value="MZ" >MOZAMBIK</option>
+                    <option value="NL" >HOLLANDIA</option>
+                    <option value="NO" >NORVÉGIA</option>
+                    <option value="NZ" >Új-Zéland</option>
+                    <option value="PH" >FÜLÖPSZIGETEK</option>
+                    <option value="PL" >LENGYELORSZÁG</option>
+                    <option value="PT" >PORTUGÁLIA</option>
+                    <option value="RO" >ROMÁNIA</option>
+                    <option value="RS" >Szerbia</option>
+                    <option value="RU" >Oroszország</option>
+                    <option value="SE" >SVÉDORSZÁG</option>
+                    <option value="SG" >SZINGAPUR</option>
+                    <option value="SI" >SZLOVÉNIA</option>
+                    <option value="SK" >SZLOVÁK KÖZTÁRSASÁG</option>
+                    <option value="TH" >THAIFÖLD</option>
+                    <option value="TN" >TUNÉZIA</option>
+                    <option value="TR" >TÖRÖKORSZÁG</option>
+                    <option value="TW" >TAIWAN</option>
+                    <option value="UA" >UKRAJNA</option>
+                    <option value="US" >AMERIKAI EGYESÜLT ÁLLAMOK</option>
+                    <option value="VN" >VIETNAM</option>
+                    <option value="XS" >SZERBIA</option>
+              </select></td>
+            </tr>
+            <tr>
+              <td>Irányítószám</td>
+              <td><input name="txtDeliveryAddressZipCode" type="text" class="regfields" size="4" /></td>
+            </tr>
+            <tr>
+              <td>Város</td>
+              <td><input name="txtDeliveryAddressCity" type="text" class="regfields" /></td>
+            </tr>
+            <tr>
+              <td>Utca, házszám</td>
+              <td><input name="txtDeliveryAddressStreet" type="text" class="regfields" /></td>
+            </tr>
+
+            </script>
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">                
+             <tr><td colspan="2"><input type="submit" name="nextstep3" id="nextstep3" value="Tovább" /></td></tr>
+            </table>
+            }        				          
+        </div>
+  		<div id="tabs-4">
+            <h2>Tab 4 Content</h2>
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_step4" }))
+            {
+
+                
+                
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td><strong>Kapcsolattartók<br />
+              és jogosultságok</strong></td>
+              <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" alt="" width="20" height="20" /></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            </table>
+            <table id="contactPersonContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
+            </table>
+            <script id="contactPersonTemplate" type="text/x-jquery-tmpl">
+
+            </script>
+                
+                
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td><strong>Cégadminisztrátor </strong></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="font-size:9px">A Cégadminisztrátor az a személy, aki felvehet, törölhet és módosíthat felhasználókat valamint beállíthatja azok jogosultságait. Figyelem, a Cégadminisztrátor személyét a szerződés aláírását követően csak cégszerűen aláírva írásban lehet megváltozatni!</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Belépési név</td>
+              <td align="right">@Html.TextBox("txtWebAdminUserName", Model.MailAddress.City, new { id = "txtWebAdminUserName", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Jelszó</td>
+              <td align="right">@Html.TextBox("txtWebAdminPassword", Model.MailAddress.City, new { id = "txtWebAdminPassword", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Jelszó mégegyszer</td>
+              <td align="right">@Html.TextBox("txtWebAdminPassword2", Model.MailAddress.City, new { id = "txtWebAdminPassword2", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">&nbsp;</td>
+              <td align="right">&nbsp;</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Vezetéknév</td>
+              <td align="right">@Html.TextBox("txtWebAdminFirstName", Model.MailAddress.City, new { id = "txtWebAdminFirstName", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Keresztnév</td>
+              <td align="right">@Html.TextBox("txtWebAdminLastName", Model.MailAddress.City, new { id = "txtWebAdminLastName", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">E-mail</td>
+              <td align="right">@Html.TextBox("txtWebAdminEmail", Model.MailAddress.City, new { id = "txtWebAdminEmail", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Telefon</td>
+              <td align="right">@Html.TextBox("txtWebAdminPhone", Model.MailAddress.City, new { id = "txtWebAdminPhone", @class = "regfields" })</td>
+            </tr>
+            <tr>
+              <td colspan="2" nowrap="nowrap"><hr /></td>
+            </tr>
+            <tr><td colspan="2"><input type="button" name="nextstep4" id="nextstep4" value="Tovább" /></td></tr>
+            </table>			
+            }
+        </div>
+        <div id="tabs-5">
+            <h2>Tab 5 Content</h2>
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_step5" }))
+            { 	
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p> 
+            }               			
+        </div>
+  	</div>
+  </td>
+</tr>
+</table>    		

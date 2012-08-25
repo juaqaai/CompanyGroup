@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Cms.Webshop.Models
 {
+    /// <summary>
+    /// struktúra model 
+    /// </summary>
     public class Structures
     {
         public Structures()

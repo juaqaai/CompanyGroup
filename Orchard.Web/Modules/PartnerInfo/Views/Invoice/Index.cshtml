@@ -1,1 +1,97 @@
-﻿<h2>@T("This is a placeholder for Invoice view.")</h2>
+﻿<h2>Számla információ</h2>
+<style>
+    .aside-first {
+        display: none;
+    }
+    .zone-content {
+        margin-left: -297px;
+    }
+    
+    #cus_copyright {
+        margin-left: -295px;
+    }
+</style>
+<div id="szamlainfo">
+    <div id="szamlaszuro">
+  <table width="100%" border="0" cellspacing="1" cellpadding="0">
+    <tr>
+      <td nowrap="nowrap">
+        <input type="radio" name="radio" id="radio" value="radio" />
+      </td>
+      <td nowrap="nowrap">Összes számla</td>
+      <td nowrap="nowrap"><input type="radio" name="radio" id="radio2" value="radio" /></td>
+      <td nowrap="nowrap">Kifizetetlen számlák</td>
+      <td nowrap="nowrap"><input type="radio" name="radio" id="radio3" value="radio" /></td>
+      <td nowrap="nowrap">Lejárt számlák</td>
+      <td width="100%"></td>
+      <td nowrap="nowrap">Kezdő dátum:&nbsp;</td>
+      <td nowrap="nowrap"><input name="naptar_kezd" id="naptar_kezd" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" />&nbsp;&nbsp;</td>
+      
+      <td nowrap="nowrap">Záró dátum:&nbsp;</td>
+      <td nowrap="nowrap"><input name="naptar_zar" id="naptar_zar" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
+      
+    </tr>
+  </table>
+  </div>
+  
+  <H3 style="margin-left:3px; color: #666;">Elemek száma: 16db.</H3>
+  
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+      <td colspan="6" nowrap="nowrap">
+      <div id="szamla_header">
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td width="50%"><strong>Számla száma:</strong> HI-123456789</td>
+          <td width="50%"><strong>Számla kelte:</strong> 2012.08.17.</td>
+          <td nowrap="nowrap"><strong>Fizetési határidő:</strong> 2012.08.17.</td>
+        </tr>
+      </table>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="6"><hr size="1" noshade="noshade" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap"><strong>Azonosító</strong></td>
+      <td nowrap="nowrap"><strong>Cikknév</strong></td>
+      <td width="100%">&nbsp;</td>
+      <td style="text-align: left; padding: 0px;" nowrap="nowrap"><strong>Mennyiség [ db ]</strong></td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap"><strong>Egységár</strong></td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap"><strong>Összesen</strong></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">TS2GXDPCM</td>
+      <td nowrap="nowrap">Transcend XD Card 2 GB M type</td>
+      <td width="100%">&nbsp;</td>
+      <td style="text-align: center; padding: 5px; border-right: 1px solid #999;" nowrap="nowrap">1</td>
+      <td style="text-align: center; padding: 5px; border-right: 1px solid #999;" nowrap="nowrap">4 220 Ft</td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap">4 220 Ft</td>
+    </tr>
+    <tr>
+      <td colspan="6"><hr size="1" noshade="noshade" /></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td width="100%">&nbsp;</td>
+      <td colspan="2" nowrap="nowrap">Netto összesen:</td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap">4 220 Ft</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td width="100%">&nbsp;</td>
+      <td colspan="2" nowrap="nowrap">Brutto összesen:</td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap">5 275 Ft</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td nowrap="nowrap">&nbsp;</td>
+      <td width="100%">&nbsp;</td>
+      <td colspan="2" nowrap="nowrap"><strong>Brutto össz. tartozás:</strong></td>
+      <td style="padding: 5px; text-align: right; font-weight: bold; color: #900;" nowrap="nowrap">0 Ft</td>
+    </tr>
+  </table>
+</div>
