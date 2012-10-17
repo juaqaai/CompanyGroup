@@ -1,1 +1,75 @@
-﻿<h2>@T("This is a placeholder for newsletter view.")</h2>
+﻿@model Cms.Company.Models.NewsletterCollection
+
+@using (Script.Head())
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            
+            CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+            CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+            CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+            CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
+            CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
+            CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Registration/")');
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/Webshop/Catalogue/SignInCatalogue")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/Webshop/Catalogue/SignOutCatalogue")');
+            CompanyGroupCms.Constants.Instance().setDownloadPriceListServiceUrl('@Url.Content("~/Webshop/Catalogue/DownloadPriceList")');
+            CompanyGroupCms.Constants.Instance().setModule('partnerinfo');
+
+            var model = @(Html.Raw(Json.Encode(Model)));
+            console.log(model);
+
+            $("#div_newsletter_container").empty();
+            $("#newsletter_template").tmpl(model).appendTo("#div_newsletter_container");
+        });
+
+    </script>
+}
+<h2>@T("Hírlevelek")</h2>
+
+<div id="div_newsletter_container" class="wrapper">
+</div>
+
+<script id="newsletter_template" type="text/x-jquery-tmpl">
+{{each( i, item ) Items}}
+<div class="expand_heading">
+	<table width="695" border="0" cellspacing="0" cellpadding="0" class="expand_heading_table1">
+		<tr>
+			<td valign="top"><img src="@Url.Content("~/Media/images/plusicon.png")" alt="" /></td>
+			<td width="100%" valign="top" class="cus_prod_header_middle_cell">
+			<span class="cus_prod_table_item_number">${item.SequenceNumber}</span><span class="cus_product_data">${item.NewsletterId}</span>
+            <span class="cus_prod_table_item_code">${item.AllowedDateTime}</span>
+            <br /><span class="cus_prod_table_item_name">${item.Title}</span>
+			</td>
+			<td align="right" valign="top" nowrap="nowrap">
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div class="toggle_container">
+	<div class="box">
+		<table width="695" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td valign="top">
+				    <div class="cus_termekkep">
+                    {{if item.PicturePath.length > 0}}
+				    <a class="popupimg" href="https://www.hrp.hu/Articles/${item.HtmlPath}" target="_blank" title="${item.Title}"><img src="https://www.hrp.hu/Articles/${item.PicturePath}" alt="${item.PicturePath}" /></a>
+                    {{else}}
+				    <a class="popupimg" href="https://www.hrp.hu/Articles/${item.HtmlPath}" target="_blank" title="${item.Title}"><img src="@Url.Content("~/Media/images/demopic.jpg")" width="180" height="134" alt="" /></a>
+                    {{/if}}
+				    </div>
+                </td>
+				<td valign="top" class="cus_prod_table_middle_cell">
+				    <div class="cus_prod_table_desc">${item.Description}</div>
+                </td>
+				<td align="right" valign="top" >
+
+                </td>
+			</tr>
+		</table>
+	</div>
+</div>
+{{/each}}
+</script>

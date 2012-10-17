@@ -118,11 +118,13 @@
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Models\Catalogue.cs" />
     <Compile Include="Models\CatalogueItem.cs" />
+    <Compile Include="Models\CreateOrder.cs" />
+    <Compile Include="Models\CreateFinanceOffer.cs" />
     <Compile Include="Models\DeleteShoppingCart.cs" />
     <Compile Include="Models\RemoveLine.cs" />
     <Compile Include="Models\FirstLevelCategories.cs" />
     <Compile Include="Models\GetCartByKey.cs" />
-    <Compile Include="Models\GetCartCollectionByVisitorId.cs" />
+    <Compile Include="Models\GetActiveCart.cs" />
     <Compile Include="Models\ManufacturerItem.cs" />
     <Compile Include="Models\Manufacturers.cs" />
     <Compile Include="Models\AddCart.cs" />

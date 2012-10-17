@@ -13,16 +13,16 @@ namespace Cms.PartnerInfo.Controllers
     [Themed]
     public class HomeController : Cms.CommonCore.Controllers.HomeController
     {
-        public ActionResult Index()
-        {
-            return View("Index");
-        }
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="request"></param>
         /// <returns></returns>
+        public ActionResult Index()
+        {
+            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+
+            return View("Index", visitor);
+        }
 
     }
 }

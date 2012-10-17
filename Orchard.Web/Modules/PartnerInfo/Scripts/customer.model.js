@@ -181,7 +181,7 @@ CompanyGroupCms.VisitorInfo = (function () {
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'ChangeLanguage',
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl('ChangeLanguage'),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
@@ -203,7 +203,7 @@ CompanyGroupCms.VisitorInfo = (function () {
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'ChangeCurrency',
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl('ChangeCurrency'),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
@@ -261,7 +261,7 @@ CompanyGroupCms.VisitorInfo = (function () {
         var dataString = $.toJSON(data);
         $.ajax({
             type: "POST",
-            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl() + 'VisitorInfo',
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl('VisitorInfo'),
             data: dataString,
             contentType: "application/json; charset=utf-8",
             timeout: 10000,
@@ -315,19 +315,19 @@ CompanyGroupCms.VisitorInfo = (function () {
                         $("#catalogueSequenceTemplate").tmpl(result.Visitor).appendTo("#catalogueSequenceContainer");
                         $("#catalogueDownloadContainer").empty();
                         $("#catalogueDownloadTemplate").tmpl(result.Visitor).appendTo("#catalogueDownloadContainer");
+                        //$("#cus_filter_price").empty();
+                        //$("#priceFilterTemplate").tmpl(result.Visitor).appendTo("#cus_filter_price");
+                        $("#cus_filter_price").hide();
+
+                        $("#hidden_cartId").val('');
+                        //CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId('');
+                        //CompanyGroupCms.ShoppingCartSummary.Instance().Init(result.Visitor.IsValidLogin, 0);
                         $("#basket_open_button").empty();
                         $("#shoppingCartSummaryTemplate").tmpl(result).appendTo("#basket_open_button");
-                        $("#cus_filter_price").empty();
-                        $("#priceFilterTemplate").tmpl(result.Visitor).appendTo("#cus_filter_price");
-
-                        CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId('');
-                        CompanyGroupCms.ShoppingCartSummary.Instance().Init(result.Visitor.IsValidLogin, 0);
-                        $("#shoppingCartSummaryTemplate").tmpl(CompanyGroupCms.ShoppingCartSummary.Instance()).appendTo("#basket_open_button");
                         $("#cus_basket_menu").empty();
                         $("#shoppingCartHeaderTemplate").tmpl(result).appendTo("#cus_basket_menu");
                         $("#cus_basket").empty();
-                        $("#shoppingCartLineTemplate").tmpl(result.ActiveCart).appendTo("#cus_basket");
-
+                        $("#shoppingCartLineTemplate").tmpl(result).appendTo("#cus_basket");
                         $("#deliveryAddressTemplate").tmpl(result.DeliveryAddresses).appendTo("#deliveryAddressContainer");
                     }
                 }
@@ -342,12 +342,12 @@ CompanyGroupCms.VisitorInfo = (function () {
     };
     var showSignInPanel = function () {
         $.fancybox({
-                    href : '#div_login',
-                    autoDimensions: true,
-                    autoScale: false,
-                    transitionIn: 'fade',
-                    transitionOut: 'fade'
-                });  
+            href: '#div_login',
+            autoDimensions: true,
+            autoScale: false,
+            transitionIn: 'fade',
+            transitionOut: 'fade'
+        });
     };
     var signIn = function (userName, password, token) {
         var data = new Object();
@@ -385,19 +385,20 @@ CompanyGroupCms.VisitorInfo = (function () {
                         $("#catalogueSequenceTemplate").tmpl(result.Visitor).appendTo("#catalogueSequenceContainer");
                         $("#catalogueDownloadContainer").empty();
                         $("#catalogueDownloadTemplate").tmpl(result.Visitor).appendTo("#catalogueDownloadContainer");
-                        $("#basket_open_button").empty();
-                        $("#shoppingCartSummaryTemplate").tmpl(result).appendTo("#basket_open_button");
-                        $("#cus_filter_price").empty();
-                        $("#priceFilterTemplate").tmpl(result.Visitor).appendTo("#cus_filter_price");
 
-                        CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(result.ActiveCart.Id);
-                        CompanyGroupCms.ShoppingCartSummary.Instance().Init(result.Visitor.IsValidLogin, result.ActiveCart.SumTotal);
-                        $("#shoppingCartSummaryTemplate").tmpl(CompanyGroupCms.ShoppingCartSummary.Instance()).appendTo("#basket_open_button");
+                        //$("#cus_filter_price").empty();
+                        //$("#priceFilterTemplate").tmpl(result.Visitor).appendTo("#cus_filter_price");
+                        $("#cus_filter_price").show();
+
+                        $("#hidden_cartId").val(result.ActiveCart.Id);
+                        //CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(result.ActiveCart.Id);
+                        //CompanyGroupCms.ShoppingCartSummary.Instance().Init(result.Visitor.IsValidLogin, result.ActiveCart.SumTotal);
+                        $("#basket_open_button").empty();
+                        $("#shoppingCartSummaryTemplate").tmpl(result).appendTo("#basket_open_button"); // CompanyGroupCms.ShoppingCartSummary.Instance() 
                         $("#cus_basket_menu").empty();
                         $("#shoppingCartHeaderTemplate").tmpl(result).appendTo("#cus_basket_menu");
                         $("#cus_basket").empty();
-                        $("#shoppingCartLineTemplate").tmpl(result.ActiveCart).appendTo("#cus_basket");
-
+                        $("#shoppingCartLineTemplate").tmpl(result).appendTo("#cus_basket");
                         $("#deliveryAddressTemplate").tmpl(result.DeliveryAddresses).appendTo("#deliveryAddressContainer");
                     }
                 }
@@ -411,6 +412,34 @@ CompanyGroupCms.VisitorInfo = (function () {
             }
         });
     };
+    var invoiceInfo = function () {
+        var data = new Object();
+        data.PaymentType = $("input[name='radio_paymenttype']:radio:checked").val();
+        var dataString = $.toJSON(data);
+        $.ajax({
+            type: "POST",
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl('FilteredInvoice'),
+            data: dataString,
+            contentType: "application/json; charset=utf-8",
+            timeout: 10000,
+            dataType: "json",
+            processData: true,
+            success: function (result) {
+                if (result) {
+                    $("#invoiceInfoListContainer").empty();
+                    $("#invoiceInfoListTemplate").tmpl(result).appendTo("#invoiceInfoListContainer");
+                    $("#itemCount").html(result.ItemCount);
+                    console.log(result);
+                }
+                else {
+                    console.log('invoiceInfo result failed');
+                }
+            },
+            error: function () {
+                console.log('invoiceInfo call failed');
+            }
+        });
+    };
     return {
         Authorize: authorize,
         SignOut: signOut,
@@ -418,7 +447,8 @@ CompanyGroupCms.VisitorInfo = (function () {
         ShowSignInPanel: showSignInPanel,
         ChangeLanguage: changeLanguage,
         ChangeCurrency: changeCurrency,
-        InitView: initView
+        InitView: initView,
+        InvoiceInfo: invoiceInfo
     };
 })();
 

@@ -51,8 +51,8 @@ CompanyGroupCms.Constants = (function () {
             setCustomerServiceUrl: function (customerServiceUrl) {
                 _customerServiceUrl = customerServiceUrl;
             },
-            getPartnerInfoServiceUrl: function () {
-                return _partnerInfoServiceUrl;
+            getPartnerInfoServiceUrl: function (url) {
+                return (url === '' || url === 'undefined') ? _partnerInfoServiceUrl : _partnerInfoServiceUrl + url;
             },
             setPartnerInfoServiceUrl: function (partnerInfoServiceUrl) {
                 if (_partnerInfoServiceUrl === '') {
@@ -69,16 +69,19 @@ CompanyGroupCms.Constants = (function () {
                 return _shoppingCartServiceBaseUrl + url;
             },
             getProductDetailsUrl: function (productId) {
-                return _webshopBaseUrl + productId + '/Details';
+                return _webshopBaseUrl + encodeURIComponent(productId) + '/Details';
+            },
+            getThumbnailPictureUrl: function (productId, recId, dataAreaId) {
+                return _webshopBaseUrl + 'PictureItem/?ProductId=' + encodeURIComponent(productId) + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=60&MaxHeight=60'; 
             },
             getPictureUrl: function (productId, recId, dataAreaId) {
-                return _webshopBaseUrl + productId + '/' + recId + '/' + dataAreaId + '/94/69/Picture';
+                return _webshopBaseUrl + 'PictureItem/?ProductId=' + encodeURIComponent(productId) + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=180&MaxHeight=134'; //webshopBaseUrl + productId + '/' + recId + '/' + dataAreaId + '/94/69/Picture';
             },
             getBigPictureUrl: function (productId, recId, dataAreaId) {
-                return _webshopBaseUrl + '/PictureItem/?ProductId=' + productId + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=500&MaxHeight=500';
+                return _webshopBaseUrl + 'PictureItem/?ProductId=' + encodeURIComponent(productId) + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=500&MaxHeight=500';
             },
-            getRegistrationServiceUrl: function () {
-                return _registrationServiceUrl;
+            getRegistrationServiceUrl: function (url) {
+                return _registrationServiceUrl + url;
             },
             setRegistrationServiceUrl: function (registrationServiceUrl) {
                 _registrationServiceUrl = registrationServiceUrl;
@@ -115,6 +118,12 @@ CompanyGroupCms.Constants = (function () {
             },
             isEqualModule: function (module) {
                 return (_module === module);
+            },
+            getCompletionListAllProductServiceUrl: function () {
+                return _webshopBaseUrl + 'GetCompletionListAllProduct/';
+            },
+            getCompletionListBaseProductServiceUrl: function () {
+                return _webshopBaseUrl + 'GetCompletionListBaseProduct/';
             }
         }
     }

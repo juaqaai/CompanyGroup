@@ -1,4 +1,37 @@
-﻿<h2>Számla információ</h2>
+﻿@model Cms.PartnerInfo.Models.InvoiceInfoList
+@using (Script.Head())
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            
+            CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+            CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+            CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+            CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Invoice/")');
+            CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
+            CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Registration/")');
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/Webshop/Catalogue/SignInCatalogue")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/Webshop/Catalogue/SignOutCatalogue")');
+            CompanyGroupCms.Constants.Instance().setDownloadPriceListServiceUrl('@Url.Content("~/Webshop/Catalogue/DownloadPriceList")');
+            CompanyGroupCms.Constants.Instance().setModule('partnerinfo');
+
+            var model = @(Html.Raw(Json.Encode(Model)));
+            console.log(model);
+
+            $("#invoiceInfoListContainer").empty();
+            $("#invoiceInfoListTemplate").tmpl(model).appendTo("#invoiceInfoListContainer");
+
+            $("#itemCount").html(model.ItemCount);
+            
+            $("input[name='radio_paymenttype']").change(function(){
+                CompanyGroupCms.VisitorInfo.InvoiceInfo();
+            });
+        });
+
+    </script>
+}           
+<h2>Számla információk</h2>
 <style>
     .aside-first {
         display: none;
@@ -13,38 +46,40 @@
 </style>
 <div id="szamlainfo">
     <div id="szamlaszuro">
-  <table width="100%" border="0" cellspacing="1" cellpadding="0">
-    <tr>
-      <td nowrap="nowrap">
-        <input type="radio" name="radio" id="radio" value="radio" />
-      </td>
-      <td nowrap="nowrap">Összes számla</td>
-      <td nowrap="nowrap"><input type="radio" name="radio" id="radio2" value="radio" /></td>
-      <td nowrap="nowrap">Kifizetetlen számlák</td>
-      <td nowrap="nowrap"><input type="radio" name="radio" id="radio3" value="radio" /></td>
-      <td nowrap="nowrap">Lejárt számlák</td>
-      <td width="100%"></td>
-      <td nowrap="nowrap">Kezdő dátum:&nbsp;</td>
-      <td nowrap="nowrap"><input name="naptar_kezd" id="naptar_kezd" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" />&nbsp;&nbsp;</td>
+      <table width="100%" border="0" cellspacing="1" cellpadding="0">
+        <tr>
+          <td nowrap="nowrap">
+            <input type="radio" name="radio_paymenttype" value="0" />
+          </td>
+          <td nowrap="nowrap">Összes számla</td>
+          <td nowrap="nowrap"><input type="radio" name="radio_paymenttype" value="1" checked="checked" /></td>
+          <td nowrap="nowrap">Kifizetetlen számlák</td>
+          <td nowrap="nowrap"><input type="radio" name="radio_paymenttype" value="2" /></td>
+          <td nowrap="nowrap">Lejárt számlák</td>
+          <td width="100%"></td>
+          <td nowrap="nowrap">Kezdő dátum:&nbsp;</td>
+          <td nowrap="nowrap"><input name="naptar_kezd" id="naptar_kezd" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" />&nbsp;&nbsp;</td>
       
-      <td nowrap="nowrap">Záró dátum:&nbsp;</td>
-      <td nowrap="nowrap"><input name="naptar_zar" id="naptar_zar" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
+          <td nowrap="nowrap">Záró dátum:&nbsp;</td>
+          <td nowrap="nowrap"><input name="naptar_zar" id="naptar_zar" type="text" value="Kattintson ide" onfocus="if(this.value=='Kattintson ide')this.value=''" onblur="if(this.value=='')this.value='Kattintson ide'" /></td>
       
-    </tr>
-  </table>
-  </div>
+        </tr>
+      </table>
+    </div>
   
-  <H3 style="margin-left:3px; color: #666;">Elemek száma: 16db.</H3>
-  
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <h3 style="margin-left:3px; color: #666;">Elemek száma: <span id="itemCount"></span></h3>
+    <table id="invoiceInfoListContainer" width="100%" border="0" cellspacing="1" cellpadding="2"></table>
+    <script id="invoiceInfoListTemplate" type="text/x-jquery-tmpl">
+    {{if Items.length > 0}}
+    {{each( i, item ) Items}}
     <tr>
       <td colspan="6" nowrap="nowrap">
       <div id="szamla_header">
       <table width="100%" border="0" cellspacing="1" cellpadding="2">
         <tr>
-          <td width="50%"><strong>Számla száma:</strong> HI-123456789</td>
-          <td width="50%"><strong>Számla kelte:</strong> 2012.08.17.</td>
-          <td nowrap="nowrap"><strong>Fizetési határidő:</strong> 2012.08.17.</td>
+          <td width="50%"><strong>Számla száma:</strong> ${item.InvoiceId}</td>
+          <td width="50%"><strong>Számla kelte:</strong> ${item.InvoiceDate}</td>
+          <td nowrap="nowrap"><strong>Fizetési határidő:</strong> ${item.DueDate}</td>
         </tr>
       </table>
       </div>
@@ -53,6 +88,7 @@
     <tr>
       <td colspan="6"><hr size="1" noshade="noshade" /></td>
     </tr>
+    {{each( j, line ) item.Lines}}
     <tr>
       <td nowrap="nowrap"><strong>Azonosító</strong></td>
       <td nowrap="nowrap"><strong>Cikknév</strong></td>
@@ -62,36 +98,41 @@
       <td style="text-align: right; padding: 5px;" nowrap="nowrap"><strong>Összesen</strong></td>
     </tr>
     <tr>
-      <td nowrap="nowrap">TS2GXDPCM</td>
-      <td nowrap="nowrap">Transcend XD Card 2 GB M type</td>
+      <td nowrap="nowrap">${line.ItemId}</td>
+      <td nowrap="nowrap">${line.Name}</td>
       <td width="100%">&nbsp;</td>
-      <td style="text-align: center; padding: 5px; border-right: 1px solid #999;" nowrap="nowrap">1</td>
-      <td style="text-align: center; padding: 5px; border-right: 1px solid #999;" nowrap="nowrap">4 220 Ft</td>
-      <td style="text-align: right; padding: 5px;" nowrap="nowrap">4 220 Ft</td>
+      <td style="text-align: center; padding: 5px; border-right: 1px solid #999;" nowrap="nowrap">${line.Quantity} </td>
+      <td style="text-align: center; padding: 5px; border-right: 1px solid #999;" nowrap="nowrap">${line.SalesPrice} ${line.CurrencyCode}</td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap">${line.LineAmount} ${line.CurrencyCode}</td>
     </tr>
     <tr>
       <td colspan="6"><hr size="1" noshade="noshade" /></td>
     </tr>
+    {{/each}}
     <tr>
       <td nowrap="nowrap">&nbsp;</td>
       <td nowrap="nowrap">&nbsp;</td>
       <td width="100%">&nbsp;</td>
       <td colspan="2" nowrap="nowrap">Netto összesen:</td>
-      <td style="text-align: right; padding: 5px;" nowrap="nowrap">4 220 Ft</td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap">${item.InvoiceAmount} ${item.CurrencyCode}</td>
     </tr>
     <tr>
       <td nowrap="nowrap">&nbsp;</td>
       <td nowrap="nowrap">&nbsp;</td>
       <td width="100%">&nbsp;</td>
-      <td colspan="2" nowrap="nowrap">Brutto összesen:</td>
-      <td style="text-align: right; padding: 5px;" nowrap="nowrap">5 275 Ft</td>
+      <td colspan="2" nowrap="nowrap">Netto tartozás összesen:</td>
+      <td style="text-align: right; padding: 5px;" nowrap="nowrap">${item.InvoiceCredit} ${item.CurrencyCode}</td>
     </tr>
+    {{/each}}
     <tr>
       <td nowrap="nowrap">&nbsp;</td>
       <td nowrap="nowrap">&nbsp;</td>
       <td width="100%">&nbsp;</td>
-      <td colspan="2" nowrap="nowrap"><strong>Brutto össz. tartozás:</strong></td>
-      <td style="padding: 5px; text-align: right; font-weight: bold; color: #900;" nowrap="nowrap">0 Ft</td>
+      <td colspan="2" nowrap="nowrap"><strong>Netto össz. tartozás:</strong></td>
+      <td style="padding: 5px; text-align: right; font-weight: bold; color: #900;" nowrap="nowrap">${NettoSumCredit} Ft</td>
     </tr>
-  </table>
+    {{else}}
+        Nem áll rendelkezésre számla információ!
+    {{/if}}
+    </script>
 </div>

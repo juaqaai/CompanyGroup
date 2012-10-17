@@ -16,11 +16,42 @@
     <title>@Html.Title(title, siteName)</title> 
     @Display(Model.Head)
     <script type="text/javascript">(function(d){d.className="dyn"+d.className.substring(6,d.className.length);})(document.documentElement);</script>
+   <script type="text/javascript" src="http://davidwalsh.name/demo/jquery.scrollTo-1.4.0-min.js"></script>
+    <script type="text/javascript">
+    jQuery.fn.topLink = function(settings) {
+        settings = jQuery.extend({
+            min: 1,
+            fadeSpeed: 200,
+            ieOffset: 50
+        }, settings);
+        return this.each(function() {
+            //listen for scroll
+            var el = $(this);
+            el.css('display','none'); //in case the user forgot
+            $(window).scroll(function() {
+                if(!jQuery.support.hrefNormalized) {
+                    el.css({
+                        'position': 'absolute',
+                        'top': $(window).scrollTop() + $(window).height() - settings.ieOffset
+                    });
+                }
+                if($(window).scrollTop() >= settings.min)
+                {
+                    el.fadeIn(settings.fadeSpeed);
+                }
+                else
+                {
+                    el.fadeOut(settings.fadeSpeed);
+                }
+            });
+        });
+    };
+    </script>
 </head> 
-<body>
+<body><a name="top" id="top">
 @* Layout (template) is in the Body zone @ the default position (nothing, zero, zilch) *@
 @Display(Model.Body)
 @Display(Model.Tail)
-<div id="endpage">end page</div>
+<!-- <div id="endpage">end page</div> -->
 </body>
 </html>

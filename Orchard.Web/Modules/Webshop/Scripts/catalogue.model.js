@@ -2,7 +2,7 @@
 
 CompanyGroupCms.Catalogue = (function () {
     var self = this;
-
+    //cikkhez tartozó képlista elkérése
     var showPicture = function (productId, dataAreaId, productName) {
         var arr_pics = new Array();
         var data = new Object();
@@ -44,7 +44,6 @@ CompanyGroupCms.Catalogue = (function () {
                             });
                     });
                 }
-
             },
             error: function () {
                 alert('Service call failed: GetListByProduct');
@@ -102,6 +101,22 @@ CompanyGroupCms.Catalogue = (function () {
         }
         loadCatalogue();
     };
+    /*
+    /// 0: átlagos életkor csökkenő, akciós csökkenő, gyártó növekvő, termékazonosító szerint növekvőleg,
+    /// 1: átlagos életkor növekvő, akciós csökkenő, gyártó növekvő, termékazonosító szerint növekvőleg, 
+    /// 2: azonosito növekvő, (cikkszám)
+    /// 3: azonosito csökkenő, (cikkszám)
+    /// 4 nev növekvő,
+    /// 5: nev csökkenő,
+    /// 6: ar növekvő,
+    /// 7: ar csökkenő, 
+    /// 8: belső készlet növekvően, 
+    /// 9: belső készlet csökkenően
+    /// 10: külső készlet növekvően
+    /// 11: külső készlet csökkenően
+    /// 12: garancia növekvően
+    /// 13: garancia csökkenő    
+    */
     var sequenceByPriceUp = function () {
         CompanyGroupCms.CatalogueListRequest.Sequence = 6;
         CompanyGroupCms.CatalogueListRequest.CurrentPageIndex = 1;
@@ -147,12 +162,12 @@ CompanyGroupCms.Catalogue = (function () {
         loadCatalogue();
     };
     var sequenceByGarantyUp = function () {
-        CompanyGroupCms.CatalogueListRequest.Sequence = 10;
+        CompanyGroupCms.CatalogueListRequest.Sequence = 12;
         CompanyGroupCms.CatalogueListRequest.CurrentPageIndex = 1;
         loadCatalogue();
     };
     var sequenceByGarantyDown = function () {
-        CompanyGroupCms.CatalogueListRequest.Sequence = 11;
+        CompanyGroupCms.CatalogueListRequest.Sequence = 13;
         CompanyGroupCms.CatalogueListRequest.CurrentPageIndex = 1;
         loadCatalogue();
     };
@@ -188,6 +203,8 @@ CompanyGroupCms.Catalogue = (function () {
         CompanyGroupCms.CatalogueListRequest.Category1IdList.push(value);
         loadCatalogue();
         loadStructure(true, true, true, true);
+        $('#category1List').val(value);
+        $("#category1List").trigger("liszt:updated");
     };
     var filterByBsc = function () {
         CompanyGroupCms.CatalogueListRequest.Clear();
@@ -201,12 +218,130 @@ CompanyGroupCms.Catalogue = (function () {
         CompanyGroupCms.CatalogueListRequest.Category1IdList.push(value);
         loadCatalogue();
         loadStructure(true, true, true, true);
+        $('#category1List').val(value);
+        $("#category1List").trigger("liszt:updated");
     };
     var clearFilters = function () {
         CompanyGroupCms.CatalogueListRequest.Clear();
         loadCatalogue();
         loadStructure(true, true, true, true);
-    }
+    };
+    var showSecondHandList = function (productId, dataAreaId) {
+        alert('Ide jön a ' + productId + '-hoz kapcsolt használtcikk lista,');
+    };
+    var searchByTextFilter = function (value) {
+        CompanyGroupCms.CatalogueListRequest.TextFilter = value;
+        CompanyGroupCms.CatalogueListRequest.CurrentPageIndex = 1;
+        loadCatalogue();
+        loadStructure(true, true, true, true);
+    };
+    var initAutoCompletionBaseProduct = function () {
+        $("#txt_filterbynameorpartnumber").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "GET",
+                    url: CompanyGroupCms.Constants.Instance().getCompletionListBaseProductServiceUrl(),
+                    data: { Prefix: request.term },
+                    contentType: "application/json; charset=utf-8",
+                    timeout: 10000,
+                    dataType: "json",
+                    processData: true,
+                    success: function (result) {
+                        if (result) {
+                            var resultObject = result.Items;
+                            var suggestions = [];
+                            $.each(resultObject, function (i, val) {
+                                suggestions.push(val);
+                            });
+                            response(suggestions);
+                        }
+                        else {
+                            console.log(result);
+                        }
+                    },
+                    error: function () {
+                        console.log('CompletionListServiceUrl failed');
+                    }
+                });
+            },
+            minLength: 2
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            console.log(item);
+            var inner_html = '<div class="list_item_container"><div class="image"><img src="' + CompanyGroupCms.Constants.Instance().getThumbnailPictureUrl(item.ProductId, item.RecId, item.DataAreaId) + ' alt=\"\" /></div><div class="label">' + item.ProductId + '</div><div class="description">' + item.ProductName + '</div></div>';
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append(inner_html)
+            .appendTo(ul);
+        };
+    };
+    var initAutoCompletionAllProduct = function () {
+        $("#txt_globalsearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "GET",
+                    url: CompanyGroupCms.Constants.Instance().getCompletionListAllProductServiceUrl(),
+                    data: { Prefix: request.term },
+                    contentType: "application/json; charset=utf-8",
+                    timeout: 10000,
+                    dataType: "json",
+                    processData: true,
+                    success: function (result) {
+                        if (result) {
+                            var resultObject = result.Items;
+                            var suggestions = [];
+                            $.each(resultObject, function (i, val) {
+                                suggestions.push(val);
+                            });
+                            response(suggestions);
+                        }
+                        else {
+                            console.log(result);
+                        }
+                    },
+                    error: function () {
+                        console.log('CompletionListServiceUrl failed');
+                    }
+                });
+            },
+            minLength: 2
+            //            //define select handler
+            //            select: function (e, ui) {
+            //                //create formatted friend
+            //                var friend = ui.item.value,
+            //							span = $("<span>").text(friend),
+            //							a = $("<a>").addClass("remove").attr({
+            //							    href: "javascript:",
+            //							    title: "Remove " + friend
+            //							}).text("x").appendTo(span);
+            //                //add friend to friend div
+            //							span.insertBefore("#txtSearch");
+            //            },
+            //            //define select handler
+            //            change: function () {
+            //                //prevent 'to' field being updated and correct position
+            //                $("#txtSearch").val("").css("top", 2);
+            //            }
+            /*
+            .data("autocomplete")._renderItem = function (ul, item) {
+            var inner_html = '<a><div class="list_item_container"><div class="image"><img src="' + item.image + '"></div><div class="label">' + item.label + '</div><div class="description">' + item.description + '</div></div></a>';
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append(inner_html)
+            .appendTo(ul);
+            };            
+            */
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            console.log(item);
+            var inner_html = '<div class="list_item_container"><div class="image"><img src="' + CompanyGroupCms.Constants.Instance().getThumbnailPictureUrl(item.ProductId, item.RecId, item.DataAreaId) + ' alt=\"\" /></div><div class="label">' + item.ProductId + '</div><div class="description">' + item.ProductName + '</div></div>';
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append(inner_html)
+            .appendTo(ul);
+        };
+
+    };
+
     var loadCatalogue = function () {
         var dataString = $.toJSON(CompanyGroupCms.CatalogueListRequest);
         $.ajax({
@@ -361,12 +496,15 @@ CompanyGroupCms.Catalogue = (function () {
         FilterByBsc: filterByBsc,
         FilterByCategoryHrp: filterByCategoryHrp,
         FilterByCategoryBsc: filterByCategoryBsc,
-        ClearFilters: clearFilters
+        ClearFilters: clearFilters,
+        ShowSecondHandList: showSecondHandList,
+        SearchByTextFilter: searchByTextFilter,
+        InitAutoCompletionAllProduct: initAutoCompletionAllProduct,
+        InitAutoCompletionBaseProduct: initAutoCompletionBaseProduct
     };
 })();
 
 //CompanyGroupCms.Catalogue.LoadStructure(true, true, true, true);
-//nts.Instance().getPictureUrl(
 //CompanyGroupCms.ConCompanyGroupCms.Constastants.Instance().getProductDetailsUrl(
 
 

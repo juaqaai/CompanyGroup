@@ -14,6 +14,10 @@ namespace Webshop
 
             manifest.DefineScript("CustomerModel").SetUrl("customer.model.js", "customer.model.js").SetVersion("1.0.0").SetDependencies("jQuery");
 
+            manifest.DefineScript("RegistrationModel").SetUrl("registration.model.js", "registration.model.js").SetVersion("1.0.0").SetDependencies("jQuery");
+
+            manifest.DefineScript("FileUpload").SetUrl("jquery.fileupload.js", "jquery.fileupload.js").SetVersion("5.17.6").SetDependencies("jQuery");
+            
          }
     }
 }

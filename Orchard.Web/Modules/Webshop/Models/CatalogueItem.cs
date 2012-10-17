@@ -13,7 +13,14 @@ namespace Cms.Webshop.Models
                              List<CompanyGroup.Dto.WebshopModule.CompatibleProduct> compatibleProducts,
                              List<CompanyGroup.Dto.WebshopModule.CompatibleProduct> reverseCompatibleProducts, 
                              Cms.CommonCore.Models.Visitor visitor,
-                             CompanyGroup.Dto.WebshopModule.BannerList bannerList)
+                             CompanyGroup.Dto.WebshopModule.BannerList bannerList,
+                             CompanyGroup.Dto.WebshopModule.ShoppingCart activeCart,
+                             List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> openedItems,
+                             List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> storedItems,
+                             bool shoppingCartOpenStatus,
+                             bool catalogueOpenStatus,
+                             CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses,
+                             CompanyGroup.Dto.WebshopModule.LeasingOptions leasingOptions)
         {
             this.Structures = new Structures(structures);
 
@@ -26,6 +33,20 @@ namespace Cms.Webshop.Models
             this.Visitor = visitor;
 
             this.BannerList = bannerList;
+
+            this.ActiveCart = activeCart;
+
+            this.OpenedItems = openedItems;
+
+            this.StoredItems = storedItems;
+
+            this.ShoppingCartOpenStatus = shoppingCartOpenStatus;
+
+            this.CatalogueOpenStatus = catalogueOpenStatus;
+
+            this.DeliveryAddresses = deliveryAddresses;
+
+            this.LeasingOptions = leasingOptions;
         }
 
         public Structures Structures { get; set; }
@@ -39,5 +60,19 @@ namespace Cms.Webshop.Models
         public Cms.CommonCore.Models.Visitor Visitor { get; set; }
 
         public CompanyGroup.Dto.WebshopModule.BannerList BannerList { get; set; }
+
+        public CompanyGroup.Dto.WebshopModule.ShoppingCart ActiveCart { get; set; }
+
+        public List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> OpenedItems { get; set; }
+
+        public List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> StoredItems { get; set; }
+
+        public bool ShoppingCartOpenStatus { get; set; }
+
+        public bool CatalogueOpenStatus { get; set; }
+
+        public CompanyGroup.Dto.PartnerModule.DeliveryAddresses DeliveryAddresses { get; set; }
+
+        public CompanyGroup.Dto.WebshopModule.LeasingOptions LeasingOptions { get; set; }
     }
 }

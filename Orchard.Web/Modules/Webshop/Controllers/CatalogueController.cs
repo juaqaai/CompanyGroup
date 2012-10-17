@@ -16,6 +16,10 @@ namespace Cms.Webshop.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            //látogató lekérdezése
+            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
+
+            //struktúrák lekérdezése
             CompanyGroup.Dto.ServiceRequest.GetAllStructure allStructure = new CompanyGroup.Dto.ServiceRequest.GetAllStructure() 
                                                                                { 
                                                                                    ActionFilter = false, 
@@ -37,8 +41,7 @@ namespace Cms.Webshop.Controllers
 
             CompanyGroup.Dto.WebshopModule.Structures structures = this.PostJSonData<CompanyGroup.Dto.WebshopModule.Structures>("StructureService", "GetAll", allStructure);
 
-            Cms.CommonCore.Models.Visitor visitor = this.GetVisitorInfo();
-
+            //katalógus lekérdezése
             CompanyGroup.Dto.ServiceRequest.GetAllProduct allProduct = new CompanyGroup.Dto.ServiceRequest.GetAllProduct() 
                                                                            { 
                                                                                ActionFilter = false, 
@@ -65,6 +68,7 @@ namespace Cms.Webshop.Controllers
 
             CompanyGroup.Dto.WebshopModule.Products products = this.PostJSonData<CompanyGroup.Dto.WebshopModule.Products>("ProductService", "GetAll", allProduct);
 
+            //banner lista lekérdezése
             CompanyGroup.Dto.ServiceRequest.GetBannerList bannerListRequest = new CompanyGroup.Dto.ServiceRequest.GetBannerList()
                                                                               {
                                                                                   BscFilter = true,
@@ -78,15 +82,25 @@ namespace Cms.Webshop.Controllers
 
             CompanyGroup.Dto.WebshopModule.BannerList bannerList = this.PostJSonData<CompanyGroup.Dto.WebshopModule.BannerList>("ProductService", "GetBannerList", bannerListRequest); 
 
+            //kosár lekérdezések     
             bool shoppingCartOpenStatus = this.ReadShoppingCartOpenedFromCookie();
 
             bool catalogueOpenStatus = this.ReadCatalogueOpenedFromCookie();
 
-            CompanyGroup.Dto.WebshopModule.ShoppingCart activeCart = (visitor.IsValidLogin) ? this.GetActiveCart() : new CompanyGroup.Dto.WebshopModule.ShoppingCart();
+            Cms.CommonCore.Models.Response.ShoppingCartInfo cartInfo = Cms.CommonCore.Models.Factory.CreateShoppingCartInfo();  //(visitor.IsValidLogin) ? this.GetCartInfo() : 
 
-            Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts = (visitor.IsValidLogin) ? this.GetStoredOpenedShoppingCartCollectionByVisitor() : new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
+            if (visitor.IsValidLogin && !String.IsNullOrEmpty(this.ReadCartIdFromCookie()))
+            {
+                CompanyGroup.Dto.WebshopModule.ShoppingCartInfo shoppingCartInfo = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCartInfo>("ShoppingCartService", "GetShoppingCartInfo", new { CartId = this.ReadCartIdFromCookie(), VisitorId = visitor.Id });
+
+                cartInfo.ActiveCart = (shoppingCartInfo != null) ? shoppingCartInfo.ActiveCart : cartInfo.ActiveCart;
+                cartInfo.OpenedItems = (shoppingCartInfo != null) ? shoppingCartInfo.OpenedItems : cartInfo.OpenedItems;
+                cartInfo.StoredItems = (shoppingCartInfo != null) ? shoppingCartInfo.StoredItems : cartInfo.StoredItems;
+                cartInfo.LeasingOptions = (shoppingCartInfo != null) ? shoppingCartInfo.LeasingOptions : cartInfo.LeasingOptions; 
+            }
 
             CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses;
+
             if (visitor.IsValidLogin)
             {
                 CompanyGroup.Dto.ServiceRequest.GetDeliveryAddresses getDeliveryAddresses = new CompanyGroup.Dto.ServiceRequest.GetDeliveryAddresses() { DataAreaId = CatalogueController.DataAreaId, VisitorId = visitor.Id };
@@ -98,11 +112,22 @@ namespace Cms.Webshop.Controllers
                 deliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses() { Items = new List<CompanyGroup.Dto.PartnerModule.DeliveryAddress>() };
             }
 
-            Cms.Webshop.Models.Catalogue catalogue = new Cms.Webshop.Models.Catalogue(structures, products, visitor, storedOpenedCarts.StoredItems, storedOpenedCarts.OpenedItems, activeCart, shoppingCartOpenStatus, catalogueOpenStatus, deliveryAddresses, bannerList);
+            Cms.Webshop.Models.Catalogue catalogue = new Cms.Webshop.Models.Catalogue(structures, products, visitor, cartInfo.ActiveCart, cartInfo.OpenedItems, cartInfo.StoredItems, shoppingCartOpenStatus, catalogueOpenStatus, deliveryAddresses, bannerList, cartInfo.LeasingOptions);
+
+            //aktív kosár azonosítójának mentése http cookie-ba
+            if (!String.IsNullOrWhiteSpace(cartInfo.ActiveCart.Id))
+            {
+                this.WriteCartIdToCookie(cartInfo.ActiveCart.Id);
+            }
 
             return View("Index", catalogue);
         }
 
+        /// <summary>
+        /// katalógus bejelentkezés
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult SignInCatalogue([Bind(Prefix = "")] Cms.CommonCore.Models.SignIn request)
         {
@@ -114,52 +139,75 @@ namespace Cms.Webshop.Controllers
 
                 CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(request.UserName), "A belépési név megadása kötelező!");
 
+                //előző belépés azonosítójának mentése
+                string permanentObjectId = this.ReadPermanentIdFromCookie();
+
+                //bejelentkezés szervízhívás
                 CompanyGroup.Dto.ServiceRequest.SignIn signIn = new CompanyGroup.Dto.ServiceRequest.SignIn()
                 {
                     DataAreaId = CatalogueController.DataAreaId,
                     IPAddress = this.Request.UserHostAddress,
                     Password = request.Password,
-                    UserName = request.UserName,
-                    ObjectId = this.ReadPermanentIdFromCookie()
+                    UserName = request.UserName
                 };
 
                 Cms.CommonCore.Models.Visitor visitor = this.PostJSonData<Cms.CommonCore.Models.Visitor>("CustomerService", "SignIn", signIn);
 
-                CompanyGroup.Dto.WebshopModule.ShoppingCart activeCart = null;
+                //válaszüzenet összeállítása
+                Cms.CommonCore.Models.Response.ShoppingCartInfo cartInfo = null;
 
-                Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts = null;
+                CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses = null;
 
-                CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses;
+                bool shoppingCartOpenStatus = this.ReadShoppingCartOpenedFromCookie();
 
-                //check status
+                bool catalogueOpenStatus = this.ReadCatalogueOpenedFromCookie();
+
+                //nem sikerült a belépés
                 if (!visitor.IsValidLogin)
                 {
-                    visitor.ErrorMessage = "A bejelentkezés nem sikerült!";
+                    visitor.ErrorMessage = this.ReadLanguageFromCookie().Equals("hu") ? "A bejelentkezés nem sikerült!" : "Login failed!";
 
-                    activeCart = new CompanyGroup.Dto.WebshopModule.ShoppingCart();
-
-                    storedOpenedCarts = new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
+                    cartInfo = new Cms.CommonCore.Models.Response.ShoppingCartInfo() 
+                                     { 
+                                         ActiveCart = new CompanyGroup.Dto.WebshopModule.ShoppingCart(), 
+                                         OpenedItems = new List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart>(), 
+                                         StoredItems = new List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart>(), 
+                                         ErrorMessage = "", 
+                                         LeasingOptions = new CompanyGroup.Dto.WebshopModule.LeasingOptions()
+                                     }; 
 
                     deliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses() { Items = new List<CompanyGroup.Dto.PartnerModule.DeliveryAddress>() };
                 }
-                else    //SignIn process, set http cookie, etc...
+                else    //sikerült a belépés, http cookie beállítás, ...
                 {
                     CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(visitor.Id), "A bejelentkezés nem sikerült! (üres azonosító)");
 
                     CompanyGroup.Helpers.DesignByContract.Require(!String.IsNullOrWhiteSpace(visitor.CompanyId), "A bejelentkezés nem sikerült! (üres cégazonosító)");
 
-                    //visitor adatok http sütibe írása     
-                    this.WriteCookie(new Cms.CommonCore.Models.VisitorData(visitor.Id, visitor.LanguageId, false, false, visitor.Currency, visitor.Id));
-
                     visitor.ErrorMessage = String.Empty;
 
-                    activeCart = this.GetActiveCart();
+                    //kosár társítása
+                    CompanyGroup.Dto.ServiceRequest.AssociateCart associateRequest = new CompanyGroup.Dto.ServiceRequest.AssociateCart(visitor.Id, permanentObjectId) { Language = this.ReadLanguageFromCookie() };
 
-                    storedOpenedCarts = this.GetStoredOpenedShoppingCartCollectionByVisitor();
+                    CompanyGroup.Dto.WebshopModule.ShoppingCartInfo associateCart = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCartInfo>("ShoppingCartService", "AssociateCart", associateRequest);
 
+                    //aktív kosár beállítás
+                    cartInfo = new Cms.CommonCore.Models.Response.ShoppingCartInfo() 
+                                   { 
+                                       ActiveCart = associateCart.ActiveCart, 
+                                       OpenedItems = associateCart.OpenedItems, 
+                                       StoredItems = associateCart.StoredItems, 
+                                       LeasingOptions = associateCart.LeasingOptions, 
+                                       ErrorMessage = "" };
+
+                    //szállítási címek
                     deliveryAddresses = this.PostJSonData<CompanyGroup.Dto.PartnerModule.DeliveryAddresses>("CustomerService", "GetDeliveryAddresses", new { DataAreaId = CatalogueController.DataAreaId, VisitorId = visitor.Id });
+
+                    //visitor adatok http sütibe írása     
+                    this.WriteCookie(new Cms.CommonCore.Models.VisitorData(visitor.Id, visitor.LanguageId, shoppingCartOpenStatus, catalogueOpenStatus, visitor.Currency, visitor.Id, associateCart.ActiveCart.Id, String.Empty));
                 }
 
+                //terméklista lekérdezés
                 CompanyGroup.Dto.ServiceRequest.GetAllProduct allProduct = new CompanyGroup.Dto.ServiceRequest.GetAllProduct()
                 {
                     ActionFilter = false,
@@ -187,45 +235,45 @@ namespace Cms.Webshop.Controllers
                 CompanyGroup.Dto.WebshopModule.Products products = this.PostJSonData<CompanyGroup.Dto.WebshopModule.Products>("ProductService", "GetAll", allProduct);
 
                 return Json(new { Products = products, 
-                                  Visitor = visitor, 
-                                  StoredCarts = storedOpenedCarts.StoredItems, 
-                                  OpenedCarts = storedOpenedCarts.OpenedItems, 
-                                  ActiveCart = activeCart,
-                                  ShoppingCartOpenStatus = false,
-                                  CatalogueOpenStatus = false,
-                                  DeliveryAddresses = deliveryAddresses
+                                  Visitor = visitor,
+                                  ActiveCart = cartInfo.ActiveCart,
+                                  OpenedItems = cartInfo.OpenedItems,
+                                  StoredItems = cartInfo.StoredItems, 
+                                  ShoppingCartOpenStatus = shoppingCartOpenStatus,
+                                  CatalogueOpenStatus = catalogueOpenStatus,
+                                  DeliveryAddresses = deliveryAddresses, 
+                                  LeasingOptions = cartInfo.LeasingOptions
+
                 }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
             }
             catch (CompanyGroup.Helpers.DesignByContractException ex)
             {
-                Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts = new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
-
                 return Json(new
                 {
                     Products = new CompanyGroup.Dto.WebshopModule.Products(),
-                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message },
-                    StoredCarts = storedOpenedCarts.StoredItems,
-                    OpenedCarts = storedOpenedCarts.OpenedItems,
+                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = String.Format("A bejelentkezés nem sikerült! ({0} - {1})", ex.Message, ex.StackTrace) },
                     ActiveCart = new CompanyGroup.Dto.WebshopModule.ShoppingCart(),
+                    OpenedItems = new List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart>(),
+                    StoredItems = new List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart>(),
                     ShoppingCartOpenStatus = false,
                     CatalogueOpenStatus = false, 
-                    DeliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses()
+                    DeliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses(), 
+                    LeasingOptions = new CompanyGroup.Dto.WebshopModule.LeasingOptions()
                 }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
             }
-            catch 
+            catch(Exception ex)
             {
-                Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts = new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
-
                 return Json(new
                 {
                     Products = new CompanyGroup.Dto.WebshopModule.Products(),
-                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = "A bejelentkezés nem sikerült! (hiba)" },
-                    StoredCarts = storedOpenedCarts.StoredItems,
-                    OpenedCarts = storedOpenedCarts.OpenedItems,
+                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = String.Format("A bejelentkezés nem sikerült! ({0} - {1})", ex.Message, ex.StackTrace) },
                     ActiveCart = new CompanyGroup.Dto.WebshopModule.ShoppingCart(),
+                    OpenedItems = new List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart>(),
+                    StoredItems = new List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart>(),
                     ShoppingCartOpenStatus = false,
                     CatalogueOpenStatus = false,
-                    DeliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses()
+                    DeliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses(),
+                    LeasingOptions = new CompanyGroup.Dto.WebshopModule.LeasingOptions()
                 }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
             }
         }
@@ -238,8 +286,6 @@ namespace Cms.Webshop.Controllers
                 Cms.CommonCore.Models.Empty empty = this.PostJSonData<Cms.CommonCore.Models.Empty>("CustomerService", "SignOut", new CompanyGroup.Dto.ServiceRequest.SignOut() { DataAreaId = CatalogueController.DataAreaId, ObjectId = this.ReadObjectIdFromCookie() });
 
                 this.RemoveObjectIdFromCookie();
-
-                Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts = new CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
 
                 CompanyGroup.Dto.ServiceRequest.GetAllProduct allProduct = new CompanyGroup.Dto.ServiceRequest.GetAllProduct()
                 {
@@ -256,7 +302,7 @@ namespace Cms.Webshop.Controllers
                     ItemsOnPage = 20,
                     ManufacturerIdList = new List<string>(),
                     NewFilter = false,
-                    Sequence = 2,
+                    Sequence = 1,
                     StockFilter = false,
                     TextFilter = "",
                     PriceFilter = "0",
@@ -270,10 +316,10 @@ namespace Cms.Webshop.Controllers
                 return Json(new
                 {
                     Products = products,
-                    Visitor = new Cms.CommonCore.Models.Visitor(),
-                    StoredCarts = storedOpenedCarts.StoredItems,
-                    OpenedCarts = storedOpenedCarts.OpenedItems,
+                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = "" },
                     ActiveCart = new CompanyGroup.Dto.WebshopModule.ShoppingCart(),
+                    OpenedItems = new List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart>(),
+                    StoredItems = new List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart>(),
                     ShoppingCartOpenStatus = false,
                     CatalogueOpenStatus = false,
                     DeliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses()
@@ -281,15 +327,13 @@ namespace Cms.Webshop.Controllers
             }
             catch(Exception ex)
             {
-                Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection storedOpenedCarts = new Cms.CommonCore.Models.Response.StoredOpenedShoppingCartCollection();
-
                 return Json(new
                 {
                     Products = new CompanyGroup.Dto.WebshopModule.Products(),
-                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = ex.Message },
-                    StoredCarts = storedOpenedCarts.StoredItems,
-                    OpenedCarts = storedOpenedCarts.OpenedItems,
+                    Visitor = new Cms.CommonCore.Models.Visitor() { ErrorMessage = String.Format("A kijelentkezés nem sikerült! ({0})", ex.Message) },
                     ActiveCart = new CompanyGroup.Dto.WebshopModule.ShoppingCart(),
+                    OpenedItems = new List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart>(),
+                    StoredItems = new List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart>(),
                     ShoppingCartOpenStatus = false,
                     CatalogueOpenStatus = false,
                     DeliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses()
@@ -383,7 +427,43 @@ namespace Cms.Webshop.Controllers
 
             CompanyGroup.Dto.WebshopModule.BannerList bannerList = this.PostJSonData<CompanyGroup.Dto.WebshopModule.BannerList>("ProductService", "GetBannerList", bannerListRequest);
 
-            return View("Details", new Cms.Webshop.Models.CatalogueItem(structures, product, compatibleProducts.Items, compatibleProducts.ReverseItems, visitor, bannerList));
+            //kosár lekérdezések     
+            bool shoppingCartOpenStatus = this.ReadShoppingCartOpenedFromCookie();
+
+            bool catalogueOpenStatus = this.ReadCatalogueOpenedFromCookie();
+
+            Cms.CommonCore.Models.Response.ShoppingCartInfo cartInfo = Cms.CommonCore.Models.Factory.CreateShoppingCartInfo();  //(visitor.IsValidLogin) ? this.GetCartInfo() : 
+
+            if (visitor.IsValidLogin && !String.IsNullOrEmpty(this.ReadCartIdFromCookie()))
+            {
+                CompanyGroup.Dto.WebshopModule.ShoppingCartInfo shoppingCartInfo = this.PostJSonData<CompanyGroup.Dto.WebshopModule.ShoppingCartInfo>("ShoppingCartService", "GetShoppingCartInfo", new { CartId = this.ReadCartIdFromCookie(), VisitorId = visitor.Id });
+
+                cartInfo.ActiveCart = (shoppingCartInfo != null) ? shoppingCartInfo.ActiveCart : cartInfo.ActiveCart;
+                cartInfo.OpenedItems = (shoppingCartInfo != null) ? shoppingCartInfo.OpenedItems : cartInfo.OpenedItems;
+                cartInfo.StoredItems = (shoppingCartInfo != null) ? shoppingCartInfo.StoredItems : cartInfo.StoredItems;
+                cartInfo.LeasingOptions = (shoppingCartInfo != null) ? shoppingCartInfo.LeasingOptions : cartInfo.LeasingOptions;
+            }
+
+            CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses;
+
+            if (visitor.IsValidLogin)
+            {
+                CompanyGroup.Dto.ServiceRequest.GetDeliveryAddresses getDeliveryAddresses = new CompanyGroup.Dto.ServiceRequest.GetDeliveryAddresses() { DataAreaId = CatalogueController.DataAreaId, VisitorId = visitor.Id };
+
+                deliveryAddresses = this.PostJSonData<CompanyGroup.Dto.PartnerModule.DeliveryAddresses>("CustomerService", "GetDeliveryAddresses", new { DataAreaId = CatalogueController.DataAreaId, VisitorId = visitor.Id });
+            }
+            else
+            {
+                deliveryAddresses = new CompanyGroup.Dto.PartnerModule.DeliveryAddresses() { Items = new List<CompanyGroup.Dto.PartnerModule.DeliveryAddress>() };
+            }
+
+            //aktív kosár azonosítójának mentése http cookie-ba
+            if (!String.IsNullOrWhiteSpace(cartInfo.ActiveCart.Id))
+            {
+                this.WriteCartIdToCookie(cartInfo.ActiveCart.Id);
+            }
+
+            return View("Details", new Cms.Webshop.Models.CatalogueItem(structures, product, compatibleProducts.Items, compatibleProducts.ReverseItems, visitor, bannerList, cartInfo.ActiveCart, cartInfo.OpenedItems, cartInfo.StoredItems, shoppingCartOpenStatus, catalogueOpenStatus, deliveryAddresses, cartInfo.LeasingOptions));
         }
 
         [HttpGet]
@@ -427,11 +507,42 @@ namespace Cms.Webshop.Controllers
         [HttpPost]
         public JsonResult GetListByProduct([Bind(Prefix = "")] CompanyGroup.Dto.ServiceRequest.PictureFilter request)
         {
-            request.DataAreaId = CatalogueController.DataAreaId;
+            //request.DataAreaId = CatalogueController.DataAreaId;
+
+            request.ProductId = System.Web.HttpUtility.UrlDecode(request.ProductId);
 
             CompanyGroup.Dto.WebshopModule.Pictures pictures = this.PostJSonData<CompanyGroup.Dto.WebshopModule.Pictures>("PictureService", "GetListByProduct", request);
 
             return Json(new { Items = pictures.Items }, "application/json; charset=utf-8", System.Text.Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// terméknév alapján kiegészítő lista lekérdezés
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult GetCompletionListAllProduct()
+        {
+            string prefix = CompanyGroup.Helpers.QueryStringParser.GetString("Prefix");
+
+            CompanyGroup.Dto.WebshopModule.CompletionList response = this.GetJSonData<CompanyGroup.Dto.WebshopModule.CompletionList>("ProductService", String.Format("GetCompletionList/{0}/{1}/{2}", CatalogueController.DataAreaId, prefix, 2));
+
+            return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// termékazonosító, cikkszám, terméknév alapján kiegészítő lista lekérdezés
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult GetCompletionListBaseProduct()
+        {
+            string prefix = CompanyGroup.Helpers.QueryStringParser.GetString("Prefix");
+
+            CompanyGroup.Dto.WebshopModule.CompletionList response = this.GetJSonData<CompanyGroup.Dto.WebshopModule.CompletionList>("ProductService", String.Format("GetCompletionList/{0}/{1}/{2}", CatalogueController.DataAreaId, prefix, 1));
+
+            return Json(response, "application/json; charset=utf-8", System.Text.Encoding.UTF8, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

@@ -16,4 +16,14 @@ namespace Cms.CommonCore.Models.Request
         public string CartId { get; set; }
     }
 
+    public class AddCart
+    {
+
+    }
+
+    public class RemoveCart
+    {
+
+    }
+
 }

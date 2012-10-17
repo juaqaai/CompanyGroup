@@ -1,4 +1,33 @@
-﻿<h2>Megrendelések</h2>
+﻿@model Cms.PartnerInfo.Models.OrderInfoList
+
+@using (Script.Head())
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            
+            CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+            CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+            CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+            CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
+            CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
+            CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Registration/")');
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/Webshop/Catalogue/SignInCatalogue")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/Webshop/Catalogue/SignOutCatalogue")');
+            CompanyGroupCms.Constants.Instance().setDownloadPriceListServiceUrl('@Url.Content("~/Webshop/Catalogue/DownloadPriceList")');
+            CompanyGroupCms.Constants.Instance().setModule('partnerinfo');
+
+            var model = @(Html.Raw(Json.Encode(Model)));
+            console.log(model);
+
+            $("#orderInfoListContainer").empty();
+            $("#orderInfoListTemplate").tmpl(model).appendTo("#orderInfoListContainer");
+        });
+
+    </script>
+}
+           
+<h2>Megrendelések</h2>
 
 <style>
     .aside-first {
@@ -33,14 +62,17 @@
     </tr>
   </table>
   <br />
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <table id="orderInfoListContainer" width="100%" border="0" cellspacing="1" cellpadding="2"></table>
+    <script id="orderInfoListTemplate" type="text/x-jquery-tmpl">
+    {{if Items.length > 0}}
+    {{each( i, item ) Items}}
     <tr>
       <td colspan="7" nowrap="nowrap">
       <div id="szamla_header">
       <table width="100%" border="0" cellspacing="1" cellpadding="2">
         <tr>
-          <td><strong>Megrendelés száma:</strong> HI-123456789</td>
-          <td><strong>Megrendelés kelte:</strong> 2012.08.17.</td>
+          <td><strong>Megrendelés száma:</strong> ${item.SalesId}</td>
+          <td><strong>Megrendelés kelte:</strong> ${item.CreatedDate}</td>
           </tr>
       </table>
       </div>
@@ -49,6 +81,7 @@
     <tr>
       <td colspan="7"><hr size="1" noshade="noshade" /></td>
     </tr>
+    {{each( j, line ) item.Lines}}
     <tr>
       <td nowrap="nowrap"><strong>Azonosító</strong></td>
       <td nowrap="nowrap"><strong>Megnevezés</strong></td>
@@ -59,17 +92,28 @@
       <td align="right" nowrap="nowrap"><strong>Státusz</strong></td>
     </tr>
     <tr>
-      <td nowrap="nowrap">TS2GXDPCM</td>
-      <td nowrap="nowrap">Transcend XD Card 2 GB M type</td>
+      <td nowrap="nowrap"> ${line.ItemId}</td>
+      <td nowrap="nowrap">${line.Name}</td>
       <td width="100%">&nbsp;</td>
-      <td align="center" nowrap="nowrap">1</td>
-      <td style="text-align: right;" nowrap="nowrap">4 220 Ft</td>
-      <td style="text-align: right;" nowrap="nowrap">Belső</td>
-      <td style="text-align: center;" nowrap="nowrap"><img src="@Url.Content("~/Media/images/checkok.png")" alt=""/></td>
+      <td align="center" nowrap="nowrap">${line.Quantity}</td>
+      <td style="text-align: right;" nowrap="nowrap">${line.SalesPrice} ${line.CurrencyCode}</td>
+      <td style="text-align: right;" nowrap="nowrap">${line.InventLocationId}</td>
+      <td style="text-align: center;" nowrap="nowrap">
+        {{if line.StatusIssue == 4}}    
+        <img src="@Url.Content("~/Media/images/checkok.png")" alt="${line.StatusIssue} ReservPhysical (foglalt tényleges)" title="${line.StatusIssue} ReservPhysical (foglalt tényleges)" />
+        {{else}}
+            {{if line.StatusIssue == 5}}
+            <img src="@Url.Content("~/Media/images/warning.png")" alt="${line.StatusIssue} ReservOrdered (foglalt rendelt)" title="${line.StatusIssue} ReservOrdered (foglalt rendelt)" />
+            {{else}}
+            <img src="@Url.Content("~/Media/images/redx.png")" alt="${line.StatusIssue} OnOrder (rendelés alatt)" title="${line.StatusIssue} OnOrder (rendelés alatt)" />
+            {{/if}}
+        {{/if}}
+      </td>
     </tr>
     <tr>
       <td colspan="7"><hr size="1" noshade="noshade" /></td>
     </tr>
+    {{/each}}
     <tr>
       <td nowrap="nowrap">&nbsp;</td>
       <td nowrap="nowrap">&nbsp;</td>
@@ -92,6 +136,7 @@
       <td>&nbsp;</td>
       <td colspan="4" nowrap="nowrap"><hr size="1" noshade="noshade" /></td>
     </tr>
+    {{/each}}
     <tr>
       <td nowrap="nowrap">&nbsp;</td>
       <td nowrap="nowrap">&nbsp;</td>
@@ -106,5 +151,8 @@
       <td colspan="3" style="color: #900;" nowrap="nowrap"><strong>Összes megrendelés brutto összesen</strong></td>
       <td style="text-align: right; color: #900;" nowrap="nowrap"><strong>5 275 Ft</strong></td>
     </tr>
-  </table>
+    {{else}}
+        Nincs nyitott vevőrendelés!
+    {{/if}}
+    </script>
 </div>

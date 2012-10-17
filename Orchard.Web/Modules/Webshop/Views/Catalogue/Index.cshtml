@@ -22,17 +22,8 @@
 
             CompanyGroupCms.Visitor.Instance().Set(model.Visitor);
 
-            var activeCart = model.ActiveCart; 
 
-            CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(model.ActiveCart.Id);
-
-            var storedCarts = model.StoredItems;
-
-            var openedCarts = model.OpenedItems;
-
-            var cartOpenStatus = model.ShoppingCartOpenStatus;
-
-            var catalogueOpenStatus = model.CatalogueOpenStatus;
+            //CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(model.ActiveCart.Id);
 
             $("#pagerTemplateTop").tmpl(model.Products).appendTo("#div_pager_top");
             $("#pagerTemplateBottom").tmpl(model.Products).appendTo("#div_pager_bottom");
@@ -43,17 +34,23 @@
 
             $("#catalogueDownloadTemplate").tmpl(model.Visitor).appendTo("#catalogueDownloadContainer");
 
-            CompanyGroupCms.ShoppingCartSummary.Instance().Init(model.Visitor.IsValidLogin, model.ActiveCart.SumTotal);
+            //CompanyGroupCms.ShoppingCartSummary.Instance().Init(model.Visitor.IsValidLogin, model.ActiveCart.SumTotal);
 
-            $("#shoppingCartSummaryTemplate").tmpl(CompanyGroupCms.ShoppingCartSummary.Instance()).appendTo("#basket_open_button");
+            $("#shoppingCartSummaryTemplate").tmpl(model).appendTo("#basket_open_button");  //  CompanyGroupCms.ShoppingCartSummary.Instance()
 
-            $("#priceFilterTemplate").tmpl(model.Visitor).appendTo("#cus_filter_price");
+            //$("#priceFilterTemplate").tmpl(model.Visitor).appendTo("#cus_filter_price");
+
+            if (!model.Visitor.IsValidLogin){
+                $("#cus_filter_price").hide();
+            }
 
             $("#shoppingCartHeaderTemplate").tmpl(model).appendTo("#cus_basket_menu");
-            $("#shoppingCartLineTemplate").tmpl(model.ActiveCart).appendTo("#cus_basket");
+            $("#shoppingCartLineTemplate").tmpl(model).appendTo("#cus_basket");
               
-            $("#deliveryAddressTemplate").tmpl(model.DeliveryAddresses).appendTo("#deliveryAddressContainer");
-            
+            $("#deliveryAddressTemplate").tmpl(model.DeliveryAddresses).appendTo("#site_select");   //deliveryAddressContainer
+                    
+            $("#leasingOptionsContainer").empty();
+            $("#leasingOptionsTemplate").tmpl(model.LeasingOptions).appendTo("#leasingOptionsContainer");            
             
 //            $.each(initialProductList.Pager.PageItemList, function(index, page) {
 //                var p = CompanyGroupCms.CatalogueFactory.CreatePage(page.Selected, page.Index, page.Value);
@@ -87,13 +84,15 @@
 			});
 
             //aktív kosár váltás
-            $('#saved_shoppingcart_list').change(function () {
-                var cartId = $('#saved_shoppingcart_list').val();
-                if (cartId != '' && cartId != null && cartId != 'undefined') {
-                    CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(cartId);
-                    CompanyGroupCms.ShoppingCart.ActivateCart(cartId);
-                }
-            });
+//            $('#saved_shoppingcart_list').change(function () {
+//                var cartId = $('#saved_shoppingcart_list').val();
+//                console.log(cartId);
+//                if (cartId != '' && cartId != null && cartId != 'undefined') {
+//                    $('#hidden_cartId').val(cartId);
+//                    //CompanyGroupCms.ShoppingCartInfo.Instance().SetCartId(cartId);
+//                    CompanyGroupCms.ShoppingCart.ActivateCart(cartId);
+//                }
+//            });
 
             $('.number').spin();
             $('.cartnumber').spin();
@@ -151,19 +150,91 @@
                 }
             });
 
+            $("#form_financeoffer").validate({
+                submitHandler: function () {
+                    CompanyGroupCms.ShoppingCart.CreateFinanceOffer();  
+                    return false;
+                },
+                invalidHandler: function (e, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                        $("#financeoffer_errors").html(message);
+                        $("#financeoffer_errors").show();
+                    } else {
+                        $("#financeoffer_errors").hide();
+                    }
+                },
+                //errorLabelContainer: $("#financeoffer_errors"),
+                rules: {
+                    txt_offername: {
+                        required: true
+                    }, 
+                    txt_offeraddress: {
+                        required: true
+                    },
+                    txt_offerphone : {
+                        required: true, 
+                        number: true
+                    },
+                    txt_offerstatnumber: {
+                        required: true
+                    }
+                },
+                messages: {
+                    txt_offername: "A név kitöltése kötelező!", 
+                    txt_offeraddress: "A cím kitöltése kötelező!", 
+                    txt_offerphone: "A cím telefonszám kötelező!", 
+                    txt_offerstatnumber: "A cégjegyzékszám kitöltése kötelező!"
+                }
+            });
+
+            //rendelés feladás
+            $("#form_createorder").validate({
+                submitHandler: function () {
+                    CompanyGroupCms.ShoppingCart.CreateOrder();
+                    return false;
+                },
+                invalidHandler: function (e, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                    } else {
+
+                    }
+                },
+                //errorLabelContainer: $("#login_errors"),
+                rules: {
+                    txt_filterbynameorpartnumber: {
+                        required: true
+                    }
+                },
+                messages: {
+                    txt_filterbynameorpartnumber: "A mező kitöltése kötelező!"
+                }
+            });
+
+            CompanyGroupCms.Catalogue.InitAutoCompletionAllProduct();
+
+            CompanyGroupCms.Catalogue.InitAutoCompletionBaseProduct();
+
         });
 
     </script>
 }
-
+    <input type="hidden" id="hidden_cartId" value="" />
     <div id="basket_open_button"></div>
     <script id="shoppingCartSummaryTemplate" type="text/x-jquery-tmpl">
-        {{if CompanyGroupCms.ShoppingCartSummary.Instance().IsValidLogin()}}
+        {{if Visitor.IsValidLogin}}
         <table id="active_basket" border="0" cellpadding="0" cellspacing="0">
             <tr>
-                <td><img src="@Url.Content("~/Media/images/basketbutton_01.png")" alt="" onclick="CompanyGroupCms.ShoppingCart.SaveShoppingCartOpenStatus();" /></td>
-                <td class="active_basket_middle_cell" nowrap="nowrap"><a href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.SaveShoppingCartOpenStatus();" class="btn_basket_slide"><span style="color: #000">Aktív kosár: </span><span style="color: #900">${CompanyGroupCms.Utils.FormatNumber(CompanyGroupCms.ShoppingCartSummary.Instance().SumTotal())} </span><span id="shoppingCartSummaryCaption" style="color: #000">[ + Megnyitás ]</span></a></td>
-                <td><img src="@Url.Content("~/Media/images/basketbutton_03.png")" alt="" onclick="CompanyGroupCms.ShoppingCart.SaveShoppingCartOpenStatus();" /></td>
+                <td><a href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.SaveShoppingCartOpenStatus()"><img src="@Url.Content("~/Media/images/basketbutton_01.png")" alt=""  /></a></td>
+                <td class="active_basket_middle_cell" nowrap="nowrap">
+                <a href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.SaveShoppingCartOpenStatus()" class="btn_basket_slide">
+                    <span style="color: #000">Aktív kosár: </span><span style="color: #900">${CompanyGroupCms.Utils.FormatNumber(ActiveCart.SumTotal)} </span>
+                    <span id="shoppingCartSummaryCaption" style="color: #000">[ + Megnyitás ]</span></a>
+                </td>
+                <td><a href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.SaveShoppingCartOpenStatus()"><img src="@Url.Content("~/Media/images/basketbutton_03.png")" alt="" /></a></td>
             </tr>
         </table>
         {{/if}}
@@ -191,12 +262,12 @@
                 <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/b_delete.png")" alt="" /></td>
                 <td nowrap="nowrap"><a href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.RemoveCart()">Aktív kosár törlése</a>&nbsp;</td>
                 <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/b_save.png")" alt="" /></td>
-                <td nowrap="nowrap"><a id="basket_save" href="#save_basket_win">Aktív kosár mentése</a>&nbsp;</td>
+                <td nowrap="nowrap"><a id="basket_save" href="javascript:void(0)" onclick="CompanyGroupCms.ShoppingCart.ShowSaveCartPanel()">Aktív kosár mentése</a>&nbsp;</td>
                 <td nowrap="nowrap"><img src="@Url.Content("~/Media/images/basketicons/import.png")" alt="" /></td>
                 <!-- <td nowrap="nowrap"><a id="new_site" href="#add_new_site">new site</a></td> -->
                 <td nowrap="nowrap" width="100%"><a id="import_win" href="#import_basket_list_win" >Lista fájl importálása</a></td>
                 <td align="right">
-                <select name="select" id="saved_shoppingcart_list"> <!-- onchange=""  -->             
+                <select name="saved_shoppingcart_list" id="saved_shoppingcart_list" onchange="CompanyGroupCms.ShoppingCart.ActivateCart($('#saved_shoppingcart_list').val())">            
                     <option style="font-weight: bold; margin-left:-3px; padding-bottom:2px; padding-top:2px; background: #7FAA13; color:#fff;" value="">Mentett / nyitott kosarak listája</option>
                     <optgroup label="Mentett kosarak">
                         {{each( i, item ) StoredItems}}
@@ -223,7 +294,7 @@
         </script>
         <div id="cus_basket"></div>
         <script id="shoppingCartLineTemplate" type="text/x-jquery-tmpl">
-        {{if CompanyGroupCms.Visitor.Instance().IsValidLogin()}}
+        {{if Visitor.IsValidLogin}}
         @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/ShoppingCart/AddItem")), System.Web.Mvc.FormMethod.Post, new { id = "form_shoppingcart" }))
         {
         <table width="974" border="0" cellspacing="1" cellpadding="3">
@@ -239,7 +310,7 @@
                 </tr>
             </thead>
             <tbody>
-                {{each( i, item ) Items}}
+                {{each( i, item ) ActiveCart.Items}}
                 <tr>
                     <td width="20%"nowrap="nowrap">${item.ProductId}</td>
                     <td width="20%"nowrap="nowrap">${item.PartNumber}</td>
@@ -260,7 +331,7 @@
                 </tr>
                 <tr>
                     <td colspan="8">
-                    <strong>Fizetendő: <span style="color:#900; font-size:14px;">${CompanyGroupCms.Utils.FormatNumber(SumTotal)} </span></strong></td>
+                    <strong>Fizetendő: <span style="color:#900; font-size:14px;">${CompanyGroupCms.Utils.FormatNumber(ActiveCart.SumTotal)} </span></strong></td>
                 </tr>
             </tbody>
         </table>
@@ -287,7 +358,8 @@
         </div>
 
         <div id="cus_rendeles_feladas">
-        <form>
+        @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/ShoppingCart/CreateOrder")), System.Web.Mvc.FormMethod.Post, new { id = "form_createorder" }))
+        {
             <table width="970" border="0" cellpadding="3" cellspacing="2">
                 <tr>
                     <td nowrap="nowrap"><strong> Fizetési opciók</strong></td>
@@ -305,12 +377,12 @@
                     <div id="kos_gombok_fiz">
                       <table width="100%" border="0" cellspacing="1" cellpadding="0">
                         <tr>
-                          <td><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="2" /></td>
+                          <td><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod" value="1" /></td>
                           <td>Átutalásos fizetés </td>
                         </tr>
                         <tr>
                           <td>&nbsp;</td>
-                          <td><strong style="font-size: 10px;">[22 500,00 Ft]</strong></td>
+                          <td><strong style="font-size: 10px;"></strong></td>
                         </tr>
                       </table>
                     </div></td>
@@ -318,7 +390,7 @@
                     <div id="kos_gombok_szall">
                         <input type="radio" name="radio_szallitasimod" id="radio_szallitasimod" value="1" />
                         Raktári átvétel </div></td>
-                    <td valign="top"  style="width:160px; height:37px;"><input type="reset" name="nullazo" id="nullazo" value="Módosít" onClick="nullazo();" class="feladasopciok_nullaz" /></td>
+                    <td valign="top"  style="width:160px; height:37px;"><input type="button" name="nullazo" id="nullazo" value="Módosít" onclick="nullazo();" class="feladasopciok_nullaz" /></td>
                     <td><!--<div id="cim_off"></div> <div id="kos_gombok_szalladat">Szállítási cím<br /><input type="checkbox" name="chk_cim" id="chk_cim" /> [Jóváhagyás]</div> --><div id="szallcimadat_off"></div>
                     <div id="szallcimadat">
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="szalladatok_tabla">
@@ -327,16 +399,15 @@
                                 <div class="szc_text">
                                     <strong>Kiszállítási cím</strong>
                                 </div>
-                                <span id="deliveryAddressContainer"></span>
+                                @*<span id="deliveryAddressContainer"></span>*@
+                                <select id="site_select"></select>
                                 <script id="deliveryAddressTemplate" type="text/x-jquery-tmpl">
-                                <select id="site_select">
                                     <!-- {{each( i, item ) Items}} -->
-                                    <option style="padding-top: 5px;">${item.ZipCode} ${item.City} ${item.Street}</option>
+                                    <option style="padding-top: 5px;" value="${item.RecId}">${item.ZipCode} ${item.City} ${item.Street}</option>
                                     <!-- {{/each}} -->
-                                </select>
                                 </script>
                                 <div id="newsite_button">
-                                    <a id="new_site"  href="#add_new_site"><img src="@Url.Content("~/media/images/newsite.png")" border="0" title="Új telephely hozzáadása"/></a>
+                                    <a id="new_site"  href="#add_new_site"><img src="@Url.Content("~/media/images/newsite.png")" border="0" title="Új telephely hozzáadása" alt="Új telephely hozzáadása"/></a>
                                 </div></td>
                                 <td align="right" valign="top">
                                 <div class="szi_text">
@@ -353,18 +424,18 @@
                     <div id="kos_gombok_fiz">
                       <table width="100%" border="0" cellspacing="1" cellpadding="0">
                         <tr>
-                          <td><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod2" value="1" /></td>
+                          <td><input type="radio" name="radio_fizetesimod" id="radio_fizetesimod2" value="2" /></td>
                           <td>Készpénzes fizetés </td>
                         </tr>
                         <tr>
                           <td>&nbsp;</td>
-                          <td><strong style="font-size: 10px;">[20 758,00 Ft]</strong></td>
+                          <td><strong style="font-size: 10px;"></strong></td>
                         </tr>
                       </table>
                     </div></td>
                     <td valign="top"  style="width:160px; height:37px;"><div id="kiszallitas_off"></div>
                     <div id="kos_gombok_szall">
-                        <input type="radio" name="radio_szallitasimod" id="radio_szallitasimod" value="2" />
+                        <input type="radio" name="radio_szallitasimod" id="radio_szallitasimod2" value="2" />
                       Kiszállítást kér </div></td>
                   <td valign="top"  style="width:160px; height:37px;">&nbsp;</td>
                   <td>&nbsp;</td>
@@ -403,7 +474,7 @@
                         <tr>
                             <td valign="top"> Egyedi rendelés azonosító
                             <br />
-                            <input type="text" name="custom_number" value="" id="custom_number" disabled="true"/>
+                            <input type="text" name="custom_number" id="custom_number" disabled="true"/>
                             <br />
                             </td>
                             <td width="100%" valign="top" style="padding-left:5px;"> Megjegyzés
@@ -420,7 +491,7 @@
                     </div><!-- Ha rendelési listájában, valamely termék mellett <img src="@Url.Content("~/media/images/basketicons/attention.png")" border="0"/ title="Kötelező érvényű megrendelés!" /> ikont lát, az a kötelező érvényű megrendelést jelöli. Ennek szabálya értelmében... blah... blah... blah... --></td>
                 </tr>
             </table>
-        </form>
+        }
     </div>
 
         <div id="cus_ajanlat_vegfelhasznalo">
@@ -476,32 +547,64 @@
             </tr>
         </table>
     </div>
-
         <div id="cus_ajanlat_finance">
-            HRP Finance árajánlat készítése
+            HRP Finance árajánlat készítése <br/>
+            <table cellpadding="1" cellspacing="1">
+            <tr>
+                <td id="leasingOptionsContainer"></td>
+                <td>
+                    @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Webshop/ShoppingCart")), System.Web.Mvc.FormMethod.Post, new { id="form_financeoffer" }))
+                    {
+                        <div id="financeoffer_errors"></div>
+                
+                        <label for="txt_offername">bérbevevő neve</label> @Html.TextBox("txt_offername", "", new {id="txt_offername", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
+                        <label class="error" for="txt_offername" generated="true" style="display:none; color:#900;">A név kitöltése kötelező</label><br/>
+
+                        <label for="txt_offeraddress">bérbevevő címe</label>@Html.TextBox("txt_offeraddress", "", new {id="txt_offeraddress", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
+                        <label class="error" for="txt_offeraddress" generated="true" style="display:none; color:#900;">A cím kitöltése kötelező</label><br/>
+
+                        <label for="txt_offerphone">bérbevevő telefon</label>@Html.TextBox("txt_offerphone", "", new {id="txt_offerphone", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
+                        <label class="error" for="txt_offerphone" generated="true" style="display:none; color:#900;">A telefon kitöltése kötelező</label><br/>
+
+                        <label for="txt_offerstatnumber">bérbevevő cégjegyzékszám</label>@Html.TextBox("txt_offerstatnumber", "", new {id="txt_offerstatnumber", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"})
+                        <label class="error" for="txt_offerstatnumber" generated="true" style="display:none; color:#900;">A cégjegyzékszám kitöltése kötelező</label><br/>
+                        <br/>
+                        <input type="submit" value="Ajánlatkérés" />
+                    }                
+                </td>
+            </tr>
+            </table>
+            <script id="leasingOptionsTemplate" type="text/x-jquery-tmpl">
+            {{if Message.length > 0}}
+                ${Message}
+            {{else}}
+                <ul>
+                {{each( i, item ) Items}} 
+                    <li><input type="radio" name="radio_selectNumOfMonth" value="${item.FinanceParameterId}" style="padding-top: 5px;">futamidő: ${item.NumOfMonth} összeg: ${item.CalculatedValue}</li>
+                {{/each}} 
+                </ul>
+            {{/if}}
+            </script>
         </div>
     </div>
 
     <div id="cus_catalogue_left">
 		<div id="cus_banner_table">
-			<form method="post" action="" id="frm_structure">
-				<div id="container">
+    		<div id="container">
                     <!-- VisitorInfo.IsValidLogin -->
-					<div id="cus_filter_price"></div>
-                    <script id="priceFilterTemplate" type="text/x-jquery-tmpl">
-                    {{if IsValidLogin}}
+					<div id="cus_filter_price">
                         @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Webshop/Catalogue")), System.Web.Mvc.FormMethod.Post, new { id = "form_filterbyprice" }))
                         {
-					<div id="negyes_szuro">	
-						<table cellpadding="1" cellspacing="1" >
+					    <div id="negyes_szuro">	
+						<table cellpadding="1" cellspacing="1">
 						    <tr>
-                    <td>Készleten</td><td><input type="checkbox" id="chk_onstock" onchange="CompanyGroupCms.Catalogue.FilterByStock($(this).is(':checked'))" /></td>
-                    <td>Akciós</td><td><input type="checkbox" id="chk_onaction" onchange="CompanyGroupCms.Catalogue.FilterByAction($(this).is(':checked'))" /></td> 
-                    <td>Leértékelt</td><td><input type="checkbox" id="chk_bargain" onchange="CompanyGroupCms.Catalogue.FilterByBargain($(this).is(':checked'))" /></td> 
-                    <td>Új</td><td><input type="checkbox" id="chk_new" onchange="CompanyGroupCms.Catalogue.FilterByNew($(this).is(':checked'))" /></td>                                   
+                                <td>Készleten</td><td><input type="checkbox" id="chk_onstock" onchange="CompanyGroupCms.Catalogue.FilterByStock($(this).is(':checked'))" /></td>
+                                <td>Akciós</td><td><input type="checkbox" id="chk_onaction" onchange="CompanyGroupCms.Catalogue.FilterByAction($(this).is(':checked'))" /></td> 
+                                <td>Leértékelt</td><td><input type="checkbox" id="chk_bargain" onchange="CompanyGroupCms.Catalogue.FilterByBargain($(this).is(':checked'))" /></td> 
+                                <td>Új</td><td><input type="checkbox" id="chk_new" onchange="CompanyGroupCms.Catalogue.FilterByNew($(this).is(':checked'))" /></td>                                   
                             </tr>
 						</table>
-					</div>	
+					    </div>	
 						<span>Ár szerinti keresés</span>
                         <label class="error" for="txt_filterbyprice" generated="true" style="display:none; color:#900;">( ! )</label><br />
 						<select name="select_filterbyprice" id="select_filterbyprice" style="margin-top:4px; padding:4px; border-radius:3px; font-size:13px; border: #ccc 1px solid; color:#666; width: 50px;">
@@ -514,19 +617,16 @@
 							Frissítés<!-- <img src="@Url.Content("~/Media/images/refresh.png")" /> -->
 						</div>
                         }
-                    {{/if}}
-                    </script>
-					
+					</div>
                     <!-- /VisitorInfo.IsValidLogin -->
 					<div id="cus_filter_1">
 						Gyártók kiválasztása
 						<br />
 						<select id="manufacturerList" data-placeholder="Gyártók..." class="chosen" multiple style="width:270px;">
 							<option value=""></option>
-							@foreach (var manufacturer in @Model.Structures.Manufacturers)
-                            { 
+							@foreach (var manufacturer in @Model.Structures.Manufacturers) { 
                                 <option value="@manufacturer.Id">@manufacturer.Name </option>
-                            }
+                                }
 						</select>
 					</div>
 					<div id="cus_filter_2">
@@ -534,9 +634,9 @@
 						<br />
 						<select id="category1List" data-placeholder="Jelleg - 1..." class="chosen" multiple style="width:270px;">
 							<option value=""></option>
-							@foreach (var category1 in @Model.Structures.FirstLevelCategories)
-                            { <option value="@category1.Id">@category1.Name</option>
-                            }
+							@foreach (var category1 in @Model.Structures.FirstLevelCategories) { 
+                            <option value="@category1.Id">@category1.Name</option>
+                        }
 						</select>
 					</div>
 					<div id="cus_filter_3">
@@ -544,10 +644,9 @@
 						<br />
 						<select id="category2List" data-placeholder="Jelleg - 2..." class="chosen" multiple style="width:270px;">
 							<option value=""></option>
-							@foreach (var category2 in @Model.Structures.SecondLevelCategories)
-                            { 
+							@foreach (var category2 in @Model.Structures.SecondLevelCategories) { 
                                 <option value="@category2.Id">@category2.Name</option>
-                            }
+                                    }
 						</select>
 					</div>
 					<div id="cus_filter_4">
@@ -562,8 +661,6 @@
 						</select>
 					</div>
 				</div>
-			</form>
-	
             <p align="center">
                 <marquee class="html-marquee" direction="up" behavior="scroll" scrollamount="1" >@*data-bind="visible: visitorInfo.isValidLogin()"*@ 
                     Felhasználónak küldött értesítő üzenetek szövege, <a href="#">linkekkel</a>, a kapcsolódó hivatkozáshoz...
@@ -610,7 +707,15 @@
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										<tr>
 											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPriceUp();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
-											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPriceUp();">ÁR szerint</a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPriceUp();">ÁR szerint növekvő</a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPriceDown();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPriceDown();">ÁR szerint csökkenő</a></td>
 										</tr>
 									</table>
 								</li>
@@ -619,7 +724,15 @@
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										<tr>
 											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPartNumberUp();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
-											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPartNumberUp();">CIKKSZÁM szerint </a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPartNumberUp();">CIKKSZÁM szerint növekvő</a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPartNumberDown();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByPartNumberDown();">CIKKSZÁM szerint csökkenő</a></td>
 										</tr>
 									</table>
 								</li>
@@ -627,7 +740,15 @@
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										<tr>
 											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByNameUp();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
-											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByNameUp();">NÉV szerint </a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByNameUp();">NÉV szerint növekvő</a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByNameDown();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByNameDown();">NÉV szerint csökkenő</a></td>
 										</tr>
 									</table>
 								</li>
@@ -636,7 +757,15 @@
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										<tr>
 											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByStockUp();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
-											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByStockUp();">MENNYISÉG szerint </a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByStockUp();">MENNYISÉG szerint növekvő</a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByStockDown();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByStockDown();">MENNYISÉG szerint csökkenő</a></td>
 										</tr>
 									</table>
 								</li>
@@ -644,7 +773,15 @@
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										<tr>
 											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByGarantyUp();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
-											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByGarantyUp();">GARANCIA IDŐ szerint</a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByGarantyUp();">GARANCIA IDŐ szerint növekvő</a></td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByGarantyUp();"><img src="@Url.Content("~/Media/images/order_arrow.png")" border="0" alt="" /></a></td>
+											<td width="100%"><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.SequenceByGarantyUp();">GARANCIA IDŐ szerint csökkenő</a></td>
 										</tr>
 									</table>
 								</li>
@@ -775,7 +912,7 @@
 				                <td valign="top">
 				                    <div class="cus_termekkep">
                                     {{if item.PrimaryPicture.RecId > 0}}
-				                    <a class="popupimg" href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.ShowPicture('${item.ProductId}', '${item.DataAreaId}', '${item.ItemName}');" title="${item.itemName}"><img src="${CompanyGroupCms.Constants.Instance().getPictureUrl(item.ProductId, item.PrimaryPicture.RecId, item.DataAreaId)}" width="94" height="69" alt="${CompanyGroupCms.Constants.Instance().getPictureUrl(item.ProductId, item.PrimaryPicture.RecId, item.DataAreaId)}" /></a>
+				                    <a class="popupimg" href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.ShowPicture('${item.ProductId}', '${item.DataAreaId}', '${item.ItemName}');" title="${item.ItemName}"><img src="${CompanyGroupCms.Constants.Instance().getPictureUrl(item.ProductId, item.PrimaryPicture.RecId, item.DataAreaId)}" alt="${CompanyGroupCms.Constants.Instance().getPictureUrl(item.ProductId, item.PrimaryPicture.RecId, item.DataAreaId)}" /></a>
 				                    {{else}}
 				                    <img src="@Url.Content("~/Media/images/demopic.jpg")" width="180" height="134" alt="" />
                                     {{/if}}
@@ -791,8 +928,8 @@
                                         {{if Visitor.IsValidLogin}}
                                         <div class="cus_teteladatok">
                                             {{if item.IsInStock}}
-				                                Belső raktár: ${item.InnerStock}<br/> 
-				                                Külső raktár: ${item.OuterStock} 
+				                                Véső raktár: ${item.InnerStock}<br/> 
+				                                Huszti raktár: ${item.OuterStock} 
                                             {{else}}
                                                 {{if item.PurchaseInProgress}}
 				                                    <span>Várható érkezés: ${item.ShippingDate}</span>
@@ -801,7 +938,7 @@
                                                 {{/if}}
                                             {{/if}}
                                             {{if item.SecondHandList.Items.length > 0}}
-				                            <br /><span>Használt: ... Ft-tól </span>
+				                            <br /><a href="javascript:void(0)" onclick="CompanyGroupCms.Catalogue.ShowSecondHandList('${item.ProductId}', '${item.DataAreaId}');" title="${item.itemName}">Használt: ${item.SecondHandList.MinimumPrice} Ft-tól </a>
 				                            {{/if}}
 				                            <br /><span>Garancia módja:<br/> ${item.GarantyMode}</span>
 				                            <br /><span>Garancia ideje: ${item.GarantyTime}</span>
@@ -811,8 +948,8 @@
 				                            {{if item.New}}
 				                            <br/><span>új termék</span>
 				                            {{/if}}
-				                            {{if item.ItemState == 1 && Visitor.IsValidLogin}}
-				                            <br/><span>kifutó</span>
+				                            {{if item.EndOfSales && Visitor.IsValidLogin}}
+				                            <br/><span>Kifutó</span>
 				                            {{/if}}
 				                        </div>
                                         {{/if}}
@@ -831,7 +968,7 @@
 				            </div>
                         </td>
                         <td>
-                        {{if Visitor.IsValidLogin}}
+                        {{if Visitor.IsValidLogin && item.Discount}}
                         <div class="cus_prod_table_morelink" style="margin-left:15px;">
                             <img class="basketicon" src="@Url.Content("~/Media/images/akcios.png")" border="0" align="absmiddle" />
                             <!-- <a href="javascript:void(0)" onclick=""><img class="basketicon" src="@Url.Content("~/Media/images/compare.png")" border="0" align="absmiddle" /> Összehasonlító listához ad</a> -->
@@ -839,7 +976,7 @@
                         {{/if}}
                         </td>
                         <td width="100%">
-                        {{if Visitor.IsValidLogin}}
+                        {{if Visitor.IsValidLogin && item.New}}
                         <div class="cus_prod_table_morelink" style="margin-left:15px;">
                             <img class="basketicon" src="@Url.Content("~/Media/images/ujdonsag.png")" border="0" align="absmiddle" />
                             <!-- <a href="javascript:void(0)" onclick=""><img class="basketicon" src="@Url.Content("~/Media/images/compare.png")" border="0" align="absmiddle" /> Összehasonlító listához ad</a> -->

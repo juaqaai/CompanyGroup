@@ -21,9 +21,13 @@ namespace Cms.CommonCore.Models
             this.Currency =String.Empty;
 
             this.PermanentId = String.Empty;
+
+            this.CartId = String.Empty;
+
+            this.RegistrationId = String.Empty;
         }
 
-        public VisitorData(string objectId, string language, bool isShoppingCartOpened, bool isCatalogueOpened, string currency, string permanentId)
+        public VisitorData(string objectId, string language, bool isShoppingCartOpened, bool isCatalogueOpened, string currency, string permanentId, string cartId, string registrationId)
         {
             this.ObjectId = objectId;
 
@@ -36,6 +40,10 @@ namespace Cms.CommonCore.Models
             this.Currency = currency;
 
             this.PermanentId = permanentId;
+
+            this.CartId = cartId;
+
+            this.RegistrationId = registrationId;
         }
 
         /// <summary>
@@ -67,5 +75,15 @@ namespace Cms.CommonCore.Models
         /// megmarado objectId
         /// </summary>
         public string PermanentId { set; get; }
+
+        /// <summary>
+        /// kosár azonosító
+        /// </summary>
+        public string CartId { set; get; }
+
+        /// <summary>
+        /// regisztrációs azonosító
+        /// </summary>
+        public string RegistrationId { set; get; }
     }
 }

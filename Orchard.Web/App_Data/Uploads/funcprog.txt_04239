@@ -1,0 +1,20 @@
+Tárgy címe: Advanced Functional Programming
+Oktató: Dr. Jacobus Marinus Plasmeier
+
+2008. október 13. (hétfõ)            16:00-18:00        00-817 
+2008. október 14. (kedd)             14:00-18:00        00-112
+2008. október 15. (szerda)          14:00-16:00        00-115
+                                                               16:00-18:00        00-623
+2008. október 16. (csütörtök)    14:00-18:00        0.99
+2008. október 17. (péntek)         14:00-16:00        00-112
+
+In this course advanced programming concepts will be taught. We will address (1) generic programming;(2) combinatorical programming;(3) advancedconcurrency concepts;(4) advanced data structures.
+Objectives
+Insight in some state-of-the-art advanced programming concepts, their theoretical background and their practical applicability.
+Subjects
+(1) generic programming: theoretical background, overloading, type constructor classes, kind indexing;practical applications: common generic functions, web-applications, workflow applications;
+(2) combinatorical programming (monadic programming, parser combinators);
+(3) advanced concurrency concepts (Software Transactional Memory);
+(4) advanced data structures (Generalized Algebraic Datatypes).
+Pre-requisites
+Basic knowledge about functional programming in general (Clean or Haskell).

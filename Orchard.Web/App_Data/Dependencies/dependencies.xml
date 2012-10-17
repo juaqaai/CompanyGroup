@@ -40,7 +40,13 @@
     <ModuleName>Company</ModuleName>
     <VirtualPath>~/Modules/Company/Company.csproj</VirtualPath>
     <LoaderName>DynamicExtensionLoader</LoaderName>
-    <References />
+    <References>
+      <Reference>
+        <Name>CommonCore</Name>
+        <LoaderName>PrecompiledExtensionLoader</LoaderName>
+        <VirtualPath>~/Modules/CommonCore/bin/CommonCore.dll</VirtualPath>
+      </Reference>
+    </References>
   </Dependency>
   <Dependency>
     <ModuleName>Containers</ModuleName>
@@ -482,8 +488,8 @@
   </Dependency>
   <Dependency>
     <ModuleName>PartnerInfo</ModuleName>
-    <VirtualPath>~/Modules/PartnerInfo/bin/PartnerInfo.dll</VirtualPath>
-    <LoaderName>PrecompiledExtensionLoader</LoaderName>
+    <VirtualPath>~/Modules/PartnerInfo/PartnerInfo.csproj</VirtualPath>
+    <LoaderName>DynamicExtensionLoader</LoaderName>
     <References>
       <Reference>
         <Name>CommonCore</Name>

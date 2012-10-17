@@ -6,7 +6,7 @@ namespace Cms.Webshop.Models
     /// <summary>
     /// látogatóhoz tartozó összes kosár lekérdezés adatait összefogó POCO
     /// </summary>
-    public class GetCartCollectionByVisitorId
+    public class GetActiveCart
     {
     }
 }

@@ -10,14 +10,15 @@ namespace Cms.Webshop.Models
     {
         public Catalogue(CompanyGroup.Dto.WebshopModule.Structures structures, 
                          CompanyGroup.Dto.WebshopModule.Products products, 
-                         Cms.CommonCore.Models.Visitor visitor, 
-                         List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> storedItems,
-                         List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> openedItems,
+                         Cms.CommonCore.Models.Visitor visitor,
                          CompanyGroup.Dto.WebshopModule.ShoppingCart activeCart, 
+                         List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> openedItems, 
+                         List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> storedItems,
                          bool shoppingCartOpenStatus, 
                          bool catalogueOpenStatus, 
                          CompanyGroup.Dto.PartnerModule.DeliveryAddresses deliveryAddresses,
-                         CompanyGroup.Dto.WebshopModule.BannerList bannerList)
+                         CompanyGroup.Dto.WebshopModule.BannerList bannerList, 
+                         CompanyGroup.Dto.WebshopModule.LeasingOptions leasingOptions)
         {
             this.Structures = new Structures(structures);
 
@@ -25,11 +26,11 @@ namespace Cms.Webshop.Models
 
             this.Visitor = visitor;
 
-            this.StoredItems = storedItems;
+            this.ActiveCart = activeCart;
 
             this.OpenedItems = openedItems;
 
-            this.ActiveCart = activeCart;
+            this.StoredItems = storedItems;
 
             this.ShoppingCartOpenStatus = shoppingCartOpenStatus;
 
@@ -38,6 +39,8 @@ namespace Cms.Webshop.Models
             this.DeliveryAddresses = deliveryAddresses;
 
             this.BannerList = bannerList;
+
+            this.LeasingOptions = leasingOptions;
         }
 
         public Structures Structures { get; set; }
@@ -46,11 +49,11 @@ namespace Cms.Webshop.Models
 
         public Cms.CommonCore.Models.Visitor Visitor { get; set; }
 
-        public List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> StoredItems { get; set; }
+        public CompanyGroup.Dto.WebshopModule.ShoppingCart ActiveCart { get; set; } 
 
         public List<CompanyGroup.Dto.WebshopModule.OpenedShoppingCart> OpenedItems { get; set; }
 
-        public CompanyGroup.Dto.WebshopModule.ShoppingCart ActiveCart { get; set; } 
+        public List<CompanyGroup.Dto.WebshopModule.StoredShoppingCart> StoredItems { get; set; } 
 
         public bool ShoppingCartOpenStatus { get; set; }
 
@@ -59,6 +62,8 @@ namespace Cms.Webshop.Models
         public CompanyGroup.Dto.PartnerModule.DeliveryAddresses DeliveryAddresses { get; set; }
 
         public CompanyGroup.Dto.WebshopModule.BannerList BannerList { get; set; }
+
+        public CompanyGroup.Dto.WebshopModule.LeasingOptions LeasingOptions { get; set; }
     }
 
 }

@@ -75,6 +75,8 @@ namespace Webshop
 
             manifest.DefineScript("Requests").SetUrl("catalogue.model.js", "application.requests.js").SetVersion("1.0.0");
 
+            manifest.DefineScript("jQuery_AutoComplete").SetUrl("jquery.autocomplete.js", "jquery.autocomplete.js").SetVersion("1.1.0");
+
             manifest.DefineScript("Ember").SetUrl("ember-0.9.8.1.min.js", "ember-0.9.8.1.js").SetVersion("0.9.8");
 
             manifest.DefineScript("App").SetUrl("app.js", "app.js").SetVersion("1.0.0");

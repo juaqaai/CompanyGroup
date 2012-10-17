@@ -1,61 +1,123 @@
-﻿<H2>ADATKEZELŐ</H2><hr noshade="noshade" size="1" />
-<table id="dashboardtable" width="350" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_01.png")" width="46" height="44" alt=""></td>
-        <td>
-            <div id="dashboardtext"><a href="@Url.Content("~/PartnerInfo/Registration")">ADATLAP / MÓDOSÍTÁS</a></div>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_02.png")" width="234" height="44" alt=""> --></td>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_03.png")" width="44" height="44" alt=""></td>
-        <td>
-            <div id="dashboardtext"><a href="#">JELSZÓVÁLTOZTATÁS</a></div>
-            <div id="changepass">
-                jelszóváltoztatás form helye
-            </div>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_04.png")" width="246" height="44" alt=""> --></td>
-    </tr>
-    <tr>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_05.png")" width="46" height="56" alt=""></td>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_06.png")" width="234" height="56" alt=""></td>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_07.png")" width="44" height="56" alt=""></td>
-        <td>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_08.png")" width="246" height="56" alt=""> --></td>
-    </tr>
-    <tr>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_09.png")" width="46" height="44" alt=""></td>
-        <td>
-            <div id="dashboardtext"><a href="#">SZÁMLÁK</a></div>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_10.png")" width="234" height="44" alt=""> --></td>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_11.png")" width="44" height="44" alt=""></td>
-        <td>
-            <div id="dashboardtext"><a href="#">MEGRENDELÉSEK</a></div>
-           <!--  <img src="@Url.Content("~/Media/images/dashboard_12.png")" width="246" height="44" alt=""> --></td>
-    </tr>
-    <tr>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_13.png")" width="46" height="52" alt=""></td>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_14.png")" width="234" height="52" alt=""></td>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_15.png")" width="44" height="52" alt=""></td>
-        <td>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_16.png")" width="246" height="52" alt=""> --></td>
-    </tr>
-    <tr>
-        <td>
-            <img src="@Url.Content("~/Media/images/dashboard_17.png")" width="46" height="45" alt=""></td>
-        <td>
-            <div id="dashboardtext"><a href="#">RENDSZERÜZENETEK</a></div>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_18.png")" width="234" height="45" alt=""> --></td>
-        <td>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_19.png")" width="44" height="45" alt=""> --></td>
-        <td>
-            <!-- <img src="@Url.Content("~/Media/images/dashboard_20.png")" width="246" height="45" alt=""></td> -->
-    </tr>
-</table>
+﻿@model Cms.CommonCore.Models.Visitor
+@using (Script.Head())
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+            CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+            CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+            CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Invoice/")');
+            CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
+            CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Registration/")');
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/Webshop/Catalogue/SignInCatalogue")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/Webshop/Catalogue/SignOutCatalogue")');
+            CompanyGroupCms.Constants.Instance().setDownloadPriceListServiceUrl('@Url.Content("~/Webshop/Catalogue/DownloadPriceList")');
+            CompanyGroupCms.Constants.Instance().setModule('partnerinfo');
+            var model = @(Html.Raw(Json.Encode(Model)));
+            console.log(model);
+        });
+    </script>
+}  
+<h2>ADATKEZELŐ</h2><hr noshade="noshade" size="1" />
+@if (Model.IsValidLogin)
+{ 
+    <table id="dashboardtable" width="350" border="0" cellpadding="0" cellspacing="0">
+        @if (!String.IsNullOrEmpty(Model.PersonId))
+        {
+        <tr>
+            <td><img src="@Url.Content("~/Media/images/dashboard_01.png")" width="46" height="44" alt="" /></td>
+            <td>
+                <div id="dashboardtext">@Html.ActionLink("ADATLAP / MÓDOSÍTÁS", "Index", "/Registration")</div>
+            </td>
+            <td><img src="@Url.Content("~/Media/images/dashboard_03.png")" width="44" height="44" alt="" /></td>
+            <td>
+                <div id="dashboardtext">@Html.ActionLink("JELSZÓVÁLTOZTATÁS", "ChangePassword", "/ContactPerson")</div>
+                <br/>
+                <div id="changepass"></div>
+            </td>
+        </tr>
+        }
+        else
+        {
+        <tr>
+            <td><img src="@Url.Content("~/Media/images/dashboard_01.png")" width="46" height="44" alt="" /></td>
+            <td><div id="dashboardtext">@Html.ActionLink("ADATLAP / MÓDOSÍTÁS", "Index", "/Registration")</div></td>
+            <td><img src="@Url.Content("~/Media/images/dashboard_03.png")" width="44" height="44" alt="" /></td>
+            <td>
+                <div id="dashboardtext">JELSZÓVÁLTOZTATÁS</div>
+                <br/>
+                <div id="changepass">Ön egy cég nevében van bejelentkezve! 
+                <br/><br/> céges belépéshez tartozó jelszó megváltoztatása csak a regisztrációs folyamat végigvitelével lehetséges.<br/>
+                Kérjük válassza a regisztráció / cégadat módosítás funkció- adminisztrátori beállításoknál - a jelszó megadását.
+                </div>
+            </td>
+        </tr>
+        }
+        <tr>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_05.png")" width="46" height="56" alt="" /></td>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_06.png")" width="234" height="56" alt="" /></td>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_07.png")" width="44" height="56" alt="" /></td>
+            <td>
+                <!-- <img src="@Url.Content("~/Media/images/dashboard_08.png")" width="246" height="56" alt=""> --></td>
+        </tr>
+        <tr>
+            <td><img src="@Url.Content("~/Media/images/dashboard_09.png")" width="46" height="44" alt="" /></td>
+            @if (Model.Permission.InvoiceInfoEnabled)
+            {
+            <td><div id="dashboardtext">@Html.ActionLink("SZÁMLÁK", "Index", "/Invoice")</div><!-- <img src="@Url.Content("~/Media/images/dashboard_10.png")" width="234" height="44" alt=""> --></td>
+            }
+            else { 
+                <td><div id="dashboardtext">A számlák megtekintéséhez nem áll rendelkezésre megfelelő jogosultság!</div></td>
+            }               
+            <td><img src="@Url.Content("~/Media/images/dashboard_11.png")" width="44" height="44" alt="" /></td>
+            
+            @if (Model.Permission.InvoiceInfoEnabled)
+            {
+            <td><div id="dashboardtext">@Html.ActionLink("MEGRENDELÉSEK", "Index", "/SalesOrder")</div>
+               <!--  <img src="@Url.Content("~/Media/images/dashboard_12.png")" width="246" height="44" alt=""> --></td>
+            }
+            else { 
+            <td><div id="dashboardtext">A megrendelések megtekintéséhez nem áll rendelkezésre megfelelő jogosultság!</div></td>
+            }
+        </tr>
+        <tr>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_13.png")" width="46" height="52" alt="" /></td>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_14.png")" width="234" height="52" alt="" /></td>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_15.png")" width="44" height="52" alt="" /></td>
+            <td>
+                <!-- <img src="@Url.Content("~/Media/images/dashboard_16.png")" width="246" height="52" alt=""> --></td>
+        </tr>
+        <tr>
+            <td>
+                <img src="@Url.Content("~/Media/images/dashboard_17.png")" width="46" height="45" alt="" /></td>
+            <td>
+                <div id="dashboardtext"><a href="#">RENDSZERÜZENETEK</a></div>
+                <!-- <img src="@Url.Content("~/Media/images/dashboard_18.png")" width="234" height="45" alt=""> --></td>
+            <td>
+                <!-- <img src="@Url.Content("~/Media/images/dashboard_19.png")" width="44" height="45" alt=""> --></td>
+            <td>
+                <!-- <img src="@Url.Content("~/Media/images/dashboard_20.png")" width="246" height="45" alt=""> --></td>
+        </tr>
+    </table>
+}
+else
+{ 
+    <table id="dashboardtable" width="350" border="0" cellpadding="0" cellspacing="0">
+        <tr>    
+            <td><h3>Figyelem! Az oldal csak bejelentkezést követően érhető el!</h3></td>
+        </tr>
+        <tr>    
+            <td>ACCESS DENIED KÉP...</td>
+        </tr>
+        <tr>    
+            <td><a href="javascript:void(0)" onclick="CompanyGroupCms.VisitorInfo.ShowSignInPanel()"><strong>Bejelentkezés</strong></a></td>
+        </tr>
+    </table>
+}

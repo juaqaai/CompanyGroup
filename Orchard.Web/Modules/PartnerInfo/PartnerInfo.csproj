@@ -70,6 +70,8 @@
   <ItemGroup>
     <Content Include="Scripts\customer.model.js" />
     <Content Include="Scripts\customer.service.js" />
+    <Content Include="Scripts\jquery.fileupload.js" />
+    <Content Include="Scripts\registration.model.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\Web.config" />
@@ -97,7 +99,15 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\SalesOrderController.cs" />
-    <Compile Include="Models\CustomerRegistration.cs" />
+    <Compile Include="Models\BankAccounts.cs" />
+    <Compile Include="Models\ContactPersons.cs" />
+    <Compile Include="Models\GetInvoiceInfo.cs" />
+    <Compile Include="Models\InvoiceInfo.cs" />
+    <Compile Include="Models\DeliveryAddresses.cs" />
+    <Compile Include="Models\OrderInfo.cs" />
+    <Compile Include="Models\Registration.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\UploadedFile.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
   </ItemGroup>

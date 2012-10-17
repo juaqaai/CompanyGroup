@@ -14,7 +14,10 @@
     Style.Include("site.css");
     Style.Include("hrp_bsc_html_css.css");
     Style.Include("login.css");
-
+    Style.Include("jquery.autocomplete.css");
+    Style.Include("jquery.ui.autocomplete.css");
+    Style.Include("jquery.fileupload-ui.css");
+ 
     Script.Require(Url.Content("jQuery")).AtHead();
     Script.Require(Url.Content("Chosen")).AtHead();
     Script.Require(Url.Content("JTemplate")).AtHead();
@@ -41,15 +44,18 @@
     //Script.Require(Url.Content("WebshopModel")).AtHead();
     //Script.Require(Url.Content("CatalogueService")).AtHead();
     Script.Require(Url.Content("CustomerService")).AtHead();
-    Script.Require(Url.Content("CustomerModel")).AtHead(); 
+    Script.Require(Url.Content("CustomerModel")).AtHead();
+    Script.Require(Url.Content("RegistrationModel")).AtHead();
     Script.Require(Url.Content("jQuery_UICore")).AtHead();
     Script.Require(Url.Content("jQuery_UIDatePicker")).AtHead();
     Script.Require(Url.Content("Knockout")).AtHead();
     Script.Require(Url.Content("Constants")).AtHead();
-    Script.Require(Url.Content("Requests")).AtHead(); 
+    Script.Require(Url.Content("Requests")).AtHead();
     Script.Require(Url.Content("ShoppingCart")).AtHead();
     Script.Require(Url.Content("Catalogue")).AtHead();
-        
+    Script.Require(Url.Content("jQueryUI_Autocomplete")).AtHead();
+    Script.Require(Url.Content("FileUpload")).AtHead();    
+
     /* Some useful shortcuts or settings
     ***************************************************************/
 
@@ -332,7 +338,7 @@
 
                 //dupla klikk tiltása
                 $(document).bind("dblclick", function (event) {
-                    alert("Egyet kattints! Ez weboldal nem a pasziánsz!");
+                    //alert("Egyet kattints! Ez weboldal nem a pasziánsz!");
                     event.preventDefault();
                 });
                 //cus teljes háttérkép eleje
@@ -585,42 +591,15 @@
                     $("#feladas").addClass("feladasopciok_block");
                 });
 
-                //regsteps
-
-                $("input[name='nextstep1']").click(function () {
-                    $('#regstep2').show();
-                    $('#nextstep1').attr("disabled", "disabled");
+                $('#top-link').topLink({
+                    min: 400,
+                    fadeSpeed: 500
                 });
-
-                $("input[name='nextstep2']").click(function () {
-                    $('#regstep3').show();
+                //smoothscroll
+                $('#top-link').click(function (e) {
+                    e.preventDefault();
+                    $.scrollTo(0, 300);
                 });
-
-                $("input[name='nextstep3']").click(function () {
-                    $('#regstep4').show();
-                });
-
-                $("input[name='nextstep4']").click(function () {
-                    $('#regstep5').show();
-                });
-
-
-                
-                //usage w/ smoothscroll
-                $(document).ready(function() {
-                    //set the link
-                    $('#top-link').topLink({
-                        min: 400,
-                        fadeSpeed: 500
-                    });
-                    //smoothscroll
-                    $('#top-link').click(function(e) {
-                        e.preventDefault();
-                        $.scrollTo(0,300);
-                    });
-                });
-
-
 
                 //szállítási idő naptármodul
 
@@ -856,6 +835,32 @@
                     },
                     messages: {
                         txt_cartname: "A kosár nevének kitöltése kötelező!"
+                    }
+                });
+
+                $("#form_searchByTextFilter").validate({
+                    submitHandler: function () {
+                        CompanyGroupCms.Catalogue.SearchByTextFilter($('#txt_globalsearch').val());
+                        return false;
+                    },
+                    invalidHandler: function (e, validator) {
+                        var errors = validator.numberOfInvalids();
+                        if (errors) {
+                            var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                            $("#globalsearch_errors").html(message);
+                            $("#globalsearch_errors").show();
+                        } else {
+                            $("#globalsearch_errors").hide();
+                        }
+                    },
+                    //errorLabelContainer: $("#login_errors"),
+                    rules: {
+                        txt_globalsearch: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        txt_globalsearch: "A keresendő kifejezés megadása kötelező!"
                     }
                 });
 
@@ -1250,8 +1255,11 @@
 						<td width="100%" nowrap="nowrap">&nbsp;</td>
 						<td align="right" nowrap="nowrap"></td>
 						<td width="50%" align="right" nowrap="nowrap"><!-- *** gyorskereső ajánlóval *** -->
-						<input name="searchfield" type="text" value="Keresés a teljes oldalban" class="ui-autocomplete-input" id="srchfield" size="19" onfocus="if(this.value=='Keresés a teljes oldalban')this.value=''" onblur="if(this.value=='')this.value='Keresés a teljes oldalban'"/>
-						</td>
+                        @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Webshop/Catalogue")), System.Web.Mvc.FormMethod.Post, new { id = "form_searchByTextFilter" }))
+                        {
+                        <label class="error" for="txt_globalsearch" generated="true" style="display:none; color:#900;">A mező kitöltése kötelező</label>
+						<input type="text" class="ui-autocomplete-input" id="txt_globalsearch" size="19" onfocus="if(this.value=='Keresés a termékek között')this.value=''" onblur="if(this.value=='')this.value='Keresés a termékek között'"/>
+                        }</td>@*watermarkedsearch value="Keresés a termékek között" *@
 					</tr>
 				</table>
 			</div>
@@ -1611,7 +1619,7 @@
 			<div style="display: none;">
 				<div id="div_login">
 					@using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_login" }))
-                    { 
+     { 
                     <div id="login_errors"></div>
 					<table width="470" border="0" align="center" cellpadding="10" cellspacing="1" >
 						<tr>
@@ -1644,7 +1652,7 @@
 							<td align="right" nowrap="nowrap"> Még nem partnerünk? <a href="@Url.Content("~/PartnerInfo/Home/")" style="color:#fff; text-decoration: none;">Regisztráljon!</a></td>
 						</tr>
 					</table>
-                    }
+     }
 				</div>
 			</div>
 

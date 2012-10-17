@@ -1,19 +1,52 @@
-﻿@model Cms.PartnerInfo.Models.CustomerRegistration
-           
+﻿@model Cms.PartnerInfo.Models.Registration
+
 @using (Script.Head())
 {
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
             
+            CompanyGroupCms.Constants.Instance().setWebshopBaseUrl('@Url.Content("~/Webshop/Catalogue/")');
+            CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
+            CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
+            CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
+            CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
+            CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Registration/")');
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/Webshop/Catalogue/SignInCatalogue")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/Webshop/Catalogue/SignOutCatalogue")');
+            CompanyGroupCms.Constants.Instance().setDownloadPriceListServiceUrl('@Url.Content("~/Webshop/Catalogue/DownloadPriceList")');
+            CompanyGroupCms.Constants.Instance().setModule('webshop');
+
             var model = @(Html.Raw(Json.Encode(Model)));
-            console.log(model);
+            //console.log(model);
 
-            $("#bankAccountTemplate").tmpl(model.BankAccounts).appendTo("#bankAccountContainer");
-            $("#contactPersonTemplate").tmpl(model.BankAccounts).appendTo("#contactPersonContainer");
-            $("#deliveryAddressTemplate").tmpl(model.DeliveryAddresses).appendTo("#deliveryAddressContainer");
+            $("#nextstep1").change(function () {
+                if($('#nextstep1').is(':checked')) {
+                    CompanyGroupCms.Registration.AddNew();
+                    $('#regstep2').show();
+                    //$('#nextstep1').attr("disabled", "disabled");
+                }
+                else {
+                    $('#regstep2').hide();
+                }
+            });
 
+                $("input[name='nextstep2']").click(function () {
+                    $('#regstep3').show();
+                });
+
+                $("input[name='nextstep3']").click(function () {
+                    $('#regstep4').show();
+                });
+
+                $("input[name='nextstep5']").click(function () {
+                    $('#regstep5').show();
+                });
+
+            //adatkitöltő
             $("#form_step2").validate({
                 submitHandler: function () {
+                    CompanyGroupCms.Registration.UpdateDataRecording();
                     return false;
                 },
                 invalidHandler: function (e, validator) {
@@ -34,18 +67,178 @@
                     },
                     txtDataRecordingEmail: {
                         required: true
-                    }, 
-                    txtCustomerEmail: {
-                        required: true
                     }
                 },
                 messages: {
                     txtDataRecordingName: "A név kitöltése kötelező!", 
                     txtDataRecordingPhone:"A telefonszám kitöltése kötelező!",
-                    txtDataRecordingEmail:"Az email cím kitöltése kötelező!",
-                    txtCustomerEmail:"A központi email cím megadása kötelező"
+                    txtDataRecordingEmail:"Az email cím kitöltése kötelező!"
                 }
             });
+
+            var validated1 = false;
+            var validated2 = false;
+
+            //cég alap adatai
+            $("#form_step3").validate({
+                submitHandler: function () {
+                    //CompanyGroupCms.Registration.UpdateRegistrationData();
+                    validated1 = true;
+                    return false;
+                },
+                invalidHandler: function (e, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                    } else {
+
+                    }
+                },
+                rules: {
+                    txtCustomerName: {
+                        required: true
+                    },
+                    txtCompanyRegisterNumber: {
+                        required: true
+                    }, 
+                    txtVatNumber: {
+                        required: true
+                    },
+//                    txtEUVatNumber: {
+//                        required: true
+//                    }, 
+                    txtMainEmail: {
+                        required: true, 
+                        email: true
+                    }
+                },
+                messages: {
+                    txtCustomerName: "A név kitöltése kötelező!", 
+                    txtCompanyRegisterNumber:"A cégjegyzékszám kitöltése kötelező!",
+                    txtVatNumber:"Az adószám kitöltése kötelező!",
+                    txtMainEmail:"A központi email cím megadása kötelező"
+                }
+            }); 
+
+            $("#form_step4").validate({
+                submitHandler: function () {
+                    //CompanyGroupCms.Registration.UpdateRegistrationData();
+                    validated2 = true;
+                    return false;
+                },
+                invalidHandler: function (e, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                    } else {
+
+                    }
+                },
+                rules: {
+                    txtInvoiceZipCode: {
+                        required: true
+                    },
+                    txtInvoiceCity: {
+                        required: true
+                    }, 
+                    txtInvoiceStreet: {
+                        required: true
+                    },
+                    txtInvoicePhone: {
+                        required: true
+                    }, 
+                    txtMailAddressZipCode: {
+                        required: true
+                    },
+                    txtMailAddressCity: {
+                        required: true
+                    }, 
+                    txtMailAddressStreet: {
+                        required: true
+                    }
+                },
+                messages: {
+                    txtInvoiceZipCode: "Az irányítószám kitöltése kötelező!", 
+                    txtInvoiceCity: "A város kitöltése kötelező!",
+                    txtInvoiceStreet: "Az utca kitöltése kötelező!",
+                    txtInvoicePhone: "A telefonszám megadása kötelező!",
+                    txtMailAddressZipCode: "Az irányítószám megadása kötelező!",
+                    txtMailAddressCity: "A város megadása kötelező!",
+                    txtMailAddressStreet: "Az utca megadása kötelező!"
+                }
+            });
+
+            $("#nextstep4").click(function(){
+               $("#form_step3").submit();
+               $("#form_step4").submit();
+               if (validated1 && validated2) {
+                   CompanyGroupCms.Registration.UpdateRegistrationData();
+                   $('#regstep4').show();
+               }
+            });
+
+            //webadmin
+            $("#form_step5").validate({
+                submitHandler: function () {
+                    CompanyGroupCms.Registration.UpdateWebAdministrator();
+                    return false;
+                },
+                invalidHandler: function (e, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        var message = errors > 1 ? 'Az űrlap kitöltése nem megfelelő! (' + errors + ' hiba)' : '';
+                    } else {
+
+                    }
+                },
+                rules: {
+                    txtWebAdminUserName: {
+                        required: true
+                    },
+                    txtWebAdminPassword: {
+                        required: true
+                    }, 
+                    txtWebAdminPassword2: {
+                        required: true
+                    },
+                    txtWebAdminFirstName: {
+                        required: true
+                    }, 
+                    txtWebAdminLastName: {
+                        required: true
+                    },
+                    txtWebAdminEmail: {
+                        required: true, 
+                        email: true
+                    }
+                },
+                messages: {
+                    txtWebAdminUserName: "Az felhasználónév kitöltése kötelező!", 
+                    txtWebAdminPassword: "A jelszó kitöltése kötelező!",
+                    txtWebAdminPassword2: "A jelszó megerősítés mező kitöltése kötelező!",
+                    txtWebAdminFirstName: "A vezetéknév megadása kötelező!",
+                    txtWebAdminLastName: "Az keresztnév megadása kötelező!",
+                    txtWebAdminEmail: "Az email megadása kötelező!"
+                }
+            });
+
+//		    $('.progressbar').progressbar({ value: 0 });
+ 
+		    $('#form_fileupload').fileupload({
+			    dataType: 'json',
+			    url: CompanyGroupCms.Constants.Instance().getRegistrationServiceUrl('UploadFile'),
+			    progressall: function (e, data) {
+                    console.log(data);
+				    //$(this).find('.progressbar').progressbar({ value: parseInt(data.loaded / data.total * 100, 10) });
+			    },
+			    done: function (e, data) {
+                    console.log(data);
+				    $('#signatureEntityFile_Name').html(data.result.Name);
+				    $('#file_type').html(data.result.Type);
+				    $('#file_size').html(data.result.Size);
+				    //$(this).find('.progressbar').progressbar({ value: 100 });
+			    }
+		    });
         });
 
     </script>
@@ -70,35 +263,34 @@
         	<ul>
   				<li><a href="#tabs-1">
                <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
-                <h2>Tab 1<br />
-                <small>tab's description</small></h2></a>
-                <div id="elfogad_chx"><input type="checkbox" name="nextstep1" id="nextstep1" />A szabályzatot elfogadom</div>
+                <h2>1. lépés<br />
+                <small>Regisztrációs szerződés</small></h2></a>
+                <div id="elfogad_chx"><input type="checkbox" name="nextstep1" id="nextstep1" />A szerződés feltételeit elfogadom</div>
                 </li>
-                
   				<li id="regstep2" style="display: none;"><a href="#tabs-2">
                <!--  <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
-                <h2>Tab 2<br />
-                <small>tab's description</small></h2>
+                <h2>2. lépés<br />
+                <small>Ügyintéző adatai</small></h2>
                 </a></li>
   			    <li id="regstep3" style="display: none;"><a href="#tabs-3">
                 <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
-                <h2>Tab 3<br />
-                <small>tab's description</small></h2>
+                <h2>3. lépés<br />
+                <small>Cég alapadatai</small></h2>
                 </a></li>
   			    <li id="regstep4" style="display: none;"><a href="#tabs-4">
                 <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
-                <h2>Tab 4<br />
-                <small>tab's description</small></h2>
+                <h2>4. lépés<br />
+                <small>Web adminisztrátor</small></h2>
                 </a></li>
   			    <li id="regstep5" style="display: none;"><a href="#tabs-5">
                 <!-- <img class='logoImage2' border="0" src="@Url.Content("~/Media/images/basketicons/import.png")"> -->
-                <h2>Tab 5<br />
-                <small>tab's description</small></h2>
+                <h2>5. lépés<br />
+                <small>Nyomtatási nézet</small></h2>
                 </a></li>
   			</ul>
             
-  			<div id="tabs-1">
-            <h2>Tab 1 Content</h2>	
+		  <div id="tabs-1">
+            <h2>Regisztrációs szerződés</h2>	
             <p><strong>Tisztelt leendő Partnerünk!</strong> <br />
   <br />
   Köszönjük, hogy viszonteladónkká kíván válni.<br />
@@ -205,13 +397,14 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
 <br />8.4. Felek jelen megállapodásban nem szabályozott kérdésekre a Ptk. és a személyes adatok védelméről szóló 1992. évi LXIII. törvény vonatkozó rendelkezéseit tartják magukra nézve kötelezőnek.
 <br />8.5. Felek a jelen szerződéssel kapcsolatban felmerült vitás kérdéseiket elsősorban kölcsönös egyeztetés útján rendezik, ennek sikertelensége esetén a közöttük keletkező jogviták elbírálására a hatásköri szabályok fegyelembevételével kikötik a Pesti Központi Kerületi Bíróság vagy hatáskörtől függően a Fővárosi Bíróság kizárólagos illetékességét, alkalmazandó jogként pedig a magyar jogot.</p> 			
         </div>
+
   			<div id="tabs-2">
-            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/PartnerInfo/DataRecording")), System.Web.Mvc.FormMethod.Post, new { id = "form_step2" }))
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Registration/UpdateDataRecording")), System.Web.Mvc.FormMethod.Post, new { id = "form_step2" }))
             { 
-            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <table  border="0" cellspacing="2" cellpadding="3">
             <tr>
               <td><strong>Ügyintéző (adatlapot kitöltő)</strong></td>
-              <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" width="20" height="20" /></td>
+              <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" width="20" height="20" alt="" /></td>
             </tr>
             <tr>
               <td>&nbsp;</td>
@@ -238,29 +431,14 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
                 @Html.TextBox("txtDataRecordingEmail", Model.DataRecording.Email, new { id = "txtDataRecordingEmail", @class = "regfields" })  
               </td>
             </tr>
-            <tr>
-              <td>* Központi email</td>
-              <td align="right">
-                <label class="error" for="txtCustomerEmail" generated="true" style="display:none; color:#900;">( ! )</label><br />
-                @Html.TextBox("txtCustomerEmail", Model.Customer.Email, new { id = "txtCustomerEmail", @class = "regfields" }) 
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="font-size:9px">(Figyelem! A központi e-mail címre küldünk el minden automatikus e-mail visszaigazolást: rendelés, árubeérkezés, kiszállítás)</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Hírlevelek a központi e-mailre</td>
-              <td>
-                @Html.CheckBox("chkNewsletter", Model.Customer.Newsletter, new { id = "chkNewsletter" }) 
-              </td>
-            </tr>
             <tr><td colspan="2"><input type="submit" name="nextstep2" id="nextstep2" value="Tovább" /></td></tr>
           </table> 
             }                
-        </div>                      
+        </div>   
+                           
   		    <div id="tabs-3">
-            <h2>Tab 3 Content</h2>	
-            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_step3" }))
+            <h2>Cégadatok</h2>	
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Registration/UpdateRegistrationData")), System.Web.Mvc.FormMethod.Post, new { id = "form_step3" }))
             { 
             <table width="100%" border="0" cellspacing="2" cellpadding="3">
             <tr>
@@ -268,7 +446,7 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
               <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" alt="" width="20" height="20" /></td>
             </tr>
             <tr>
-              <td>Ország</td>
+              <td>* Ország</td>
               <td>
                   <select name="selectCountry" id="selectCountry" class="regfields">
                     <option value="HU" selected="selected">Magyarország</option>
@@ -339,48 +517,109 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
              </td>
             </tr>
             <tr>
-              <td>Cégnév</td>
-              <td>@Html.TextBox("txtCustomerName", Model.Customer.CustomerName, new { id = "txtCustomerName", @class = "regfields" })</td>
+              <td>* Cégnév</td>
+              <td><label class="error" for="txtCustomerName" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtCustomerName", Model.CompanyData.CustomerName, new { id = "txtCustomerName", @class = "regfields" })
+                  @Html.Hidden("hfCustomerId", Model.CompanyData.CustomerId, new { id = "hfCustomerId" })
+              </td>
             </tr>
             <tr>
               <td>Cégjegyzékszám</td>
-              <td>@Html.TextBox("txtCompanyRegisterNumber", Model.Customer.CompanyRegisterNumber, new { id = "txtCompanyRegisterNumber", @class = "regfields" })</td>
+              <td><label class="error" for="txtCompanyRegisterNumber" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtCompanyRegisterNumber", Model.CompanyData.RegistrationNumber, new { id = "txtRegistrationNumber", @class = "regfields" })</td>
             </tr>
             <tr>
-              <td>Adószám</td>
-              <td>@Html.TextBox("txtVatNumber1", Model.Customer.VatNumber1, new { id = "txtVatNumber1", @class = "regfields", size = "6" })
-                -
-                @Html.TextBox("txtVatNumber2", Model.Customer.VatNumber2, new { id = "txtVatNumber2", @class = "regfields", size = "6" })
-                -
-                @Html.TextBox("txtVatNumber3", Model.Customer.VatNumber3, new { id = "txtVatNumber3", @class = "regfields", size = "6" })</td>
+              <td>* Adószám</td>
+              <td><label class="error" for="txtVatNumber" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtVatNumber", Model.CompanyData.VatNumber, new { id = "txtVatNumber", @class = "regfields", size = "10" })</td>
             </tr>
             <tr>
               <td>Uniós adószám</td>
-              <td>@Html.TextBox("txtEUVatNumber", Model.Customer.EUVatNumber, new { id = "txtEUVatNumber", @class = "regfields" })</td>
+              <td>@Html.TextBox("txtEUVatNumber", Model.CompanyData.EUVatNumber, new { id = "txtEUVatNumber", @class = "regfields" })</td>
             </tr>
-            </table>
-            <table id="bankAccountContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
-            </table>
-            <script id="bankAccountTemplate" type="text/x-jquery-tmpl"> 
             <tr>
-              <td nowrap="nowrap">Bankszámlaszám</td>
-              <td><input name="txtBankAccountNumber" type="text" class="regfields" /> 
-                [<a href="#">+</a>] További</td>
+              <td>* Központi email</td>
+              <td align="right">
+                <label class="error" for="txtMainEmail" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                @Html.TextBox("txtMainEmail", Model.CompanyData.MainEmail, new { id = "txtMainEmail", @class = "regfields" }) 
+              </td>
             </tr>
+            <tr>
+              <td colspan="2" style="font-size:9px">(Figyelem! A központi e-mail címre küldünk el minden automatikus e-mail visszaigazolást: rendelés, árubeérkezés, kiszállítás)</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap">Hírlevelek a központi e-mailre</td>
+              <td>
+                @Html.CheckBox("chkNewsletterToMainEmail", Model.CompanyData.NewsletterToMainEmail, new { id = "chkNewsletterToMainEmail" }) 
+              </td>
+            </tr>
+            </table><h3>Bankszámlaszám</h3>
+            <table id="bankAccountContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td nowrap="nowrap"></td>
+              <td></td>
+            </tr>
+            </table>
+            <script id="bankAccountTemplate" type="text/x-jquery-tmpl">
+            {{each( i, item ) Items}}
+            {{if item.Id == SelectedId}}
+            <tr>
+              <td nowrap="nowrap"></td>
+              <td><input type="text" id="txtBankAccountPart1_${item.Id}" class="regfields" value="${item.Part1}" />
+                  - <input type="text" id="txtBankAccountPart2_${item.Id}" class="regfields" value="${item.Part2}" />
+                  - <input type="text" id="txtBankAccountPart3_${item.Id}" class="regfields" value="${item.Part3}" />
+              <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.UpdateBankAccount('${item.Id}', '${item.RecId}')">Mentés</a></td>
+            </tr>
+            {{else}}
+            <tr>
+            <td nowrap="nowrap"></td>
+              <td>${item.Part1} - ${item.Part2} - ${item.Part3} 
+              <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.SelectForUpdateBankAccount('${item.Id}')">Módosít</a>
+              <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.RemoveBankAccount('${item.Id}')">Törlés</a>
+              </td>
+            </tr>
+            {{/if}}
+            {{/each}}
             </script>   
             <table width="100%" border="0" cellspacing="2" cellpadding="3">
             <tr>
-              <td nowrap="nowrap">Aláírási címpéldány [ <a href="@Url.Content("~/upload/index.asp")">klikk</a> ]</td>
+              <td nowrap="nowrap"></td>
+              <td>@Html.TextBox("txtBankAccountPart1", "", new { id = "txtBankAccountPart1", @class = "regfields" }) 
+                  - @Html.TextBox("txtBankAccountPart2", "", new { id = "txtBankAccountPart2", @class = "regfields" })
+                  - @Html.TextBox("txtBankAccountPart3", "", new { id = "txtBankAccountPart3", @class = "regfields" })
+              <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.AddBankAccount()">[+] Hozzáadás</a></td>
+            </tr>
+            </table>
+            }
+            @using (Html.BeginForm("UploadFile", "Registration", System.Web.Mvc.FormMethod.Post, new { id = "form_fileupload", enctype = "multipart/form-data" }))
+            {   
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td nowrap="nowrap">Aláírási címpéldány</td>
               <td>
-              @Html.Label("spanSignatureEntityFile", Model.Customer.SignatureEntityFile)
-                <input name="uploadSignatureEntityFile" type="file" id="uploadSignatureEntityFile" />
-                
+                @*@Html.Label("spanSignatureEntityFile", Model.CompanyData.SignatureEntityFile)*@
+                <span class="fileupload-buttonbar">
+		            <span class="progressbar fileupload-progressbar"></span>
+		            <span class="fileinput-button"></span>
+			            <!-- <a href="javascript:void(0)" class="upload-image">feltöltés</a> -->
+			            <input name="uploadSignatureEntityFile" type="file" id="uploadSignatureEntityFile" />
+		            
+                </span>
+                <br /><br />
+                <span id="signatureEntityFile_Name"></span>
+                <span id="file_type"></span>
+                <span id="file_size"></span>
               </td>
             </tr>
             <tr>
               <td colspan="2" style="font-size:9px">Feltölthető formátumok: .jpg, .jpeg, .pdf, .png, .tiff<br /><br />Egy dokumentum feltöltése lehetséges!
                 A fenti dokumentum feltöltése akkor nem kötelező, ha vállalja, hogy más módon (személyesen, faxon, postai úton) juttatja el hozzánk. </td>
             </tr>
+            </table>
+            }
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Registration/UpdateRegistrationData2")), System.Web.Mvc.FormMethod.Post, new { id = "form_step4" }))
+            {
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
             <tr>
               <td colspan="2"><hr /></td>
             </tr>
@@ -459,23 +698,25 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
             </tr>
             <tr>
               <td>Irányítószám</td>
-              <td>
+              <td><label class="error" for="txtInvoiceZipCode" generated="true" style="display:none; color:#900;">( ! )</label><br />
               @Html.TextBox("txtInvoiceZipCode", Model.InvoiceAddress.ZipCode, new { id = "txtInvoiceZipCode", @class = "regfields", size = "4" })
               </td>
             </tr>
             <tr>
               <td>Város</td>
-              <td>
+              <td><label class="error" for="txtInvoiceCity" generated="true" style="display:none; color:#900;">( ! )</label><br />
               @Html.TextBox("txtInvoiceCity", Model.InvoiceAddress.City, new { id = "txtInvoiceCity", @class = "regfields" })
               </td>
             </tr>
             <tr>
               <td>Utca, házszám</td>
-              <td>@Html.TextBox("txtInvoiceStreet", Model.InvoiceAddress.Street, new { id = "txtInvoiceStreet", @class = "regfields" })</td>
+              <td><label class="error" for="txtInvoiceStreet" generated="true" style="display:none; color:#900;">( ! )</label><br />
+              @Html.TextBox("txtInvoiceStreet", Model.InvoiceAddress.Street, new { id = "txtInvoiceStreet", @class = "regfields" })</td>
             </tr>
             <tr>
               <td>Telefon</td>
-              <td>@Html.TextBox("txtInvoicePhone", Model.InvoiceAddress.Phone, new { id = "txtInvoicePhone", @class = "regfields" })</td>
+              <td><label class="error" for="txtInvoicePhone" generated="true" style="display:none; color:#900;">( ! )</label><br />
+              @Html.TextBox("txtInvoicePhone", Model.InvoiceAddress.Phone, new { id = "txtInvoicePhone", @class = "regfields" })</td>
             </tr>
             <tr>
               <td colspan="2"><hr /></td>
@@ -558,15 +799,18 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
             </tr>
             <tr>
               <td>Irányítószám</td>
-              <td>@Html.TextBox("txtMailAddressZipCode", Model.MailAddress.ZipCode, new { id = "txtMailAddressZipCode", @class = "regfields" })</td>
+              <td><label class="error" for="txtMailAddressZipCode" generated="true" style="display:none; color:#900;">( ! )</label><br />
+              @Html.TextBox("txtMailAddressZipCode", Model.MailAddress.ZipCode, new { id = "txtMailAddressZipCode", @class = "regfields" })</td>
             </tr>
             <tr>
               <td>Város</td>
-              <td>@Html.TextBox("txtMailAddressCity", Model.MailAddress.City, new { id = "txtMailAddressCity", @class = "regfields" })</td>
+              <td><label class="error" for="txtMailAddressCity" generated="true" style="display:none; color:#900;">( ! )</label><br />
+              @Html.TextBox("txtMailAddressCity", Model.MailAddress.City, new { id = "txtMailAddressCity", @class = "regfields" })</td>
             </tr>
             <tr>
               <td>Utca, házszám</td>
-              <td>@Html.TextBox("txtMailAddressStreet", Model.MailAddress.Street, new { id = "txtMailAddressStreet", @class = "regfields" })</td>
+              <td><label class="error" for="txtMailAddressStreet" generated="true" style="display:none; color:#900;">( ! )</label><br />
+              @Html.TextBox("txtMailAddressStreet", Model.MailAddress.Street, new { id = "txtMailAddressStreet", @class = "regfields" })</td>
             </tr>
             <tr>
               <td colspan="2"><hr /></td>
@@ -578,13 +822,14 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
               <td colspan="2" style="font-size:9px">(kérjük itt írja át, ha nem egyezik a számlázási címmel)</td>
             </tr>
             </table>
-                
             <table id="deliveryAddressContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
             </table>
             <script id="deliveryAddressTemplate" type="text/x-jquery-tmpl">
+            {{each( i, item ) Items}}
+            {{if item.Id == SelectedId}}
             <tr>
               <td>Ország</td>
-              <td><select name="selectDeliveryAddressCity" class="regfields">
+              <td><select id="selectDeliveryAddressCountry_${item.Id}" class="regfields">
                     <option value="HU" selected="selected">Magyarország</option>
                     <option value="AE" >Egyesült Arab Emirátus</option>
                     <option value="AL" >Albánia</option>
@@ -653,121 +898,536 @@ A szerződés létrejöttének feltétele, hogy a Viszonteladó az aláírt szer
             </tr>
             <tr>
               <td>Irányítószám</td>
-              <td><input name="txtDeliveryAddressZipCode" type="text" class="regfields" size="4" /></td>
+              <td><input id="txtDeliveryAddressZipCode_${item.Id}" type="text" value="${ZipCode}" class="regfields" size="4" /></td>
             </tr>
             <tr>
               <td>Város</td>
-              <td><input name="txtDeliveryAddressCity" type="text" class="regfields" /></td>
+              <td><input id="txtDeliveryAddressCity_${item.Id}" type="text" value="${City}" class="regfields" /></td>
             </tr>
             <tr>
               <td>Utca, házszám</td>
-              <td><input name="txtDeliveryAddressStreet" type="text" class="regfields" /></td>
+              <td><input id="txtDeliveryAddressStreet_${item.Id}" value="${Street}" type="text" class="regfields" /></td>
             </tr>
-
+            <tr>
+              <td><input type="hidden" value="${item.RecId}" /></td>
+              <td><a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.UpdateDeliveryAddress('${item.Id}', '${item.RecId}')">Mentés</a></td>
+            </tr>
+            {{else}}
+            <tr>
+              <td>Ország</td>
+              <td>${item.CountryRegionId}</td>
+            </tr>
+            <tr>
+              <td>Irányítószám</td>
+              <td>${item.ZipCode}</td>
+            </tr>
+            <tr>
+              <td>Város</td>
+              <td>${item.City}</td>
+            </tr>
+            <tr>
+              <td>Utca, házszám</td>
+              <td>${item.Street}</td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap"></td>
+              <td>
+                <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.SelectForUpdateDeliveryAddress('${item.Id}')">Módosít</a>
+                <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.RemoveDeliveryAddress('${item.Id}')">Törlés</a>              
+              </td>
+            </tr>
+            {{/if}}
+            {{/each}}            
             </script>
-            <table width="100%" border="0" cellspacing="2" cellpadding="3">                
-             <tr><td colspan="2"><input type="submit" name="nextstep3" id="nextstep3" value="Tovább" /></td></tr>
+            <table width="100%" border="0" cellspacing="2" cellpadding="3">
+            <tr>
+              <td>Ország</td>
+              <td><select id="selectDeliveryAddressCountry" class="regfields">
+                    <option value="HU" selected="selected">Magyarország</option>
+                    <option value="AE" >Egyesült Arab Emirátus</option>
+                    <option value="AL" >Albánia</option>
+                    <option value="AT" >AUSZTRIA</option>
+                    <option value="AU" >AUSZTRÁLIA</option>
+                    <option value="AZ" >Azerbajdzsán</option>
+                    <option value="BE" >BELGIUM</option>
+                    <option value="BG" >BULGÁRIA</option>
+                    <option value="BR" >BRAZILIA</option>
+                    <option value="CA" >KANADA</option>
+                    <option value="CH" >SVÁJC</option>
+                    <option value="CN" >KINA</option>
+                    <option value="CY" >CIPRUS</option>
+                    <option value="CZ" >CSEH-KÖZTÁRSASÁG</option>
+                    <option value="DE" >NÉMETORSZÁG</option>
+                    <option value="DK" >DÁNIA</option>
+                    <option value="EE" >ÉSZTORSZÁG</option>
+                    <option value="ES" >SPANYOLORSZÁG</option>
+                    <option value="EU" >EURÓPAI UNIÓ</option>
+                    <option value="FI" >FINNORSZÁG</option>
+                    <option value="FR" >FRANCIAORSZÁG</option>
+                    <option value="GB" >NAGY-BRITANNIA</option>
+                    <option value="GR" >GÖRÖGORSZÁG</option>
+                    <option value="HK" >HONG KONG</option>
+                    <option value="HR" >HORVÁTORSZÁG</option>
+                    <option value="ID" >INDONÉZIA</option>
+                    <option value="IE" >IRORSZÁG</option>
+                    <option value="IL" >IZRAEL</option>
+                    <option value="IN" >INDIA</option>
+                    <option value="IS" >IZLAND</option>
+                    <option value="IT" >OLASZORSZÁG</option>
+                    <option value="JP" >JAPÁN</option>
+                    <option value="KR" >KOREAI KÖZTÁRSASÁG</option>
+                    <option value="LI" >LICHTENSTEIN</option>
+                    <option value="LT" >LITVÁNIA</option>
+                    <option value="LU" >LUXEMBURG</option>
+                    <option value="LV" >LETTORSZÁG</option>
+                    <option value="MD" >MOLDOVA</option>
+                    <option value="MN" >MONGOLIA</option>
+                    <option value="MT" >MÁLTA</option>
+                    <option value="MX" >MEXIKO</option>
+                    <option value="MY" >MALAYSIA</option>
+                    <option value="MZ" >MOZAMBIK</option>
+                    <option value="NL" >HOLLANDIA</option>
+                    <option value="NO" >NORVÉGIA</option>
+                    <option value="NZ" >Új-Zéland</option>
+                    <option value="PH" >FÜLÖPSZIGETEK</option>
+                    <option value="PL" >LENGYELORSZÁG</option>
+                    <option value="PT" >PORTUGÁLIA</option>
+                    <option value="RO" >ROMÁNIA</option>
+                    <option value="RS" >Szerbia</option>
+                    <option value="RU" >Oroszország</option>
+                    <option value="SE" >SVÉDORSZÁG</option>
+                    <option value="SG" >SZINGAPUR</option>
+                    <option value="SI" >SZLOVÉNIA</option>
+                    <option value="SK" >SZLOVÁK KÖZTÁRSASÁG</option>
+                    <option value="TH" >THAIFÖLD</option>
+                    <option value="TN" >TUNÉZIA</option>
+                    <option value="TR" >TÖRÖKORSZÁG</option>
+                    <option value="TW" >TAIWAN</option>
+                    <option value="UA" >UKRAJNA</option>
+                    <option value="US" >AMERIKAI EGYESÜLT ÁLLAMOK</option>
+                    <option value="VN" >VIETNAM</option>
+                    <option value="XS" >SZERBIA</option>
+              </select></td>
+            </tr>
+            <tr>
+              <td>Irányítószám</td>
+              <td>@Html.TextBox("txtDeliveryAddressZipCode", "", new { id = "txtDeliveryAddressZipCode", @class = "regfields", size = "4" })</td>
+            </tr>
+            <tr>
+              <td>Város</td>
+              <td>@Html.TextBox("txtDeliveryAddressCity", "", new { id = "txtDeliveryAddressCity", @class = "regfields", size = "10" })</td>
+            </tr>
+            <tr>
+              <td>Utca, házszám</td>
+              <td>@Html.TextBox("txtDeliveryAddressStreet", "", new { id = "txtDeliveryAddressStreet", @class = "regfields", size = "10" })</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.AddDeliveryAddress()">[+] Hozzáad</a></td>
+            </tr>
+            <tr><td colspan="2"><input type="button" name="nextstep4" id="nextstep4" value="Tovább" /></td></tr>
             </table>
             }        				          
         </div>
-  		<div id="tabs-4">
-            <h2>Tab 4 Content</h2>
-            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_step4" }))
+
+  		    <div id="tabs-4">
+            <h2>Webadminisztrátor</h2>
+            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Registration/UpdateWebAdministrator")), System.Web.Mvc.FormMethod.Post, new { id = "form_step5" }))
             {
-
-                
-                
-            <table width="100%" border="0" cellspacing="2" cellpadding="3">
-            <tr>
-              <td><strong>Kapcsolattartók<br />
-              és jogosultságok</strong></td>
-              <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" alt="" width="20" height="20" /></td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-            </table>
-            <table id="contactPersonContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
-            </table>
-            <script id="contactPersonTemplate" type="text/x-jquery-tmpl">
-
-            </script>
-                
-                
-            <table width="100%" border="0" cellspacing="2" cellpadding="3">
-            <tr>
-              <td><strong>Cégadminisztrátor </strong></td>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td colspan="2" style="font-size:9px">A Cégadminisztrátor az a személy, aki felvehet, törölhet és módosíthat felhasználókat valamint beállíthatja azok jogosultságait. Figyelem, a Cégadminisztrátor személyét a szerződés aláírását követően csak cégszerűen aláírva írásban lehet megváltozatni!</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Belépési név</td>
-              <td align="right">@Html.TextBox("txtWebAdminUserName", Model.MailAddress.City, new { id = "txtWebAdminUserName", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Jelszó</td>
-              <td align="right">@Html.TextBox("txtWebAdminPassword", Model.MailAddress.City, new { id = "txtWebAdminPassword", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Jelszó mégegyszer</td>
-              <td align="right">@Html.TextBox("txtWebAdminPassword2", Model.MailAddress.City, new { id = "txtWebAdminPassword2", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">&nbsp;</td>
-              <td align="right">&nbsp;</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Vezetéknév</td>
-              <td align="right">@Html.TextBox("txtWebAdminFirstName", Model.MailAddress.City, new { id = "txtWebAdminFirstName", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Keresztnév</td>
-              <td align="right">@Html.TextBox("txtWebAdminLastName", Model.MailAddress.City, new { id = "txtWebAdminLastName", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">E-mail</td>
-              <td align="right">@Html.TextBox("txtWebAdminEmail", Model.MailAddress.City, new { id = "txtWebAdminEmail", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap">Telefon</td>
-              <td align="right">@Html.TextBox("txtWebAdminPhone", Model.MailAddress.City, new { id = "txtWebAdminPhone", @class = "regfields" })</td>
-            </tr>
-            <tr>
-              <td colspan="2" nowrap="nowrap"><hr /></td>
-            </tr>
-            <tr><td colspan="2"><input type="button" name="nextstep4" id="nextstep4" value="Tovább" /></td></tr>
-            </table>			
+                <table width="100%" border="0" cellspacing="2" cellpadding="3">
+                <tr>
+                  <td><strong>Cégadminisztrátor </strong></td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="font-size:9px">A Cégadminisztrátor az a személy, aki felvehet, törölhet és módosíthat felhasználókat valamint beállíthatja azok jogosultságait. Figyelem, a Cégadminisztrátor személyét a szerződés aláírását követően csak cégszerűen aláírva írásban lehet megváltozatni!</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Belépési név</td>
+                  <td align="right"><label class="error" for="txtWebAdminUserName" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtWebAdminUserName", Model.WebAdministrator.UserName, new { id = "txtWebAdminUserName", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó</td>
+                  <td align="right"><label class="error" for="txtWebAdminPassword" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtWebAdminPassword", Model.WebAdministrator.Password, new { id = "txtWebAdminPassword", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó mégegyszer</td>
+                  <td align="right"><label class="error" for="txtWebAdminPassword2" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtWebAdminPassword2", Model.WebAdministrator.Password, new { id = "txtWebAdminPassword2", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">&nbsp;</td>
+                  <td align="right">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Vezetéknév</td>
+                  <td align="right"><label class="error" for="txtWebAdminFirstName" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                                    @Html.TextBox("txtWebAdminFirstName", Model.WebAdministrator.FirstName, new { id = "txtWebAdminFirstName", @class = "regfields" })
+                                    @Html.Hidden("hiddenWebAdminContactPersonId", Model.WebAdministrator.ContactPersonId, new { id = "hiddenWebAdminContactPersonId" })
+                                    @Html.Hidden("hiddenWebAdminRecId", Model.WebAdministrator.RecId, new { id = "hiddenWebAdminRecId" })
+                                    @Html.Hidden("hiddenWebAdminRefRecId", Model.WebAdministrator.RefRecId, new { id = "hiddenWebAdminRefRecId" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Keresztnév</td>
+                  <td align="right"><label class="error" for="txtWebAdminLastName" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtWebAdminLastName", Model.WebAdministrator.LastName, new { id = "txtWebAdminLastName", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">E-mail</td>
+                  <td align="right"><label class="error" for="txtWebAdminEmail" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtWebAdminEmail", Model.WebAdministrator.Email, new { id = "txtWebAdminEmail", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Telefon</td>
+                  <td align="right"><label class="error" for="txtWebAdminPhone" generated="true" style="display:none; color:#900;">( ! )</label><br />
+                  @Html.TextBox("txtWebAdminPhone", Model.WebAdministrator.Telephone, new { id = "txtWebAdminPhone", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Rendelhet?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminAllowOrder", Model.WebAdministrator.AllowOrder, new { id = "chkWebAdminAllowOrder" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árut átvehet?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminAllowReceiptOfGoods", Model.WebAdministrator.AllowReceiptOfGoods, new { id = "chkWebAdminAllowReceiptOfGoods" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árubeérkezésről?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminEmailArriveOfGoods", Model.WebAdministrator.EmailArriveOfGoods, new { id = "chkWebAdminEmailArriveOfGoods" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árukiszállításról?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminEmailOfDelivery", Model.WebAdministrator.EmailOfDelivery, new { id = "chkWebAdminEmailOfDelivery" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés rendelésről?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminEmailOfOrderConfirm", Model.WebAdministrator.EmailOfOrderConfirm, new { id = "chkWebAdminEmailOfOrderConfirm" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Számlainformáció?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminInvoiceInfo", Model.WebAdministrator.InvoiceInfo, new { id = "chkWebAdminInvoiceInfo" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Hírlevél?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminNewsletter", Model.WebAdministrator.Newsletter, new { id = "chkWebAdminNewsletter" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árlistát letölthet?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminPriceListDownload", Model.WebAdministrator.PriceListDownload, new { id = "chkWebAdminPriceListDownload" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árubeérkezésről?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminSmsArriveOfGoods", Model.WebAdministrator.SmsArriveOfGoods, new { id = "chkWebAdminSmsArriveOfGoods" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árukiszállításról?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminSmsOfDelivery", Model.WebAdministrator.SmsOfDelivery, new { id = "chkWebAdminSmsOfDelivery" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms rendelésről?</td>
+                  <td align="right">@Html.CheckBox("chkWebAdminSmsOrderConfirm", Model.WebAdministrator.SmsOrderConfirm, new { id = "chkWebAdminSmsOrderConfirm" })</td>
+                </tr>
+                <tr>
+                  <td colspan="2" nowrap="nowrap"><hr /></td>
+                </tr>
+                <tr><td colspan="2"><input type="submit" name="nextstep5" id="nextstep5" value="Tovább" /></td></tr>
+                </table>			
             }
-        </div>
-        <div id="tabs-5">
-            <h2>Tab 5 Content</h2>
-            @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Customer/SignIn")), System.Web.Mvc.FormMethod.Post, new { id = "form_step5" }))
-            { 	
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p> 
-            }               			
-        </div>
+            </div>
+
+            <div id="tabs-5">
+                <h2>Kapcsolattartók</h2>
+                @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Registration/AddContactPerson")), System.Web.Mvc.FormMethod.Post, new { id = "form_step6" }))
+                { 	
+                 <table width="100%" border="0" cellspacing="2" cellpadding="3">
+                 <tr>
+                  <td><strong>Kapcsolattartók<br />
+                  és jogosultságok</strong></td>
+                  <td align="right"><img src="@Url.Content("~/Media/images/gear.png")" alt="" width="20" height="20" /></td>
+                 </tr>
+                 <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                 </tr>
+                 </table>
+                 <table id="contactPersonContainer" width="100%" border="0" cellspacing="2" cellpadding="3">
+                 </table>
+                    
+                 <script id="contactPersonTemplate" type="text/x-jquery-tmpl">
+                {{each( i, item ) Items}}
+                {{if item.Id == SelectedId}}
+                <tr>
+                  <td colspan="2" style="font-size:9px"></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Belépési név</td>
+                  <td align="right"><input type="text" id="txtContactPersonUserName_${item.Id}" class="regfields" value="${item.UserName}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó</td>
+                  <td align="right"><input type="text" id="txtContactPersonPassword_${item.Id}" class="regfields" value="${item.Password}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó mégegyszer</td>
+                  <td align="right"><input type="text" id="txtContactPersonPassword2_${item.Id}" class="regfields" value="${item.Password}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">&nbsp;</td>
+                  <td align="right">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Vezetéknév</td>
+                  <td align="right"><input type="text" id="txtContactPersonFirstName_${item.Id}" class="regfields" value="${item.FirstName}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Keresztnév</td>
+                  <td align="right"><input type="text" id="txtContactPersonLastName_${item.Id}" class="regfields" value="${item.LastName}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">E-mail</td>
+                  <td align="right"><input type="text" id="txtContactPersonEmail_${item.Id}" class="regfields" value="${item.Email}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Telefon</td>
+                  <td align="right"><input type="text" id="txtContactPersonPhone_${item.Id}" class="regfields" value="${item.Phone}" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Rendelhet?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonAllowOrder" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árut átvehet?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonAllowReceiptOfGoods" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árubeérkezésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonEmailArriveOfGoods" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árukiszállításról?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonEmailOfDelivery" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés rendelésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonEmailOfOrderConfirm" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Számlainformáció?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonInvoiceInfo" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Hírlevél?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonNewsletter" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árlistát letölthet?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonPriceListDownload" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árubeérkezésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonSmsArriveOfGoods" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árukiszállításról?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonSmsOfDelivery" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms rendelésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonSmsOrderConfirm" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap"></td>
+                  <td align="right"><a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.UpdateContactPerson('${item.Id}', '${item.RecId}')">Mentés</a></td>
+                </tr>
+                <tr>
+                  <td colspan="2" nowrap="nowrap"><hr /></td>
+                </tr>
+                {{else}}
+                <tr>
+                  <td colspan="2" style="font-size:9px"></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Belépési név</td>
+                  <td align="right">${item.UserName} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó</td>
+                  <td align="right">${item.Password} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó mégegyszer</td>
+                  <td align="right">${item.Password} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">&nbsp;</td>
+                  <td align="right">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Vezetéknév</td>
+                  <td align="right">${item.FirstName} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Keresztnév</td>
+                  <td align="right">${item.LastName} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">E-mail</td>
+                  <td align="right">${item.Email} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Telefon</td>
+                  <td align="right">${item.Phone} /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Rendelhet?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonAllowOrder" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árut átvehet?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonAllowReceiptOfGoods" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árubeérkezésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonEmailArriveOfGoods" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árukiszállításról?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonEmailOfDelivery" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés rendelésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonEmailOfOrderConfirm" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Számlainformáció?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonInvoiceInfo" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Hírlevél?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonNewsletter" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árlistát letölthet?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonPriceListDownload" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árubeérkezésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonSmsArriveOfGoods" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árukiszállításról?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonSmsOfDelivery" /></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms rendelésről?</td>
+                  <td align="right"><input type="checkbox" id="chkContactPersonSmsOrderConfirm" /></td>
+                </tr>
+                <tr>
+                <td nowrap="nowrap"></td>
+                  <td>
+                  <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.SelectForUpdateContactPerson('${item.Id}')">Módosít</a>
+                  <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.RemoveContactPerson('${item.Id}')">Törlés</a>
+                  </td>
+                </tr>
+                {{/if}}
+                {{/each}}
+                 </script>
+                <table width="100%" border="0" cellspacing="2" cellpadding="3">
+                <tr>
+                  <td><strong>Kapcsolattartó </strong></td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="font-size:9px"></td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Belépési név</td>
+                  <td align="right">@Html.TextBox("txtContactPersonUserName", "", new { id = "txtContactPersonUserName", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó</td>
+                  <td align="right">@Html.TextBox("txtContactPersonPassword", "", new { id = "txtContactPersonPassword", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Jelszó mégegyszer</td>
+                  <td align="right">@Html.TextBox("txtContactPersonPassword2", "", new { id = "txtContactPersonPassword2", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">&nbsp;</td>
+                  <td align="right">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Vezetéknév</td>
+                  <td align="right">@Html.TextBox("txtContactPersonFirstName", "", new { id = "txtContactPersonFirstName", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Keresztnév</td>
+                  <td align="right">@Html.TextBox("txtContactPersonLastName", "", new { id = "txtContactPersonLastName", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">E-mail</td>
+                  <td align="right">@Html.TextBox("txtContactPersonEmail", "", new { id = "txtContactPersonEmail", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Telefon</td>
+                  <td align="right">@Html.TextBox("txtContactPersonPhone", "", new { id = "txtContactPersonPhone", @class = "regfields" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Rendelhet?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonAllowOrder", false, new { id = "chkContactPersonAllowOrder" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árut átvehet?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonAllowReceiptOfGoods", false, new { id = "chkContactPersonAllowReceiptOfGoods" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árubeérkezésről?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonEmailArriveOfGoods", false, new { id = "chkContactPersonEmailArriveOfGoods" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés árukiszállításról?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonEmailOfDelivery", false, new { id = "chkContactPersonEmailOfDelivery" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Email értesítés rendelésről?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonEmailOfOrderConfirm", false, new { id = "chkContactPersonEmailOfOrderConfirm" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Számlainformáció?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonInvoiceInfo", false, new { id = "chkContactPersonInvoiceInfo" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Hírlevél?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonNewsletter", false, new { id = "chkContactPersonNewsletter" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Árlistát letölthet?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonPriceListDownload", false, new { id = "chkContactPersonPriceListDownload" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árubeérkezésről?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonSmsArriveOfGoods", false, new { id = "chkContactPersonSmsArriveOfGoods" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms árukiszállításról?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonSmsOfDelivery", false, new { id = "chkContactPersonSmsOfDelivery" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms rendelésről?</td>
+                  <td align="right">@Html.CheckBox("chkContactPersonSmsOrderConfirm", false, new { id = "chkContactPersonSmsOrderConfirm" })</td>
+                </tr>
+                <tr>
+                  <td nowrap="nowrap">Sms rendelésről?</td>
+                  <td align="right"> <a href="javascript:void(0)" onclick="CompanyGroupCms.Registration.AddContactPerson()">[+] Hozzáadás</a></td>
+                </tr>
+                <tr>
+                  <td colspan="2" nowrap="nowrap"><hr /></td>
+                </tr>
+                <tr><td colspan="2"><input type="submit" name="nextstep6" id="nextstep6" value="Tovább" /></td></tr>
+                </table>                    
+                }               			
+            </div>
   	</div>
   </td>
 </tr>

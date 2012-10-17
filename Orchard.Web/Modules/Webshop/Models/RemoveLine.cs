@@ -9,5 +9,10 @@ namespace Cms.Webshop.Models
         /// termékazonosító
         /// </summary>
         public string ProductId { get; set; }
+
+        /// <summary>
+        /// kosár azonosító
+        /// </summary>
+        //public string CartId { get; set; }
     }
 }

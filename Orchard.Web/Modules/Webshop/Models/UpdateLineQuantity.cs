@@ -8,7 +8,7 @@ namespace Cms.Webshop.Models
         /// <summary>
         /// kosár azonosító
         /// </summary>
-        public string CartId { get; set; }
+        //public string CartId { get; set; }
 
         /// <summary>
         /// termékazonosító
