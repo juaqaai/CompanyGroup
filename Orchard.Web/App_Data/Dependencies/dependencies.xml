@@ -488,8 +488,8 @@
   </Dependency>
   <Dependency>
     <ModuleName>PartnerInfo</ModuleName>
-    <VirtualPath>~/Modules/PartnerInfo/PartnerInfo.csproj</VirtualPath>
-    <LoaderName>DynamicExtensionLoader</LoaderName>
+    <VirtualPath>~/Modules/PartnerInfo/bin/PartnerInfo.dll</VirtualPath>
+    <LoaderName>PrecompiledExtensionLoader</LoaderName>
     <References>
       <Reference>
         <Name>CommonCore</Name>

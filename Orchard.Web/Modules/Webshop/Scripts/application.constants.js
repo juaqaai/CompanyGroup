@@ -8,6 +8,7 @@ CompanyGroupCms.Constants = (function () {
     var _pictureListServiceUrl = '';
     var _customerServiceUrl = '';
     var _partnerInfoServiceUrl = '';
+    var _contactPersonServiceUrl = '';
     var _shoppingCartServiceBaseUrl = '';
     var _registrationServiceUrl = '';
     var _signInServiceUrl = '';
@@ -59,6 +60,14 @@ CompanyGroupCms.Constants = (function () {
                     _partnerInfoServiceUrl = partnerInfoServiceUrl;
                 }
             },
+            getContactPersonServiceUrl: function (url) {
+                return (url === '' || url === 'undefined') ? _contactPersonServiceUrl : _contactPersonServiceUrl + url;
+            },
+            setContactPersonServiceUrl: function (contactPersonServiceUrl) {
+                if (_contactPersonServiceUrl === '') {
+                    _contactPersonServiceUrl = contactPersonServiceUrl;
+                }
+            },
             getShoppingCartServiceBaseUrl: function () {
                 return _shoppingCartServiceUrl;
             },
@@ -72,7 +81,7 @@ CompanyGroupCms.Constants = (function () {
                 return _webshopBaseUrl + encodeURIComponent(productId) + '/Details';
             },
             getThumbnailPictureUrl: function (productId, recId, dataAreaId) {
-                return _webshopBaseUrl + 'PictureItem/?ProductId=' + encodeURIComponent(productId) + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=60&MaxHeight=60'; 
+                return _webshopBaseUrl + 'PictureItem/?ProductId=' + encodeURIComponent(productId) + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=60&MaxHeight=60';
             },
             getPictureUrl: function (productId, recId, dataAreaId) {
                 return _webshopBaseUrl + 'PictureItem/?ProductId=' + encodeURIComponent(productId) + '&RecId=' + recId + '&DataAreaId=' + dataAreaId + '&MaxWidth=180&MaxHeight=134'; //webshopBaseUrl + productId + '/' + recId + '/' + dataAreaId + '/94/69/Picture';

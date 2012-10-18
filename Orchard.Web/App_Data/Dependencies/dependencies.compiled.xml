@@ -16,13 +16,13 @@
     <ExtensionId>CommonCore</ExtensionId>
     <LoaderName>PrecompiledExtensionLoader</LoaderName>
     <VirtualPath>~/Modules/CommonCore/bin/CommonCore.dll</VirtualPath>
-    <Hash>48f104f40fe8fed9</Hash>
+    <Hash>48f10b2484be2653</Hash>
   </Dependency>
   <Dependency>
     <ExtensionId>Company</ExtensionId>
     <LoaderName>DynamicExtensionLoader</LoaderName>
     <VirtualPath>~/Modules/Company/Company.csproj</VirtualPath>
-    <Hash>8b29e3950f6183e6</Hash>
+    <Hash>8b29f213c5aad0f7</Hash>
   </Dependency>
   <Dependency>
     <ExtensionId>Lucene</ExtensionId>
@@ -266,9 +266,9 @@
   </Dependency>
   <Dependency>
     <ExtensionId>PartnerInfo</ExtensionId>
-    <LoaderName>DynamicExtensionLoader</LoaderName>
-    <VirtualPath>~/Modules/PartnerInfo/PartnerInfo.csproj</VirtualPath>
-    <Hash>f4f27b7f2ff8f21a</Hash>
+    <LoaderName>PrecompiledExtensionLoader</LoaderName>
+    <VirtualPath>~/Modules/PartnerInfo/bin/PartnerInfo.dll</VirtualPath>
+    <Hash>923a06a11a5d4989</Hash>
   </Dependency>
   <Dependency>
     <ExtensionId>Szmyd.Orchard.Modules.Menu</ExtensionId>
@@ -292,6 +292,6 @@
     <ExtensionId>Webshop</ExtensionId>
     <LoaderName>DynamicExtensionLoader</LoaderName>
     <VirtualPath>~/Modules/Webshop/Webshop.csproj</VirtualPath>
-    <Hash>5cb851bba666ad46</Hash>
+    <Hash>5cb8603a5caffa57</Hash>
   </Dependency>
 </Dependencies>

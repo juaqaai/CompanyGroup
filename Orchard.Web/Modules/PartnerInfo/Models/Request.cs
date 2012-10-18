@@ -196,4 +196,13 @@ namespace Cms.PartnerInfo.Models
         /// </summary>
         public string SelectedId { get; set; }
     }
+
+    public class ChangePassword
+    {
+        public string OldPassword { get; set; }
+
+        public string NewPassword { get; set; }
+
+        public string UserName { get; set; }
+    }
 }

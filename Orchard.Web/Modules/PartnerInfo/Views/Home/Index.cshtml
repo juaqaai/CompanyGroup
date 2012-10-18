@@ -7,24 +7,29 @@
             CompanyGroupCms.Constants.Instance().setStructureServiceUrl('@Url.Content("~/Webshop/Catalogue/GetStructure")');
             CompanyGroupCms.Constants.Instance().setProductListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetProducts")');
             CompanyGroupCms.Constants.Instance().setPictureListServiceUrl('@Url.Content("~/Webshop/Catalogue/GetListByProduct")');
-            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Invoice/")');
+            CompanyGroupCms.Constants.Instance().setPartnerInfoServiceUrl('@Url.Content("~/PartnerInfo/Home/")');
             CompanyGroupCms.Constants.Instance().setShoppingCartServiceBaseUrl('@Url.Content("~/Webshop/ShoppingCart/")');
             CompanyGroupCms.Constants.Instance().setRegistrationServiceUrl('@Url.Content("~/PartnerInfo/Registration/")');
-            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/Webshop/Catalogue/SignInCatalogue")');
-            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/Webshop/Catalogue/SignOutCatalogue")');
+            CompanyGroupCms.Constants.Instance().setSignInServiceUrl('@Url.Content("~/PartnerInfo/Home/SignIn")');
+            CompanyGroupCms.Constants.Instance().setSignOutServiceUrl('@Url.Content("~/PartnerInfo/Home/SignOut")');
             CompanyGroupCms.Constants.Instance().setDownloadPriceListServiceUrl('@Url.Content("~/Webshop/Catalogue/DownloadPriceList")');
             CompanyGroupCms.Constants.Instance().setModule('partnerinfo');
             var model = @(Html.Raw(Json.Encode(Model)));
             console.log(model);
+
+            CompanyGroupCms.Visitor.Instance().Set(model);
+
+            $("#dashbordContainer").empty();
+            $("#dashbordTemplate").tmpl(model).appendTo("#dashbordContainer");
         });
     </script>
 }  
 <h2>ADATKEZELŐ</h2><hr noshade="noshade" size="1" />
-@if (Model.IsValidLogin)
-{ 
+    <div id="dashbordContainer"></div> 
+    <script id="dashbordTemplate" type="text/x-jquery-tmpl">  
+    {{if IsValidLogin}}  
     <table id="dashboardtable" width="350" border="0" cellpadding="0" cellspacing="0">
-        @if (!String.IsNullOrEmpty(Model.PersonId))
-        {
+        {{if PersonId.length > 0}}
         <tr>
             <td><img src="@Url.Content("~/Media/images/dashboard_01.png")" width="46" height="44" alt="" /></td>
             <td>
@@ -37,9 +42,7 @@
                 <div id="changepass"></div>
             </td>
         </tr>
-        }
-        else
-        {
+        {{else}}
         <tr>
             <td><img src="@Url.Content("~/Media/images/dashboard_01.png")" width="46" height="44" alt="" /></td>
             <td><div id="dashboardtext">@Html.ActionLink("ADATLAP / MÓDOSÍTÁS", "Index", "/Registration")</div></td>
@@ -53,7 +56,7 @@
                 </div>
             </td>
         </tr>
-        }
+        {{/if}}
         <tr>
             <td>
                 <img src="@Url.Content("~/Media/images/dashboard_05.png")" width="46" height="56" alt="" /></td>
@@ -66,23 +69,19 @@
         </tr>
         <tr>
             <td><img src="@Url.Content("~/Media/images/dashboard_09.png")" width="46" height="44" alt="" /></td>
-            @if (Model.Permission.InvoiceInfoEnabled)
-            {
+            {{if Permission.InvoiceInfoEnabled}}
             <td><div id="dashboardtext">@Html.ActionLink("SZÁMLÁK", "Index", "/Invoice")</div><!-- <img src="@Url.Content("~/Media/images/dashboard_10.png")" width="234" height="44" alt=""> --></td>
-            }
-            else { 
+            {{else}}
                 <td><div id="dashboardtext">A számlák megtekintéséhez nem áll rendelkezésre megfelelő jogosultság!</div></td>
-            }               
+            {{/if}}              
             <td><img src="@Url.Content("~/Media/images/dashboard_11.png")" width="44" height="44" alt="" /></td>
             
-            @if (Model.Permission.InvoiceInfoEnabled)
-            {
+            {{if Permission.InvoiceInfoEnabled}}
             <td><div id="dashboardtext">@Html.ActionLink("MEGRENDELÉSEK", "Index", "/SalesOrder")</div>
                <!--  <img src="@Url.Content("~/Media/images/dashboard_12.png")" width="246" height="44" alt=""> --></td>
-            }
-            else { 
+            {{else}} 
             <td><div id="dashboardtext">A megrendelések megtekintéséhez nem áll rendelkezésre megfelelő jogosultság!</div></td>
-            }
+            {{/if}} 
         </tr>
         <tr>
             <td>
@@ -106,9 +105,7 @@
                 <!-- <img src="@Url.Content("~/Media/images/dashboard_20.png")" width="246" height="45" alt=""> --></td>
         </tr>
     </table>
-}
-else
-{ 
+    {{else}}
     <table id="dashboardtable" width="350" border="0" cellpadding="0" cellspacing="0">
         <tr>    
             <td><h3>Figyelem! Az oldal csak bejelentkezést követően érhető el!</h3></td>
@@ -120,4 +117,5 @@ else
             <td><a href="javascript:void(0)" onclick="CompanyGroupCms.VisitorInfo.ShowSignInPanel()"><strong>Bejelentkezés</strong></a></td>
         </tr>
     </table>
-}
+    {{/if}}
+</script>

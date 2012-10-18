@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Views\ContactPerson\ChangePassword.cshtml" />
     <None Include="Views\ContactPerson\Index.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Invoice\Index.cshtml" />

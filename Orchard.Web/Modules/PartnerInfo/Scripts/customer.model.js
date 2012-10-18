@@ -330,6 +330,11 @@ CompanyGroupCms.VisitorInfo = (function () {
                         $("#shoppingCartLineTemplate").tmpl(result).appendTo("#cus_basket");
                         $("#deliveryAddressTemplate").tmpl(result.DeliveryAddresses).appendTo("#deliveryAddressContainer");
                     }
+                    //partnerinfo home oldal
+                    if (CompanyGroupCms.Constants.Instance().isEqualModule('partnerinfo')) {
+                        $("#dashbordContainer").empty();
+                        $("#dashbordTemplate").tmpl(result.Visitor).appendTo("#dashbordContainer");
+                    }
                 }
                 else {
                     alert('SignOut result failed');
@@ -401,6 +406,11 @@ CompanyGroupCms.VisitorInfo = (function () {
                         $("#shoppingCartLineTemplate").tmpl(result).appendTo("#cus_basket");
                         $("#deliveryAddressTemplate").tmpl(result.DeliveryAddresses).appendTo("#deliveryAddressContainer");
                     }
+                    //partnerinfo home oldal
+                    if (CompanyGroupCms.Constants.Instance().isEqualModule('partnerinfo')) {
+                        $("#dashbordContainer").empty();
+                        $("#dashbordTemplate").tmpl(result.Visitor).appendTo("#dashbordContainer");
+                    }
                 }
                 else {
                     $("#login_errors").html(result.Visitor.ErrorMessage);
@@ -440,6 +450,35 @@ CompanyGroupCms.VisitorInfo = (function () {
             }
         });
     };
+    var changePassword = function () {
+        alert('');
+        var data = new Object();
+        data.OldPassword = $('#txt_oldpassword').val();
+        data.NewPassword = $('#txt_newpassword').val();
+        data.UserName = $('#txt_username').val();
+        data.RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+        var dataString = $.toJSON(data);
+        $.ajax({
+            type: "POST",
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl('ChangePwd'),
+            data: dataString,
+            contentType: "application/json; charset=utf-8",
+            timeout: 10000,
+            dataType: "json",
+            processData: true,
+            success: function (result) {
+                if (result) {
+                    console.log(result);
+                }
+                else {
+                    console.log('changePassword result failed');
+                }
+            },
+            error: function () {
+                console.log('changePassword call failed');
+            }
+        });
+    };
     return {
         Authorize: authorize,
         SignOut: signOut,
@@ -448,7 +487,8 @@ CompanyGroupCms.VisitorInfo = (function () {
         ChangeLanguage: changeLanguage,
         ChangeCurrency: changeCurrency,
         InitView: initView,
-        InvoiceInfo: invoiceInfo
+        InvoiceInfo: invoiceInfo,
+        ChangePassword: changePassword
     };
 })();
 
