@@ -469,6 +469,16 @@ CompanyGroupCms.VisitorInfo = (function () {
             success: function (result) {
                 if (result) {
                     console.log(result);
+                    if (result.OperationSucceeded) {
+                        $('#changePasswordSucceededResult').show();
+                        $('#changepassword_succeededmessage').html(result.Message);
+                        $('#changePasswordFailedResult').hide();
+                    }
+                    else {
+                        $('#changePasswordFailedResult').show();
+                        $('#changepassword_failedmessage').html(result.Message);
+                        $('#changePasswordSucceededResult').hide();
+                    }
                 }
                 else {
                     console.log('changePassword result failed');
