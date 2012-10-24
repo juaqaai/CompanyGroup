@@ -14,7 +14,7 @@ namespace Cms.PartnerInfo {
             return new[] {
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
-                                                         "Home",
+                                                         "PartnerInfo/Home",
                                                          new RouteValueDictionary {
                                                                                       {"area", "PartnerInfo"},
                                                                                       {"controller", "Home"},
@@ -28,7 +28,7 @@ namespace Cms.PartnerInfo {
                              }, 
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
-                                                         "Registration",
+                                                         "PartnerInfo/Registration",
                                                          new RouteValueDictionary {
                                                                                       {"area", "PartnerInfo"},
                                                                                       {"controller", "Registration"},
@@ -42,7 +42,7 @@ namespace Cms.PartnerInfo {
                              }, 
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
-                                                         "Invoice",
+                                                         "PartnerInfo/Invoice",
                                                          new RouteValueDictionary {
                                                                                       {"area", "PartnerInfo"},
                                                                                       {"controller", "Invoice"},
@@ -56,7 +56,7 @@ namespace Cms.PartnerInfo {
                              }, 
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
-                                                         "SalesOrder",
+                                                         "PartnerInfo/SalesOrder",
                                                          new RouteValueDictionary {
                                                                                       {"area", "PartnerInfo"},
                                                                                       {"controller", "SalesOrder"},
@@ -70,7 +70,7 @@ namespace Cms.PartnerInfo {
                              },
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
-                                                         "ContactPerson",
+                                                         "PartnerInfo/ContactPerson",
                                                          new RouteValueDictionary {
                                                                                       {"area", "PartnerInfo"},
                                                                                       {"controller", "ContactPerson"},
@@ -81,7 +81,50 @@ namespace Cms.PartnerInfo {
                                                                                       {"area", "PartnerInfo"}
                                                          },
                                                          new MvcRouteHandler())
-                             }
+                             },
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
+                                                         "PartnerInfo/ForgetPassword",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"},
+                                                                                      {"controller", "ContactPerson"},
+                                                                                      {"action", "ForgetPassword"}
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             },
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
+                                                         "PartnerInfo/ChangePassword",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"},
+                                                                                      {"controller", "ContactPerson"},
+                                                                                      {"action", "ChangePassword"}
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             },
+                             new RouteDescriptor {   Priority = 5,
+                                                     Route = new Route(
+                                                         "PartnerInfo/ContactPerson/{ChangePasswordId}/UndoChangePassword",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"},
+                                                                                      {"controller", "ContactPerson"},
+                                                                                      {"action", "UndoChangePassword"},
+                                                                                      {"changePasswordId", ""}
+                                                         },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "PartnerInfo"}
+                                                         },
+                                                         new MvcRouteHandler())
+                             }, 
                          };
         }
     }

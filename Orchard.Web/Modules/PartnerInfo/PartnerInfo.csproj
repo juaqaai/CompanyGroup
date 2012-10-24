@@ -107,6 +107,7 @@
     <Compile Include="Models\OrderInfo.cs" />
     <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\UndoChangePassword.cs" />
     <Compile Include="Models\UploadedFile.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
@@ -114,6 +115,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Views\ContactPerson\ChangePassword.cshtml" />
+    <None Include="Views\ContactPerson\ForgetPassword.cshtml" />
     <None Include="Views\ContactPerson\Index.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Invoice\Index.cshtml" />

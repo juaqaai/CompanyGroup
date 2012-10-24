@@ -197,12 +197,23 @@ namespace Cms.PartnerInfo.Models
         public string SelectedId { get; set; }
     }
 
+    /// <summary>
+    /// jelszómódosítás
+    /// </summary>
     public class ChangePassword
     {
         public string OldPassword { get; set; }
 
         public string NewPassword { get; set; }
 
+        public string UserName { get; set; }
+    }
+
+    /// <summary>
+    /// elfelejtett jelszó
+    /// </summary>
+    public class ForgetPassword
+    {
         public string UserName { get; set; }
     }
 }

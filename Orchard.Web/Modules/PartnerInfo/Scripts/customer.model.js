@@ -469,14 +469,17 @@ CompanyGroupCms.VisitorInfo = (function () {
             success: function (result) {
                 if (result) {
                     console.log(result);
-                    if (result.OperationSucceeded) {
+                    if (result.ChangePassword.OperationSucceeded) {
                         $('#changePasswordSucceededResult').show();
-                        $('#changepassword_succeededmessage').html(result.Message);
+                        $('#changepassword_succeededmessage').html(result.ChangePassword.Message);
                         $('#changePasswordFailedResult').hide();
+
+                        $("#changePasswordContainer").empty();
+                        $("#changePasswordTemplate").tmpl(result.Visitor).appendTo("#changePasswordContainer");
                     }
                     else {
                         $('#changePasswordFailedResult').show();
-                        $('#changepassword_failedmessage').html(result.Message);
+                        $('#changepassword_failedmessage').html(result.ChangePassword.Message);
                         $('#changePasswordSucceededResult').hide();
                     }
                 }
@@ -489,6 +492,46 @@ CompanyGroupCms.VisitorInfo = (function () {
             }
         });
     };
+    var forgetPassword = function () {
+        alert('');
+        var data = new Object();
+        data.UserName = $('#txt_username').val();
+        data.RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+        var dataString = $.toJSON(data);
+        $.ajax({
+            type: "POST",
+            url: CompanyGroupCms.Constants.Instance().getPartnerInfoServiceUrl('ForgetPwd'),
+            data: dataString,
+            contentType: "application/json; charset=utf-8",
+            timeout: 10000,
+            dataType: "json",
+            processData: true,
+            success: function (result) {
+                if (result) {
+                    console.log(result);
+                    if (result.ForgetPassword.Succeeded) {
+                        $('#forgetPasswordSucceededResult').show();
+                        $('#forgetpassword_succeededmessage').html(result.ForgetPassword.Message);
+                        $('#forgetPasswordFailedResult').hide();
+
+                        $("#forgetPasswordContainer").empty();
+                        $("#forgetPasswordTemplate").tmpl(result.Visitor).appendTo("#forgetPasswordContainer");
+                    }
+                    else {
+                        $('#forgetPasswordFailedResult').show();
+                        $('#forgetpassword_failedmessage').html(result.ForgetPassword.Message);
+                        $('#forgetPasswordSucceededResult').hide();
+                    }
+                }
+                else {
+                    console.log('ForgetPassword result failed');
+                }
+            },
+            error: function () {
+                console.log('ForgetPassword call failed');
+            }
+        });
+    };
     return {
         Authorize: authorize,
         SignOut: signOut,
@@ -498,7 +541,8 @@ CompanyGroupCms.VisitorInfo = (function () {
         ChangeCurrency: changeCurrency,
         InitView: initView,
         InvoiceInfo: invoiceInfo,
-        ChangePassword: changePassword
+        ChangePassword: changePassword,
+        ForgetPassword: forgetPassword
     };
 })();
 
