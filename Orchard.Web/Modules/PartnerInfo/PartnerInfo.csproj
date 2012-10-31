@@ -63,6 +63,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
@@ -115,6 +116,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Views\ContactPerson\ChangePassword.cshtml" />
+    <None Include="Views\ContactPerson\UndoChangePassword2.cshtml" />
     <None Include="Views\ContactPerson\ForgetPassword.cshtml" />
     <None Include="Views\ContactPerson\Index.cshtml" />
     <None Include="Views\Home\Index.cshtml" />

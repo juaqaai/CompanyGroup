@@ -155,7 +155,7 @@ body {
 }
 
 #listscroll {
-	width: 780px;
+	width: 700px;
 	height:600px;
 	overflow: auto;
 }
@@ -335,11 +335,11 @@ body {
 /************************************************ termék listaelem tábla ************************************************/
 
 #cus_product_table {
-    margin-left: 5px;
-    margin-top: 5px;
+    margin-left: 0px;
+    margin-top: 0px;
     margin-bottom: 5px;
     float: left;
-    width: 695px;
+    width: 680px;
     background: #fff;
     font-family: Verdana, Geneva, sans-serif;
     font-size: 11px;
@@ -414,8 +414,8 @@ body {
 }
 .cus_prod_header_middle_cell {
     width: 100%;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
     font-size: 11px;
 }
 .cus_prod_table_price {
@@ -461,16 +461,16 @@ body {
     color: #333;
 }
 .cus_prod_table_desc {
-    width: 380px;
-    font-size: 11px;
-    font-family: Verdana, Geneva, sans-serif;
-    overflow: hidden;
-    height: 40px;
-    text-align: justify;
-    margin-top: 0px;
-    padding-right: 3px;
-    cursor: pointer;
-    margin-bottom:7px;
+	width: 380px;
+	font-size: 11px;
+	font-family: Verdana, Geneva, sans-serif;
+	overflow: visible;
+	height: 40px;
+	text-align: justify;
+	margin-top: 0px;
+	padding-right: 3px;
+	cursor: pointer;
+	margin-bottom:7px;
 }
 
 .cus_teteladatok {
@@ -712,8 +712,8 @@ ul#navmenu li:hover ul, ul#navmenu ul li:hover ul, ul#navmenu ul ul li:hover ul,
     margin-left: 8px;
 }
 #cus_list_order_panel {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
     padding-bottom: 0px;
     padding-top: 0px;
 }
@@ -1263,15 +1263,15 @@ ul#usermenu li:hover ul, ul#usermenu ul li:hover ul, ul#usermenu ul ul li:hover 
     background: #FFF;
 }
 #cus_recommended_prod_content li {
-    float: left;
-    width: 149px;
-    height: 105px;
-    margin: 0 2px;
-    padding: 10px;
-    background-color: #DEDEDE;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    text-align: center;
+	float: left;
+	width: 149px;
+	height: 105px;
+	margin: 0 2px;
+	padding: 10px;
+	background-color: #FFF;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	text-align: center;
 }
 #cus_recommended_prod_content span {
     float: left;

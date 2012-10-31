@@ -74,7 +74,7 @@ namespace Cms.PartnerInfo.Controllers
 
             Cms.PartnerInfo.Models.UndoChangePassword model = new Cms.PartnerInfo.Models.UndoChangePassword(response, visitor);
 
-            return View("UndoChangePassword", model);
+            return View("UndoChangePassword2", model);
         }
 
         /// <summary>

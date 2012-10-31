@@ -548,25 +548,29 @@
         </table>
     </div>
         <div id="cus_ajanlat_finance">
-            HRP Finance árajánlat készítése <br/>
-            <table cellpadding="1" cellspacing="1">
+            <strong>HRP Finance árajánlat készítése</strong><br/>
+            <table height="150" cellpadding="1" cellspacing="1">
             <tr>
-                <td id="leasingOptionsContainer"></td>
-                <td>
+                <td width="350" align="left" id="leasingOptionsContainer"></td>
+<td width="300" align="right">
                     @using (Html.BeginFormAntiForgeryPost(Url.Action(Url.Content("~/Webshop/ShoppingCart")), System.Web.Mvc.FormMethod.Post, new { id="form_financeoffer" }))
                     {
                         <div id="financeoffer_errors"></div>
                 
-                        <label for="txt_offername">bérbevevő neve</label> @Html.TextBox("txt_offername", "", new {id="txt_offername", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
-                        <label class="error" for="txt_offername" generated="true" style="display:none; color:#900;">A név kitöltése kötelező</label><br/>
+                  <label for="txt_offername"><strong>bérbevevő neve</strong></label>
+                  @Html.TextBox("txt_offername", "", new {id="txt_offername", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
+                  <label class="error" for="txt_offername" generated="true" style="display:none; color:#900;">A név kitöltése kötelező</label><br/>
 
-                        <label for="txt_offeraddress">bérbevevő címe</label>@Html.TextBox("txt_offeraddress", "", new {id="txt_offeraddress", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
-                        <label class="error" for="txt_offeraddress" generated="true" style="display:none; color:#900;">A cím kitöltése kötelező</label><br/>
+                  <label for="txt_offeraddress"><strong>bérbevevő címe</strong></label>
+                  @Html.TextBox("txt_offeraddress", "", new {id="txt_offeraddress", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
+                  <label class="error" for="txt_offeraddress" generated="true" style="display:none; color:#900;">A cím kitöltése kötelező</label><br/>
 
-                        <label for="txt_offerphone">bérbevevő telefon</label>@Html.TextBox("txt_offerphone", "", new {id="txt_offerphone", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
-                        <label class="error" for="txt_offerphone" generated="true" style="display:none; color:#900;">A telefon kitöltése kötelező</label><br/>
+                      <label for="txt_offerphone"><strong>bérbevevő telefon</strong></label>
+                      @Html.TextBox("txt_offerphone", "", new {id="txt_offerphone", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"}) 
+                      <label class="error" for="txt_offerphone" generated="true" style="display:none; color:#900;">A telefon kitöltése kötelező</label><br/>
 
-                        <label for="txt_offerstatnumber">bérbevevő cégjegyzékszám</label>@Html.TextBox("txt_offerstatnumber", "", new {id="txt_offerstatnumber", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"})
+                        <label for="txt_offerstatnumber"><strong>bérbevevő cégjegyzékszám</strong></label>          
+                        @Html.TextBox("txt_offerstatnumber", "", new {id="txt_offerstatnumber", style="padding:5px; width:200px; border:1px #bbb solid; border-radius:5px;"})
                         <label class="error" for="txt_offerstatnumber" generated="true" style="display:none; color:#900;">A cégjegyzékszám kitöltése kötelező</label><br/>
                         <br/>
                         <input type="submit" value="Ajánlatkérés" />
